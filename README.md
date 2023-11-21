@@ -17,15 +17,22 @@ Intent Layer has 3 modules:
 **3)** ***intent_translator*** - convert NILE to suitable format (e.g., VNFd and NSd) and trigger network slice creation.
 
 ###  Architecture
+
+---
+
 ![](fig/experimental-setup.png)
 
 ### Intent layer components workflow
+
+---
 
 ![](fig/POC-basic.png)
 
 
 ### Requirements
 Software and resources already available:
+
+--- 
 * python3.
 * pip3.
 * VM/Bare metal with [OSM](https://osm.etsi.org/).
