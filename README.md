@@ -1,5 +1,7 @@
 ## Intent Layer
 
+
+
 [![Build Passing](https://img.shields.io/badge/build-passing-yellow)](link_do_seu_build)
 <a href="https://www.python.org/"><img alt="Python 3" src="https://img.shields.io/badge/-Python-2b5b84?style=flat-square&logo=python&logoColor=white" /></a>
 [![SQLite3](https://img.shields.io/badge/SQLite-3/logo=sqlite&logoColor=white)](https://www.sqlite.org/)
@@ -47,11 +49,10 @@ Intent Layer has 3 modules:
 
 ### Requirements
 
---- 
-* python3.
-* pip3.
-* VM/Bare metal with [OSM](https://osm.etsi.org/).
-* VM/Bare metal with [OpenStack](https://docs.openstack.org/devstack/latest/).
+- python3. 
+- pip3. 
+- VM/Bare metal with [OSM](https://osm.etsi.org/). 
+- VM/Bare metal with [OpenStack](https://docs.openstack.org/devstack/latest/).
 ---
 ### How to install
 
@@ -94,10 +95,8 @@ pip3 install -r requirements.txt
 ### How to RUN
 
 ---
-intent-GUI:
+**1)** intent-GUI:
 
 ```
 python3 ~/intent_layer/intent_gui.py
 ```
-
-
