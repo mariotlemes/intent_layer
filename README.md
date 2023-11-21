@@ -16,7 +16,7 @@ Intent Layer has 3 modules:
 
 ### How to install
 ```
-$ git clone https://github.com/mariotlemes/intent_layer.git
+git clone https://github.com/mariotlemes/intent_layer.git
 ```
 
 ```
