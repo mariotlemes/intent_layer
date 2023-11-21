@@ -1,6 +1,8 @@
 ## Intent Layer
 
-[![Build Passing](https://img.shields.io/badge/build-passing-brightgreen)](link_do_seu_build)
+[![Build Passing](https://img.shields.io/badge/build-passing-yellow)](link_do_seu_build)
+<a href="https://www.python.org/"><img alt="Python 3" src="https://img.shields.io/badge/-Python-2b5b84?style=flat-square&logo=python&logoColor=white" /></a>
+[![SQLite3](https://img.shields.io/badge/SQLite-3/logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 
 ---
 
