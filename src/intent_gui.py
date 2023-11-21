@@ -16,7 +16,6 @@ PUBLIC_IP_OSM = GlobalVariables.get_public_ip_osm()
 
 class CenterAlignedQueryModel(QSqlQueryModel):
     """Centering results in tw_intents QtableView"""
-
     def data(self, index, role=Qt.DisplayRole):
         if role == Qt.TextAlignmentRole:
             return Qt.AlignCenter  # Align all cells to center
@@ -95,49 +94,49 @@ class Intent_GUI(QMainWindow, Ui_MainWindow):
         header = self.tw_intents.verticalHeader().setVisible(False)
 
 
-    def verify_netslice_instances(self):
-        """Verify status of network slices"""
-
-        # print("Função chamada após um tempo!")
-
-        # timer.timeout.connect(veri)
-
-        headers = {"Accept": "application/json", "Content_Type": "application/json"}
-        endpoint_netslice_instances = PUBLIC_IP_OSM + '/nsilcm/v1/netslice_instances'
-
-        # print(endpoint_netslice_instances)
-
-        # generate token for authentication
-        bearer = connect_osm.generate_nbi_token()
-
-        # update headers with bearer authentication token
-        headers.update(bearer)
-
-        # generate response for netslice instances
-        response = requests.get(endpoint_netslice_instances, headers=headers)
-        # print(endpoint_netslice_instances)
-
-        # parse response request to list
-        list_response = []
-        list_response = response.json()
-
-        print(list_response)
-
-        # verify the operational status of slice. If yes, change status column in db to "running"
-        for i in list_response:
-            if (i.get("operational-status") == "running" and
-                i.get("config-status") == "configured"):
-                # print(i.get("name"))
-                # obj = DataBase()
-                DataBase.update_table_intent(i.get("name"))
-                self.show_table_intent()
-
-                # obj.close_connection()
-
-        # show tw_intents
-        self.show_table_intent()
-
-        return True
+    # def verify_netslice_instances(self):
+    #     """Verify status of network slices"""
+    #
+    #     # print("Função chamada após um tempo!")
+    #
+    #     # timer.timeout.connect(veri)
+    #
+    #     headers = {"Accept": "application/json", "Content_Type": "application/json"}
+    #     endpoint_netslice_instances = PUBLIC_IP_OSM + '/nsilcm/v1/netslice_instances'
+    #
+    #     # print(endpoint_netslice_instances)
+    #
+    #     # generate token for authentication
+    #     bearer = connect_osm.generate_nbi_token()
+    #
+    #     # update headers with bearer authentication token
+    #     headers.update(bearer)
+    #
+    #     # generate response for netslice instances
+    #     response = requests.get(endpoint_netslice_instances, headers=headers)
+    #     # print(endpoint_netslice_instances)
+    #
+    #     # parse response request to list
+    #     list_response = []
+    #     list_response = response.json()
+    #
+    #     print(list_response)
+    #
+    #     # verify the operational status of slice. If yes, change status column in db to "running"
+    #     for i in list_response:
+    #         if (i.get("operational-status") == "running" and
+    #             i.get("config-status") == "configured"):
+    #             # print(i.get("name"))
+    #             # obj = DataBase()
+    #             DataBase.update_table_intent(i.get("name"))
+    #             self.show_table_intent()
+    #
+    #             # obj.close_connection()
+    #
+    #     # show tw_intents
+    #     self.show_table_intent()
+    #
+    #     return True
 
 
 if __name__ == '__main__':
@@ -154,4 +153,4 @@ if __name__ == '__main__':
         window.show()
         app.exec()
 
-        window.verify_netslice_instances()
+        # window.verify_netslice_instances()
