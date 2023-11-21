@@ -22,14 +22,14 @@
 
 This repository contains the code
 for intent layer software and instructions to run in top of
-an NFV environment. ***`Intent Layer`*** has 3 (three) main modules:
+an NFV environment. **`Intent Layer`** has 3 (three) main modules:
 
 
-**1)**`intent_gui.py`- GUI-based for intent expressing;
+**1)** **`intent_gui.py`**- GUI-based for intent expressing;
 
-**2)**`intent_engine.py`- Convert intents into NILE (**N**etwork **I**ntent **L**anguag**E**);
+**2)** **`intent_engine.py`**- Convert intents into NILE (**N**etwork **I**ntent **L**anguag**E**);
 
-**3)**`intent_translator.py`- Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor) and NSd (Network Service Descriptor), and trigger network slice creation;
+**3)** **`intent_translator.py`**- Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor) and NSd (Network Service Descriptor), and trigger network slice creation;
 
 ---
 ###  Architecture
