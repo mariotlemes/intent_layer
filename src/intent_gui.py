@@ -1,13 +1,11 @@
-import sqlite3, sys, re, json, requests, connect_osm
+import sys, requests, connect_osm
 
 from ui_main import Ui_MainWindow
 
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QMessageBox,
-                               QTreeWidget, QTreeWidgetItem, QTableView, QHeaderView)
-from PySide6.QtCore import Qt, QAbstractTableModel
-from PySide6.QtSql import QSqlDatabase, QSqlTableModel, QSqlQueryModel
-
-from PyQt6.QtCore import QSortFilterProxyModel, QRegularExpression, QTimer
+from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox,
+                               QHeaderView)
+from PySide6.QtCore import Qt
+from PySide6.QtSql import QSqlDatabase, QSqlQueryModel
 
 from database import DataBase
 
