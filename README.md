@@ -1,27 +1,26 @@
 ## Intent Layer
 
-
-
 ![Python](https://img.shields.io/badge/python-3670A0?style=plastic&logo=python&logoColor=ffdd54)
 ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=plastic&logo=sqlite&logoColor=white)
 ![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=plastic&logo=Qt&logoColor=white)
 ---
 
-- [Description](#description)
+- [Description](#getting-started)
 - [Architecture](#architecture)
 - [Intent layer components workflow](#intent-layer-components-workflow)
-- [Requirements](#requirements)
-- [How to install](#how-to-install)
-- [How to run](#how-to-run)
+- [Prerequisites](#prerequisites)
+- [How to install](#installing)
+- [How to run](#running)
 
 --- 
-### Description
+### Getting started
 
 ---
 
-This repository contains the code
-for intent layer software and instructions to run in top of
-an NFV environment. **`Intent Layer`** has 3 (three) main modules:
+This project contains the code
+for intent layer software (src directory) and instructions to run in top of
+an NFV environment.
+**`Intent Layer`** has 3 (three) main modules:
 
 
 **1)** **`intent_gui.py`**- GUI-based for intent expressing;
@@ -30,7 +29,11 @@ an NFV environment. **`Intent Layer`** has 3 (three) main modules:
 
 **3)** **`intent_translator.py`**- Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor) and NSd (Network Service Descriptor), and trigger network slice creation;
 
+Obs: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.com/lumichatbot/webhook)
+
 ---
+
+
 ###  Architecture
 
 ---
@@ -47,14 +50,14 @@ an NFV environment. **`Intent Layer`** has 3 (three) main modules:
 
 ---
 
-### Requirements
+### Prerequisites
 
 - python3. 
 - pip3. 
 - VM/Bare metal with [OSM](https://osm.etsi.org/). 
 - VM/Bare metal with [OpenStack](https://docs.openstack.org/devstack/latest/).
 ---
-### How to install
+### Installing
 
 ---
 **1)** Clone the repository:
@@ -90,7 +93,7 @@ pip install --upgrade pip
 pip3 install -r requirements.txt
 ```
 ---
-### How to RUN
+### Running
 
 ---
 **1)** intent-GUI:
