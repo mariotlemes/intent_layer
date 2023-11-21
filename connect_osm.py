@@ -2,7 +2,6 @@ from variables import GlobalVariables
 import requests, os
 
 PUBLIC_IP_OSM = GlobalVariables.get_public_ip_osm()
-os.environ['IP_ADDRESS_OSM'] = PUBLIC_IP_OSM
 
 def verify_osm_status():
     """Verify  OSM (Open Source Mano) status. """
