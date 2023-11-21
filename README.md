@@ -2,7 +2,6 @@
 
 
 
-[![Build Passing](https://img.shields.io/badge/build-passing-green)](link_do_seu_build)
 <a href="https://www.python.org/"><img alt="Python 3" src="https://img.shields.io/badge/-Python-2b5b84?style=flat-square&logo=python&logoColor=white" /></a>
 
 
