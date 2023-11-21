@@ -61,11 +61,9 @@ an NFV environment. ***`Intent Layer`*** has 3 (three) main modules:
 **1)** Clone the repository:
 
 ```
-cd ~
+cd ~ && git clone https://github.com/mariotlemes/intent_layer.git
 ```
-```
-git clone https://github.com/mariotlemes/intent_layer.git
-```
+
 **2)** Export the os environment IP_ADDRESS_OSM, where **A.B.C.D** represents the IPv4 address for OSM (Open
 Source Mano):
 ```
