@@ -1,12 +1,14 @@
 ## Change Log
 
-###  1) intent_gui.py
-`Current features`
-- [X] add intent into a database from GUI-template.
-- [X] function to show data from database.
+### Global Features
+- [x] `verify_osm_status()` - verify  OSM (Open Source Mano) status.
+- [x] `generate_nbi_token()` - generate token for NBI OSM authentication
 
-`Future features`
-- [ ] creates a new subscription to notifications related to NS lifecycle changes
+
+###  1) intent_gui.py
+- [X] `insert_intent()` - add intent into a database from GUI-template.
+- [X] `show_table_intent()`: function to show data from database.
+- [ ] create a new subscription to notifications related to NS lifecycle changes
 - [ ] receive a notification of a subscription.
 - [ ] create a function to update intent status (started or deplolyed) accordingly to
 received notifications.
