@@ -10,30 +10,70 @@ This repository contains the development code
 for intent layer software. 
 Intent Layer has 3 modules:
 
-**i)** intent_gui.py - Intent Expressing;
+**1)** ***intent_gui.py*** - GUI-based for intent expressing;
 
-**ii)** intent_engine - to convert intents into NILE;
+**2)** ***intent_engine*** - Convert intents into NILE;
 
-**iii)** intent_translator - convert NILE to VNFd and trigger network slice creation.
+**3)** ***intent_translator*** - convert NILE to suitable format (e.g., VNFd and NSd) and trigger network slice creation.
 
+###  Architecture
+![](fig/experimental-setup.png)
+
+### Intent layer components workflow
+
+![](fig/POC-basic.png)
+
+
+### Requirements
+Software and resources already available:
+* python3.
+* pip3.
+* VM/Bare metal with [OSM](https://osm.etsi.org/).
+* VM/Bare metal with [OpenStack](https://docs.openstack.org/devstack/latest/).
 
 ### How to install
 
 ---
-**1)** Export the os environment IP_ADDRESS_OSM, where A.B.C.D represents the IPv4 address for OSM (Open
-Source Mano)
+**1)** Clone the repository:
+
 ```
-export IP_ADDRESS_OSM="A.B.C.D"
+cd ~
 ```
-**2)** Clone the repository
 ```
 git clone https://github.com/mariotlemes/intent_layer.git
 ```
+**2)** Export the os environment IP_ADDRESS_OSM, where **A.B.C.D** represents the IPv4 address for OSM (Open
+Source Mano):
+```
+export IP_ADDRESS_OSM="A.B.C.D"
+```
+
 **3)** Install requirements.txt:
 ```
-cd intent_layer
-python3 -m venv .venv
-source .venv/bin/activate
-install -r requirements.txt
+cd ~/intent_layer
 ```
+
+```
+python3 -m venv .venv
+```
+
+```
+source .venv/bin/activate
+```
+
+```
+pip install --upgrade pip
+```
+
+```
+pip3 install -r requirements.txt
+```
+
+### How to RUN
+intent-GUI:
+
+```
+python3 ~/intent_layer/intent_gui.py
+```
+
 
