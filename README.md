@@ -10,11 +10,11 @@ This repository contains the development code
 for intent layer software. 
 Intent Layer has 3 modules:
 
-**1)** ***intent_gui.py*** - GUI-based for intent expressing;
+**1)** ***intent_gui.py***: GUI-based for intent expressing;
 
-**2)** ***intent_engine*** - Convert intents into NILE;
+**2)** ***intent_engine***: Convert intents into NILE (**N**etwork **I**ntent **L**anguag**E**);
 
-**3)** ***intent_translator*** - convert NILE to suitable format (e.g., VNFd and NSd) and trigger network slice creation.
+**3)** ***intent_translator***: Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor) and NSd (Network Service Descriptor), and trigger network slice creation;
 
 ###  Architecture
 
