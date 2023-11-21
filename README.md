@@ -1,7 +1,17 @@
-# intent_layer
+## Intent Layer
 
 [![Build Passing](https://img.shields.io/badge/build-passing-brightgreen)](link_do_seu_build)
 
+---
+
+- [Description](#description)
+- [Architecture](#architecture)
+- [Intent layer components workflow](#intent-layer-components-workflow)
+- [Requirements](#requirements)
+- [How to install](#how-to-install)
+- [How to run](#how-to-run)
+
+--- 
 ### Description
 
 ---
@@ -12,15 +22,18 @@ Intent Layer has 3 modules:
 
 **1)** ***intent_gui.py***: GUI-based for intent expressing;
 
-**2)** ***intent_engine***: Convert intents into NILE (**N**etwork **I**ntent **L**anguag**E**);
+**2)** ***intent_engine.py***: Convert intents into NILE (**N**etwork **I**ntent **L**anguag**E**);
 
-**3)** ***intent_translator***: Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor) and NSd (Network Service Descriptor), and trigger network slice creation;
+**3)** ***intent_translator.py***: Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor) and NSd (Network Service Descriptor), and trigger network slice creation;
 
+---
 ###  Architecture
 
 ---
 
 ![](fig/experimental-setup.png)
+
+---
 
 ### Intent layer components workflow
 
@@ -28,16 +41,16 @@ Intent Layer has 3 modules:
 
 ![](fig/POC-basic.png)
 
+---
 
 ### Requirements
-Software and resources already available:
 
 --- 
 * python3.
 * pip3.
 * VM/Bare metal with [OSM](https://osm.etsi.org/).
 * VM/Bare metal with [OpenStack](https://docs.openstack.org/devstack/latest/).
-
+---
 ### How to install
 
 ---
@@ -75,8 +88,10 @@ pip install --upgrade pip
 ```
 pip3 install -r requirements.txt
 ```
-
+---
 ### How to RUN
+
+---
 intent-GUI:
 
 ```
