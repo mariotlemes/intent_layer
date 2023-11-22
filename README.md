@@ -1,4 +1,4 @@
-## Intent Layer
+# Intent Layer
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=plastic&logo=python&logoColor=ffdd54)
 ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=plastic&logo=sqlite&logoColor=white)
@@ -13,7 +13,7 @@
 - [How to run](#running)
 
 --- 
-### Getting started
+## Getting started
 
 ---
 
@@ -34,7 +34,7 @@ Obs: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.c
 ---
 
 
-###  Architecture
+##  Architecture
 
 ---
 
@@ -42,7 +42,7 @@ Obs: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.c
 
 ---
 
-### Intent layer components workflow
+## Intent layer components workflow
 
 ---
 
@@ -50,14 +50,14 @@ Obs: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.c
 
 ---
 
-### Prerequisites
+## Prerequisites
 
 - python3. 
 - pip3. 
 - VM/Bare metal with [OSM](https://osm.etsi.org/). 
 - VM/Bare metal with [OpenStack](https://docs.openstack.org/devstack/latest/).
 ---
-### Installing
+## Installing
 
 ---
 **1)** Clone the repository:
@@ -93,7 +93,7 @@ pip install --upgrade pip
 pip3 install -r requirements.txt
 ```
 ---
-### Running
+## Running
 
 ---
 **1)** intent-GUI:
