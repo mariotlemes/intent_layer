@@ -11,7 +11,7 @@
 - [X] `show_table_intent()` - show created intents from database.
 - [ ] create a new subscription to notifications related to NS lifecycle changes
 - [ ] receive a notification of a subscription.
-- [ ] create a function to update intent status (started or deplolyed) accordingly to
+- [ ] create a function to update intent status (started or deployed) accordingly to
 received notifications.
 
 ###  2) intent_engine.py

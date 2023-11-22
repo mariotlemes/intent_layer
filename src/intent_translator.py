@@ -3,6 +3,9 @@ import json
 import connect_osm
 from variables import GlobalVariables
 
+def get_vim_id():
+    pass
+
 def trigger_create_slice():
     url =  GlobalVariables.get_public_ip_osm() + '/nslcm/v1/ns_instances_content'
     print(url)
