@@ -3,22 +3,12 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery
 from PySide6.QtWidgets import QHeaderView
 
 class DataBase():
-    def __init__(self, name="system.db") -> None:
+    def __init__(self, name="database/system.db") -> None:
         self.name = name
 
     def create_connect(self):
         self.connection = sqlite3.connect(self.name)
 
-        # connection_name = "qt_sql_default_connection"
-
-
-        # Verificar se já existe uma conexão com o mesmo nome
-        # if QSqlDatabase.contains(connection_name):
-        #     # Se existir, remover essa conexão
-        #     db = QSqlDatabase.database(connection_name)
-        #     if db.isValid():
-        #         db.close()
-        #     QSqlDatabase.removeDatabase(connection_name)
 
     def close_connection(self):
         try:
@@ -51,17 +41,9 @@ class DataBase():
         except AttributeError:
             print("faça a conexão")
 
-    # def select_all_intents(self):
-    #     try:
-    #         cursor = self.connection.cursor()
-    #         cursor.execute("""SELECT * FROM intents""")
-    #         self.connection.commit()
-    #     except AttributeError:
-    #         print("faça a conexão!")
-
     def update_table_intent(name):
         db = QSqlDatabase.addDatabase("QSQLITE")
-        db.setDatabaseName("system.db")
+        db.setDatabaseName("database/system.db")
         db.open()
 
         query = QSqlQuery()

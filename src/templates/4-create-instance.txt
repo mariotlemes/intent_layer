@@ -1,0 +1,5 @@
+osm nsi-create \
+--nsi_name primeiro_slice \
+--nst_name slice_basic_nst \
+--vim_account openstack \
+--config 'netslice-vld: [{ "name": "slice_vld_mgmt", "vim-network-name": public }]'
