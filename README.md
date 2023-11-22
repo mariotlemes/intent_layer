@@ -12,10 +12,7 @@
 - [How to install](#installing)
 - [How to run](#running)
 
---- 
 ## Getting started
-
----
 
 This project contains the code
 for intent layer software (src directory) and instructions to run in top of
@@ -31,24 +28,13 @@ an NFV environment.
 
 Obs: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.com/lumichatbot/webhook)
 
----
-
-
 ##  Architecture
-
----
 
 ![](fig/experimental-setup.png)
 
----
-
 ## Intent layer components workflow
 
----
-
 ![](fig/POC-basic.png)
-
----
 
 ## Prerequisites
 
@@ -56,10 +42,9 @@ Obs: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.c
 - pip3. 
 - VM/Bare metal with [OSM](https://osm.etsi.org/). 
 - VM/Bare metal with [OpenStack](https://docs.openstack.org/devstack/latest/).
----
+
 ## Installing
 
----
 **1)** Clone the repository:
 
 ```
@@ -92,10 +77,9 @@ pip install --upgrade pip
 ```
 pip3 install -r requirements.txt
 ```
----
+
 ## Running
 
----
 **1)** intent-GUI:
 
 ```
