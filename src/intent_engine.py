@@ -1,10 +1,10 @@
-from nile import compiler
+# from nile import compiler
 from database import DataBase
 import sqlite3
 
 def get_intents_data():
     """1) Get intents in database"""
-    conn = sqlite3.connect('database/system.db')
+    conn = sqlite3.connect('system.db')
     cursor = conn.cursor()
 
     cursor.execute('SELECT name, number_vfs FROM intents')

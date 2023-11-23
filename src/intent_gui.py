@@ -1,15 +1,11 @@
 import sys, requests
 from connect_osm import ConnectOSM
-
 from ui_main import Ui_MainWindow
-
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox,
                                QHeaderView)
 from PySide6.QtCore import Qt
 from PySide6.QtSql import QSqlDatabase, QSqlQueryModel
-
 from database import DataBase
-
 from variables import GlobalVariables
 
 # public ipv4 address - Open Source Mano

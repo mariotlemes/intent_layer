@@ -9,7 +9,6 @@ class DataBase():
     def create_connect(self):
         self.connection = sqlite3.connect(self.name)
 
-
     def close_connection(self):
         try:
             self.connection.close()
@@ -60,5 +59,4 @@ class DataBase():
 
         # Execute the query
         query.exec()
-
         db.close()
