@@ -50,13 +50,18 @@ Obs: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.c
 cd ~ && git clone https://github.com/mariotlemes/intent_layer.git
 ```
 
-**2)** Export the os environment IP_ADDRESS_OSM, where **A.B.C.D** represents the IPv4 address for OSM (Open
+**2)** Install qttools:
+```
+sudo apt install qttools5-dev-tools
+```
+
+**3)** Export the os environment IP_ADDRESS_OSM, where **A.B.C.D** represents the IPv4 address for OSM (Open
 Source Mano):
 ```
 export IP_ADDRESS_OSM="A.B.C.D"
 ```
 
-**3)** Install requirements.txt:
+**4)** Install requirements.txt:
 ```
 cd ~/intent_layer
 ```
