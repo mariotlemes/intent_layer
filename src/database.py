@@ -3,7 +3,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery
 from PySide6.QtWidgets import QHeaderView
 
 class DataBase():
-    def __init__(self, name="database/system.db") -> None:
+    def __init__(self, name="system.db") -> None:
         self.name = name
 
     def create_connect(self):
@@ -43,7 +43,7 @@ class DataBase():
 
     def update_table_intent(name):
         db = QSqlDatabase.addDatabase("QSQLITE")
-        db.setDatabaseName("database/system.db")
+        db.setDatabaseName("system.db")
         db.open()
 
         query = QSqlQuery()
@@ -62,4 +62,3 @@ class DataBase():
         query.exec()
 
         db.close()
-

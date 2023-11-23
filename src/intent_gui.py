@@ -72,7 +72,7 @@ class Intent_GUI(QMainWindow, Ui_MainWindow):
         """Show data from databse in tw_intents QTableView"""
 
         db = QSqlDatabase.addDatabase("QSQLITE")
-        db.setDatabaseName("database/system.db")
+        db.setDatabaseName("system.db")
         db.open()
 
         # herdar da classe CenterAlignedQueryModel para centralizar o resultado da consulta
