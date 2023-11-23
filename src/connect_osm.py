@@ -105,7 +105,7 @@ class ConnectOSM:
 
     # def post_vnf_packages(self, vnfd_data):
     def post_vnf_packages(self, vnfd_data):
-        '''Post a new content of VNFd in OSM'''
+        '''Post a new VNFd content in JSON to OSM'''
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages
         print(endpoint)
 
