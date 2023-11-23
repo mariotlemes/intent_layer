@@ -1,4 +1,5 @@
-import sys, requests, connect_osm
+import sys, requests
+from connect_osm import ConnectOSM
 
 from ui_main import Ui_MainWindow
 
@@ -110,7 +111,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Intent_GUI()
 
-    if connect_osm.verify_osm_status() == True:
+    if ConnectOSM.verify_osm_status() == True:
 
         window.show()
         app.exec()

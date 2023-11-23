@@ -1,8 +1,9 @@
 import requests
 import json, yaml
-import connect_osm
+from connect_osm import ConnectOSM
 from variables import GlobalVariables
 import descriptors_constructor
+
 
 # def trigger_creation_slice():
 #     ''''Function to trigger creation of slice. It interacts with OSM NBI REST API'''
@@ -39,8 +40,7 @@ if __name__ == '__main__':
     # print("\n\n\n")
     # print(connect_osm.get_ns_packages())
 
-    connect_osm.post_vnf_packages()
-
+    ConnectOSM.post_vnf_packages()
     # conteudo = descriptors_constructor.create_template_vnfd('teste', 4)
     # connect_osm.post_vnf_packages('/Users/mariotl/PycharmProjects/intent_layer/src/slice_basic_vnf.yaml')
 
