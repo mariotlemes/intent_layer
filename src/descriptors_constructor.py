@@ -1,5 +1,5 @@
 import yaml, tarfile, gzip, os, json, io
-import connect_osm
+import handler_osm
 '''
 NFs, throghput, topology
 
@@ -213,7 +213,7 @@ if __name__ == '__main__':
     #     print("Not deployed!")
 
     nsd = DescriptorConstrutor.create_template_ns()
-    post = connect_osm.ConnectOSM()
+    post = connect_osm.HandlerOSM()
     result = post.post_ns_package(nsd)
 
     if result == False:

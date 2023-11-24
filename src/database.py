@@ -47,16 +47,16 @@ class DataBase():
 
         query = QSqlQuery()
 
-        #  update query
+        # update query
         update_query = "UPDATE intents SET status = :new_value WHERE name = :condition_value"
 
-        # Prepare the query
+        # prepare the query
         query.prepare(update_query)
 
-        # Bind values to placeholders
+        # bind values to placeholders
         query.bindValue(":new_value", "DEPLOYED")  # Replace with the new value
         query.bindValue(":condition_value", name)  # Replace with the condition value
 
-        # Execute the query
+        # execute the query
         query.exec()
         db.close()

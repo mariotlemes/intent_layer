@@ -15,7 +15,7 @@ endpoint_vnf_packages_content = '/vnfpkgm/v1/vnf_packages_content'
 enpoint_ns_packages_content = '/nsd/v1/ns_descriptors_content'
 
 
-class ConnectOSM:
+class HandlerOSM:
     def verify_osm_status():
         """Verify  OSM (Open Source Mano) status. """
         print("Trying to connect OSM NorthBound Interface ... \n")
@@ -63,7 +63,7 @@ class ConnectOSM:
 
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         # print(url)
-        bearer = ConnectOSM.generate_nbi_token()
+        bearer = HandlerOSM.generate_nbi_token()
         headers.update(bearer)
         response = requests.get(endpoint, headers=headers)
 
@@ -71,12 +71,12 @@ class ConnectOSM:
 
 
     # Management operations of NS descriptors and packages
-    def get_ns_packages(): # Query information about multiple NS instances
+    def get_ns_packages(): # Query information about multiple NS packages
 
         endpoint = PUBLIC_IP_OSM + endpoint_ns_packages
 
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
-        bearer = ConnectOSM.generate_nbi_token()
+        bearer = HandlerOSM.generate_nbi_token()
         headers.update(bearer)
         response = requests.get(endpoint, headers=headers)
 
@@ -88,7 +88,7 @@ class ConnectOSM:
 
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         # print(endpoint_ns_instances)
-        bearer = ConnectOSM.generate_nbi_token()
+        bearer = HandlerOSM.generate_nbi_token()
         headers.update(bearer)
         response = requests.get(endpoint, headers=headers)
         return response.json()
@@ -98,7 +98,7 @@ class ConnectOSM:
 
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         # to generate bearer value
-        bearer = ConnectOSM.generate_nbi_token()
+        bearer = HandlerOSM.generate_nbi_token()
         # update headers with bearer authentication
         headers.update(bearer)
         # response - GET method
@@ -118,7 +118,7 @@ class ConnectOSM:
             'Accept': 'application/json'
         }
 
-        bearer = ConnectOSM.generate_nbi_token()
+        bearer = HandlerOSM.generate_nbi_token()
         headers.update(bearer)
 
         response = requests.request("POST", endpoint, headers=headers,
@@ -153,7 +153,7 @@ class ConnectOSM:
             'Accept': 'application/json'
         }
 
-        bearer = ConnectOSM.generate_nbi_token()
+        bearer = HandlerOSM.generate_nbi_token()
 
         headers.update(bearer)
 
@@ -220,5 +220,5 @@ if __name__ == '__main__':
       }
     }
     """
-    post_ns = ConnectOSM()
+    post_ns = HandlerOSM()
     post_ns.post_ns_package(self, nsd_data)

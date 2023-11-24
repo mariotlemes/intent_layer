@@ -1,13 +1,30 @@
-## Change Log
+### Features
 
-### 11-23-2023:
-#### Global Features
-- [x] `get_public_ip_osm()` - get value from IP_ADDRESS_OSM (OS environment variable)  
+---
+All notable features to this project will be documented in this file.
+
+---
+
+#### `handler_osm.py:` handles the NBI OSM.
+class HandlerOSM:
 - [x] `verify_osm_status()` - verify OSM (Open Source Mano) status.
 - [x] `generate_nbi_token()` - generate token for NBI OSM authentication
+- [x] `get_ns_packages()`- get information about multiple NS packages
+- [x] `get_ns_instances()` - get information about multiple NS instances
+- [x] `get_public_ip_osm()` - get value from IP_ADDRESS_OSM (OS environment variable) 
+- [x] `get_vim_accounts()` - get information about VIM created in OSM.
+- [x] `post_vnf_packages(vnfd_data):` post a new VNFd in JSON format to OSM.
+- [x] `post_ns_package (nsd_data):` post a new NSd in JSON format to OSM.
+---
+####  `descriptors_constructor:` creates the suitable templates for VNFd and NSd.
+class DescriptorConstructor:
+- [X] `create_template_vnfd(name_of_intent, number_vfs)` - receive an intent name and number of VFs and generate a JSON file
+        of VNF and creates a VNFd template (JSON format).
+- [ ] `create_template_nsd()` 
 
-####  1) intent_gui.py
-- [x] `GUI template` - create a basic GUI for intent expressing.
+---
+#### `intentgui.py:` basic GUI for intent expressing.
+class IntentGUI:
 - [X] `insert_intent()` - add intent into a database from GUI-template.
 - [X] `show_table_intent()` - show created intents from database.
 - [ ] `create_subscription_osm()` - create a new subscription to notifications related to NS lifecycle changes
@@ -15,11 +32,16 @@
 - [ ] `update_intent_status()` - update intent status (started, running, deployed, etc) accordingly to
 received notifications.
 
-####  2) intent_engine.py
+--- 
+####  `intent_engine.py`: converts intents into NILE
+class IntentEngine:
 - [X] `import nile` - import code from NILE (Network Intent LanguagE).
 - [X] `get_intents_data()` - get intents data from database.
 
-####  3) intent_translator.py
+
+--- 
+#### `intent_translator.py`: mapping NILE intents to VNFd and NSD.
+class IntentTranslate:
 - [X] `trigger_creation_slice()` - trigger the creation of slice interacting 
 with OSM NBI REST API.
 

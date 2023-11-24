@@ -19,7 +19,7 @@ an NFV environment.
 <mark>**`Intent Layer`**</mark> has 3 (three) main modules:
 
 
-**1)** **`intent_gui.py`**- GUI-based for intent expressing;
+**1)** **`intentgui.py`**- GUI-based for intent expressing;
 
 **2)** **`intent_engine.py`**- Convert intents into NILE (**N**etwork **I**ntent **L**anguag**E**);
 
@@ -87,5 +87,5 @@ pip3 install -r requirements.txt
 **1)** intent-GUI:
 
 ```
-python3 ~/intent_layer/intent_gui.py
+python3 ~/intent_layer/intentgui.py
 ```

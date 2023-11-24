@@ -1,5 +1,5 @@
 import sys, requests
-from connect_osm import ConnectOSM
+from handler_osm import HandlerOSM
 from ui_main import Ui_MainWindow
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox,
                                QHeaderView)
@@ -19,11 +19,11 @@ class CenterAlignedQueryModel(QSqlQueryModel):
 
         return super().data(index, role)
 
-class Intent_GUI(QMainWindow, Ui_MainWindow):
+class IntentGUI(QMainWindow, Ui_MainWindow):
     """Front-end for Intent Expressing"""
 
     def __init__(self):
-        super(Intent_GUI, self).__init__()
+        super(IntentGUI, self).__init__()
 
         self.setupUi(self)
         self.setWindowTitle("PoC - GUI-based Intent Expressing/Profiling")
@@ -105,9 +105,9 @@ if __name__ == '__main__':
     db.create_table_intents()
 
     app = QApplication(sys.argv)
-    window = Intent_GUI()
+    window = IntentGUI()
 
-    if ConnectOSM.verify_osm_status() == True:
+    if HandlerOSM.verify_osm_status() == True:
 
         window.show()
         app.exec()
