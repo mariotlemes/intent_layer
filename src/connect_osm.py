@@ -12,6 +12,8 @@ endpoint_ns_packages = '/nsd/v1/ns_descriptors'
 endpoint_ns_instances = '/nslcm/v1/ns_instances'
 endpoint_del_ns_instances = '/nslcm/v1/ns_instances'
 endpoint_vnf_packages_content = '/vnfpkgm/v1/vnf_packages_content'
+enpoint_ns_packages_content = '/nsd/v1/ns_descriptors_content'
+
 
 class ConnectOSM:
     def verify_osm_status():
@@ -137,4 +139,86 @@ class ConnectOSM:
         #
         #  return id_value
 
+    def post_ns_package(self, nsd_data):
+        # campos importantes
+        # vnfd-id: referencia a VNFD antes implantada
+        # virtual-link-profile-id: nome da rede existente no OpenStack
 
+        '''Post a new VNFd content in JSON to OSM'''
+        endpoint = PUBLIC_IP_OSM + enpoint_ns_packages_content
+        print(endpoint)
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        bearer = ConnectOSM.generate_nbi_token()
+
+        headers.update(bearer)
+
+        response = requests.request("POST", endpoint, headers=headers, data=nsd_data)
+
+        print(response.text)
+
+        if response.status_code == 409:
+            print("The operation cannot be executed currently, due to a conflict with the state of the resource")
+            return False
+
+        if response.status_code == 201:
+            print("Successfuly NSd onboarding on Open Source Mano")
+
+        return response
+
+
+if __name__ == '__main__':
+    # post_ns = ConnectOSM()
+    # post_ns.post_ns_package()
+
+    nsd_data = """
+            {
+      "nsd": {
+        "nsd": [
+          {
+            "description": "Simple NS with a single VNF and a single VL",
+            "df": [
+              {
+                "id": "default-df",
+                "vnf-profile": [
+                  {
+                    "id": "vnf",
+                    "virtual-link-connectivity": [
+                      {
+                        "constituent-cpd-id": [
+                          {
+                            "constituent-base-element-id": "vnf",
+                            "constituent-cpd-id": "vnf-cp0-ext"
+                          }
+                        ],
+                        "virtual-link-profile-id": "mgmtnet"
+                      }
+                    ],
+                    "vnfd-id": "hackfest_basic-vnf"
+                  }
+                ]
+              }
+            ],
+            "id": "hackfest_basic-ns",
+            "name": "hackfest_basic-ns",
+            "version": 1,
+            "virtual-link-desc": [
+              {
+                "id": "mgmtnet",
+                "mgmt-network": true
+              }
+            ],
+            "vnfd-id": [
+              "hackfest_basic-vnf"
+            ]
+          }
+        ]
+      }
+    }
+    """
+    post_ns = ConnectOSM()
+    post_ns.post_ns_package(self, nsd_data)

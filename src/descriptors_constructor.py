@@ -13,8 +13,51 @@ Reference: https://osm-download.etsi.org/ftp/osm-doc/etsi-nfv-vnfd.html#
 '''
 class DescriptorConstrutor:
     def create_template_ns():
-
-        pass
+        nsd_data = """
+        {
+  "nsd": {
+    "nsd": [
+      {
+        "description": "Simple NS with a single VNF and a single VL",
+        "df": [
+          {
+            "id": "default-df",
+            "vnf-profile": [
+              {
+                "id": "vnf",
+                "virtual-link-connectivity": [
+                  {
+                    "constituent-cpd-id": [
+                      {
+                        "constituent-base-element-id": "vnf",
+                        "constituent-cpd-id": "vnf-cp0-ext"
+                      }
+                    ],
+                    "virtual-link-profile-id": "mgmtnet"
+                  }
+                ],
+                "vnfd-id": "slice_basic_vnf"
+              }
+            ]
+          }
+        ],
+        "id": "hackfest_basic-ns",
+        "name": "hackfest_basic-ns",
+        "version": 1,
+        "virtual-link-desc": [
+          {
+            "id": "mgmtnet",
+            "mgmt-network": true
+          }
+        ],
+        "vnfd-id": [
+          "slice_basic_vnf"
+        ]
+      }
+    ]
+  }
+}"""
+        return nsd_data
 
     def create_template_vnfd(name_of_intent, number_vfs):
         '''Receive intent name and number of VFs and generate a JSON file
@@ -160,14 +203,23 @@ class DescriptorConstrutor:
 if __name__ == '__main__':
 
     # creaet a VNFd
-    new_vnfd = DescriptorConstrutor.create_template_vnfd('mario_9', 3)
+    # new_vnfd = DescriptorConstrutor.create_template_vnfd('slice_basic_vnf', 3)
+    #
+    # # post a VNFd package in OSM
+    # post = connect_osm.ConnectOSM()
+    # result = post.post_vnf_packages(new_vnfd)
+    #
+    # if result == False:
+    #     print("Not deployed!")
 
-    # post a VNFd package in OSM
+    nsd = DescriptorConstrutor.create_template_ns()
     post = connect_osm.ConnectOSM()
-    result = post.post_vnf_packages(new_vnfd)
+    result = post.post_ns_package(nsd)
 
     if result == False:
         print("Not deployed!")
+
+
 
 
 # vnfd (caracteristicas das funções)
