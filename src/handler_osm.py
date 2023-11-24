@@ -13,7 +13,7 @@ endpoint_ns_instances = '/nslcm/v1/ns_instances'
 endpoint_del_ns_instances = '/nslcm/v1/ns_instances'
 endpoint_vnf_packages_content = '/vnfpkgm/v1/vnf_packages_content'
 enpoint_ns_packages_content = '/nsd/v1/ns_descriptors_content'
-
+endpoint_ns_create_instances = '/nslcm/v1/ns_instances_content'
 
 class HandlerOSM:
     def verify_osm_status():
@@ -58,7 +58,7 @@ class HandlerOSM:
 
         return headers
 
-    def get_vnf_packages(): # Query information about multiple VNF package resources
+    def get_vnf_packages(self): # Query information about multiple VNF package resources
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages
 
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
@@ -67,11 +67,15 @@ class HandlerOSM:
         headers.update(bearer)
         response = requests.get(endpoint, headers=headers)
 
+        key_search = '_id'
+        if key_search in response.json():
+            value = response.json()[key_search]
+            headers = {"Authorization": "Bearer " + value}
         return response.json()
 
 
     # Management operations of NS descriptors and packages
-    def get_ns_packages(): # Query information about multiple NS packages
+    def get_ns_packages(name): # Query information about multiple NS packages
 
         endpoint = PUBLIC_IP_OSM + endpoint_ns_packages
 
@@ -79,11 +83,17 @@ class HandlerOSM:
         bearer = HandlerOSM.generate_nbi_token()
         headers.update(bearer)
         response = requests.get(endpoint, headers=headers)
-
-        return response.json()
+        # print(response.json())
+        for item in response.json():
+            if item['name'] == name:
+                value_id = item['_id']
+                return value_id
+        else:
+            print("NS package not found!")
+            return False
 
     # Management operations of NS instances
-    def get_ns_instances():
+    def get_ns_instances(self):
         endpoint = PUBLIC_IP_OSM + endpoint_ns_instances
 
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
@@ -93,7 +103,7 @@ class HandlerOSM:
         response = requests.get(endpoint, headers=headers)
         return response.json()
 
-    def get_vim_accounts():
+    def get_vim_accounts(self):
         endpoint = PUBLIC_IP_OSM + endpoint_vim_accounts
 
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
@@ -103,15 +113,18 @@ class HandlerOSM:
         headers.update(bearer)
         # response - GET method
         response = requests.get(endpoint, headers=headers)
-        return response.json()
+
+        if response.status_code != 200:
+            return False
+
+        if response.status_code == 200:
+            value_id = response.json()[0]["_id"]
+            return value_id
 
     def post_vnf_packages(self, vnfd_data):
         '''Post a new VNFd content in JSON to OSM'''
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages_content
         print(endpoint)
-
-        # print(endpoint)
-        # ajustando para enviar dados de um arquivo YAML
 
         headers = {
             'Content-Type': 'application/json',
@@ -124,20 +137,16 @@ class HandlerOSM:
         response = requests.request("POST", endpoint, headers=headers,
                                     data=vnfd_data)
 
-        if response.status_code == 409:
-            print("The operation cannot be executed currently, due to a conflict with the state of the resource")
+        if response.status_code != 201:
+            print("The operation cannot be executed!")
             return False
 
         if response.status_code == 201:
             print("Successfuly VNFd onboarding on Open Source Mano")
-
-        return response
-        # # to restory id value
-        # key_search = 'id'
-        # if key_search in response.json():
-        #     id_value = response.json()[key_search]
-        #
-        #  return id_value
+            key_search = 'id'
+            if key_search in response.json():
+                id_value = response.json()[key_search]
+                return id_value
 
     def post_ns_package(self, nsd_data):
         # campos importantes
@@ -146,7 +155,6 @@ class HandlerOSM:
 
         '''Post a new VNFd content in JSON to OSM'''
         endpoint = PUBLIC_IP_OSM + enpoint_ns_packages_content
-        print(endpoint)
 
         headers = {
             'Content-Type': 'application/json',
@@ -159,66 +167,56 @@ class HandlerOSM:
 
         response = requests.request("POST", endpoint, headers=headers, data=nsd_data)
 
-        print(response.text)
-
-        if response.status_code == 409:
-            print("The operation cannot be executed currently, due to a conflict with the state of the resource")
+        if response.status_code != 201:
+            print("The operation cannot be executed!")
             return False
 
         if response.status_code == 201:
             print("Successfuly NSd onboarding on Open Source Mano")
+            key_search = 'id'
+            if key_search in response.json():
+                id_value = response.json()[key_search]
+                return id_value
+
+    def post_create_ns_instances(self, nsd_id, ns_name, ns_description, vim_account_id):
+        # campos importantes
+        # vnfd-id: referencia a VNFD antes implantada
+        # virtual-link-profile-id: nome da rede existente no OpenStack
+
+        '''Post a new VNFd content in JSON to OSM'''
+        endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instances
+        print(endpoint)
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        # nsd_id = HandlerOSM.get_ns_packages('hackfest_basic-ns')
+        #
+        # vim_account_id = HandlerOSM.get_vim_accounts()
+
+        payload = {
+            "nsdId": nsd_id,
+            "nsName": ns_name,
+            "nsDescription": ns_description,
+            "vimAccountId": vim_account_id
+        }
+
+        payload = json.dumps(payload)
+
+        bearer = HandlerOSM.generate_nbi_token()
+
+        headers.update(bearer)
+
+        response = requests.request("POST", endpoint, headers=headers, data=payload)
+
+        print(response.text)
+
+        if response.status_code != 201:
+            print("The operation cannot be executed!")
+
+        if response.status_code == 201:
+            print("Successfuly Instantiation!")
 
         return response
-
-
-if __name__ == '__main__':
-    # post_ns = ConnectOSM()
-    # post_ns.post_ns_package()
-
-    nsd_data = """
-            {
-      "nsd": {
-        "nsd": [
-          {
-            "description": "Simple NS with a single VNF and a single VL",
-            "df": [
-              {
-                "id": "default-df",
-                "vnf-profile": [
-                  {
-                    "id": "vnf",
-                    "virtual-link-connectivity": [
-                      {
-                        "constituent-cpd-id": [
-                          {
-                            "constituent-base-element-id": "vnf",
-                            "constituent-cpd-id": "vnf-cp0-ext"
-                          }
-                        ],
-                        "virtual-link-profile-id": "mgmtnet"
-                      }
-                    ],
-                    "vnfd-id": "hackfest_basic-vnf"
-                  }
-                ]
-              }
-            ],
-            "id": "hackfest_basic-ns",
-            "name": "hackfest_basic-ns",
-            "version": 1,
-            "virtual-link-desc": [
-              {
-                "id": "mgmtnet",
-                "mgmt-network": true
-              }
-            ],
-            "vnfd-id": [
-              "hackfest_basic-vnf"
-            ]
-          }
-        ]
-      }
-    }
-    """
-    post_ns = HandlerOSM()
-    post_ns.post_ns_package(self, nsd_data)

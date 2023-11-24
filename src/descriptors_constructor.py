@@ -200,25 +200,6 @@ class DescriptorConstrutor:
         return json_pos_operation
 
 
-if __name__ == '__main__':
-
-    # creaet a VNFd
-    # new_vnfd = DescriptorConstrutor.create_template_vnfd('slice_basic_vnf', 3)
-    #
-    # # post a VNFd package in OSM
-    # post = connect_osm.ConnectOSM()
-    # result = post.post_vnf_packages(new_vnfd)
-    #
-    # if result == False:
-    #     print("Not deployed!")
-
-    nsd = DescriptorConstrutor.create_template_ns()
-    post = connect_osm.HandlerOSM()
-    result = post.post_ns_package(nsd)
-
-    if result == False:
-        print("Not deployed!")
-
 
 
 

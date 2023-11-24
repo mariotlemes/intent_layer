@@ -10,11 +10,12 @@ class HandlerOSM:
 - [x] `verify_osm_status()` - verify OSM (Open Source Mano) status.
 - [x] `generate_nbi_token()` - generate token for NBI OSM authentication
 - [x] `get_ns_packages()`- get information about multiple NS packages
-- [x] `get_ns_instances()` - get information about multiple NS instances
+- [x] `get_ns_instances(name)` - get ID information about a specific NS instance.
 - [x] `get_public_ip_osm()` - get value from IP_ADDRESS_OSM (OS environment variable) 
 - [x] `get_vim_accounts()` - get information about VIM created in OSM.
 - [x] `post_vnf_packages(vnfd_data):` post a new VNFd in JSON format to OSM.
 - [x] `post_ns_package (nsd_data):` post a new NSd in JSON format to OSM.
+- [x] `post_create_ns_instances (nsd_id, ns_name, ns_description, vim_account_id): `post a new NS instance. 
 ---
 ####  `descriptors_constructor:` creates the suitable templates for VNFd and NSd.
 class DescriptorConstructor:
@@ -44,4 +45,14 @@ class IntentEngine:
 class IntentTranslate:
 - [X] `trigger_creation_slice()` - trigger the creation of slice interacting 
 with OSM NBI REST API.
+
+
+--- 
+#### `tests.py`: test and analyze other components.
+
+class Tests:
+- [X] `onboarding_time()` - calculate the onboarding time (VNFd and NSd)
+- [X] `instantiaton_time()` - calculate the instantiation time of a NS.
+
+
 
