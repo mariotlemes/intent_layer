@@ -1,31 +1,30 @@
-import handler_osm
 from descriptors_constructor import DescriptorConstrutor
-from handler_osm import HandlerOSM
 import time
+from handler_osm import HandlerOSM
 
 class Tests:
-    def onboarding_time(self):
-        '''Calculate the onboarding time'''
+    def onboarding (self):
+        """Calculate the onboarding time"""
 
         print('Onboarding time - start!')
         start = time.time()
 
         # create a VNFd
-        new_vnfd = DescriptorConstrutor.create_template_vnfd('slice_basic_vnf',
-                                                             8)
+        new_vnfd = DescriptorConstrutor()
+
+        new_vnfd = new_vnfd.create_template_vnfd('slice_basic_vnf',3)
 
         # post a VNFd package in OSM
-        post = handler_osm.HandlerOSM()
+        post = HandlerOSM()
         result = post.post_vnf_packages(new_vnfd)
 
         if not result:
             print(f"VNF not deployed!")
 
-        nsd = DescriptorConstrutor.create_template_ns()
-        post = handler_osm.HandlerOSM()
-        result = post.post_ns_package(nsd)
+        nsd = DescriptorConstrutor()
+        post2 = HandlerOSM()
 
-        if not result:
+        if not post2.post_ns_package(nsd.create_template_ns()):
             print(f" NS not deployed!")
 
         end = time.time()
@@ -38,27 +37,23 @@ class Tests:
 
         print(f'Time elapsed: {elapsed_time}s')
 
-    def instantiaton_time(self):
+    def instantiaton (self):
         '''Calculate the instantiation time'''
         print('Instantiation time - start!')
 
         start = time.time()
         teste = HandlerOSM()
 
-        nsd_id = HandlerOSM.get_ns_packages('hackfest_basic-ns')
-        # print(nsd_id)
+        nsd_id = HandlerOSM()
 
         vim_account_id = HandlerOSM()
 
-        id_vim = vim_account_id.get_vim_accounts()
-
-        teste.post_create_ns_instances(nsd_id,
+        teste.post_create_ns_instances(nsd_id.get_ns_packages('hackfest_basic-ns'),
                                        'first_creation',
                                        'default',
-                                       id_vim)
+                                       vim_account_id.get_vim_accounts())
         end = time.time()
 
-        # print(HandlerOSM.get_ns_packages('hackfest_basic-ns'))
         elapsed_time = end - start
 
         elapsed_time = round(elapsed_time, 2)
@@ -69,9 +64,7 @@ class Tests:
 
 if __name__ == '__main__':
     teste1 = Tests()
-    teste1.onboarding_time()
+    teste1.onboarding()
 
     teste2 = Tests()
-    teste2.instantiaton_time()
-
-
+    teste2.instantiaton()

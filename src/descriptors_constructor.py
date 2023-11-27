@@ -12,7 +12,8 @@ cloud_init_example_VNF/
 Reference: https://osm-download.etsi.org/ftp/osm-doc/etsi-nfv-vnfd.html#
 '''
 class DescriptorConstrutor:
-    def create_template_ns():
+    '''Create a template for network service'''
+    def create_template_ns(self):
         nsd_data = """
         {
   "nsd": {
@@ -59,7 +60,7 @@ class DescriptorConstrutor:
 }"""
         return nsd_data
 
-    def create_template_vnfd(name_of_intent, number_vfs):
+    def create_template_vnfd(self, name_of_intent, number_vfs):
         '''Receive intent name and number of VFs and generate a JSON file
         of VNFD'''
 
@@ -180,7 +181,7 @@ class DescriptorConstrutor:
         vnfd_dict = json.loads(vnfd_data)
 
         value_id = vnfd_dict['vnfd']['id']
-        print(value_id)
+        # print(value_id)
 
         try:
             if 'vnfd' in vnfd_dict and 'df' in vnfd_dict['vnfd']:

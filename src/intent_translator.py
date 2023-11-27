@@ -40,7 +40,7 @@ if __name__ == '__main__':
     # print("\n\n\n")
     # print(connect_osm.get_ns_packages())
 
-    HandlerOSM.post_vnf_packages()
+    post_vnf_packages()
     # conteudo = descriptors_constructor.create_template_vnfd('teste', 4)
     # connect_osm.post_vnf_packages('/Users/mariotl/PycharmProjects/intent_layer/src/slice_basic_vnf.yaml')
 

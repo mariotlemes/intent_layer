@@ -1,4 +1,4 @@
-import sys, requests
+import sys
 from handler_osm import HandlerOSM
 from ui_main import Ui_MainWindow
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox,
@@ -11,13 +11,16 @@ from variables import GlobalVariables
 # public ipv4 address - Open Source Mano
 PUBLIC_IP_OSM = GlobalVariables.get_public_ip_osm()
 
+
 class CenterAlignedQueryModel(QSqlQueryModel):
     """Centering results in tw_intents QtableView"""
+
     def data(self, index, role=Qt.DisplayRole):
         if role == Qt.TextAlignmentRole:
             return Qt.AlignCenter  # Align all cells to center
 
         return super().data(index, role)
+
 
 class IntentGUI(QMainWindow, Ui_MainWindow):
     """Front-end for Intent Expressing"""
@@ -64,7 +67,6 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
 
         # db.close_connection()
 
-
     def show_table_intent(self):
         """Show data from databse in tw_intents QTableView"""
 
@@ -75,8 +77,8 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
         # herdar da classe CenterAlignedQueryModel para centralizar o resultado da consulta
         project_model = CenterAlignedQueryModel()
         project_model.setQuery("SELECT  id AS 'ID', name AS 'Name', "
-                              "number_vfs AS 'Number of VFs', "
-                              "status AS 'Status' FROM intents", db)
+                               "number_vfs AS 'Number of VFs', "
+                               "status AS 'Status' FROM intents", db)
         project_view = self.tw_intents
         project_view.setModel(project_model)
 
@@ -90,13 +92,14 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
         # remove lines in tw_intents QTableView
         header = self.tw_intents.verticalHeader().setVisible(False)
 
-    def create_subscription_osm():
+    def create_subscription_osm(self):
         '''TODO: create a new subscription related to NS lifecycle changes'''
         pass
 
-    def receive_subscrition_changes():
+    def receive_subscrition_changes(self):
         '''TODO: receive NS lifecycle changes'''
         pass
+
 
 if __name__ == '__main__':
     # create database 'intents' if not exists
@@ -107,8 +110,8 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = IntentGUI()
 
-    if HandlerOSM.verify_osm_status() == True:
-
+    status = HandlerOSM()
+    if status.verify_osm_status():
         window.show()
         app.exec()
 
