@@ -51,8 +51,8 @@ with OSM NBI REST API.
 #### `tests.py`: test and analyze other components.
 
 class Tests:
-- [X] `onboarding_time()` - calculate the onboarding time (VNFd and NSd)
-- [X] `instantiaton_time()` - calculate the instantiation time of a NS.
+- [X] `onboarding()` - Onboarding  (VNFd and NSd)
+- [X] `instantiaton()` - NSd onstantiation.
 
 
 
