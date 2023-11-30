@@ -52,7 +52,7 @@ with OSM NBI REST API.
 
 class Tests:
 - [X] `onboarding()` - Onboarding  (VNFd and NSd)
-- [X] `instantiaton()` - NSd onstantiation.
+- [X] `instantiaton()` - NSd instantiation.
 
 
 
