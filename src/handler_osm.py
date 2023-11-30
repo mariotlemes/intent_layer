@@ -245,8 +245,6 @@ class HandlerOSM:
         The input is the name of resource and the output is the subscription ID'''
         endpoint = PUBLIC_IP_OSM + endpoint_create_new_subscription
 
-        print(endpoint)
-
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json'

@@ -42,6 +42,7 @@ def index():
 # @app.route('/create_subscription', methods=['POST'])
 # def create_subscription():
 
+'''Route to receive notifications from OSM'''
 @app.route('/notifications', methods=['POST', 'GET'])
 def receive_notification():
     # create_subscription()
