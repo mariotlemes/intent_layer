@@ -15,6 +15,7 @@ endpoint_del_ns_instances = '/nslcm/v1/ns_instances'
 endpoint_vnf_packages_content = '/vnfpkgm/v1/vnf_packages_content'
 endpoint_ns_packages_content = '/nsd/v1/ns_descriptors_content'
 endpoint_ns_create_instances = '/nslcm/v1/ns_instances_content'
+endpoint_create_new_subscription = '/nslcm/v1/subscriptions'
 
 class HandlerOSM:
     """This class provides methods for interacting with the OSM rest interface"""
@@ -57,6 +58,7 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
             return False
+
     def get_vnf_packages(self):
         """Query information about multiple VNF package resources"""
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages
@@ -76,7 +78,7 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def get_ns_instances(self):
+    def get_ns_instances(self, name):
         endpoint = PUBLIC_IP_OSM + endpoint_ns_instances
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         bearer = HandlerOSM()
@@ -84,11 +86,18 @@ class HandlerOSM:
 
         try:
             response = requests.get(endpoint, headers=headers)
-            return response.json()
+            for item in response.json():
+                if item['name'] == name:
+                    value_id = item['_id']
+                    return value_id
+            else:
+                print("NS instance not found!")
+                return False
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
+
 
     def post_ns_package(self, nsd_data):
         # campos importantes
@@ -204,7 +213,7 @@ class HandlerOSM:
     def post_vnf_packages(self, vnfd_data):
         """Post a new VNFd content in JSON to OSM"""
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages_content
-        print(endpoint)
+        # print(endpoint)
 
         headers = {
             'Content-Type': 'application/json',
@@ -226,6 +235,61 @@ class HandlerOSM:
                 if key_search in response.json():
                     id_value = response.json()[key_search]
                     return id_value
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
+    def post_create_new_subscription(self, name):
+        '''Create a new subscription to receive notifications about a NSd.
+        The input is the name of resource'''
+        endpoint = PUBLIC_IP_OSM + endpoint_create_new_subscription
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        bearer = HandlerOSM()
+        nsd_instance = HandlerOSM()
+
+        headers.update(bearer.generate_nbi_token())
+
+        payload = json.dumps({
+                "filter": {
+                    "nsInstanceSubscriptionFilter": {
+                        "nsdIds": [
+                            nsd_instance.get_ns_instances(name)
+                        ]
+                    },
+                    "notificationTypes": [
+                        "NsLcmOperationOccurrenceNotification"
+                    ],
+                    "operationTypes": [
+                        "INSTANTIATE",
+                        "TERMINATE"
+                    ],
+                    "operationStates": [
+                        "PROCESSING",
+                        "COMPLETED",
+                        "FAILED"
+                    ]
+                },
+                "CallbackUri": "http://189.63.44.102:5400/notifications"
+            })
+
+        print(payload)
+
+        try:
+            response = requests.request("POST", endpoint, headers=headers, data=payload)
+            # if response.status_code != 201:
+            # print("The operation cannot be executed!")
+            print(response.status_code)
+            # else:
+            # print("Subscription is successfully!")
+
+            return response
+
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
