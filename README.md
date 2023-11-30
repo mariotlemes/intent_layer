@@ -38,7 +38,8 @@ Obs: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.c
 
 ## Prerequisites
 
-- VM/Bare metal with [OSM](https://osm.etsi.org/). 
+- VM/Bare metal with [OSM](https://osm.etsi.org/) and ONOS controller. View the details to create an SDN controller inside
+OSM [here]().
 - VM/Bare metal with [OpenStack](https://docs.openstack.org/devstack/latest/).
 
 ## Features description

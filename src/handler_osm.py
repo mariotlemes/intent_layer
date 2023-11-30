@@ -242,8 +242,10 @@ class HandlerOSM:
 
     def post_create_new_subscription(self, name):
         '''Create a new subscription to receive notifications about a NSd.
-        The input is the name of resource'''
+        The input is the name of resource and the output is the subscription ID'''
         endpoint = PUBLIC_IP_OSM + endpoint_create_new_subscription
+
+        print(endpoint)
 
         headers = {
             'Content-Type': 'application/json',
@@ -278,19 +280,21 @@ class HandlerOSM:
                 "CallbackUri": "http://189.63.44.102:5400/notifications"
             })
 
-        print(payload)
-
         try:
             response = requests.request("POST", endpoint, headers=headers, data=payload)
-            # if response.status_code != 201:
-            # print("The operation cannot be executed!")
-            print(response.status_code)
-            # else:
-            # print("Subscription is successfully!")
-
-            return response
-
+            if response.status_code != 201:
+                print("The operation cannot be executed!")
+                print(response.status_code)
+            else:
+                print("Subscription is successfully!")
+                # print(response.json())
+                key_search = 'id'
+                if key_search in response.json():
+                    id_value = response.json()[key_search]
+                    return id_value
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
+
+

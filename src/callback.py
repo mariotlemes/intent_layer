@@ -39,19 +39,18 @@ def authentication_required(f):
 def index():
     return jsonify({'message': 'Welcome to the REST API'})
 
-@app.route('/create_subscription', methods=['POST'])
-def create_subscription():
+# @app.route('/create_subscription', methods=['POST'])
+# def create_subscription():
 
 @app.route('/notifications', methods=['POST', 'GET'])
-# @authentication_required
 def receive_notification():
     # create_subscription()
     return Response(status=204)
 
     if request.method == 'POST':
-        print("entrou aqui!")
-        data = request.get_json()
-        print(data)
+        print(request.text)
+        # data = request.get_json()
+        # print(data)
         return Response(status=204)
 
 

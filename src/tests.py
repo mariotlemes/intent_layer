@@ -70,5 +70,8 @@ if __name__ == '__main__':
     teste2.instantiaton()
 
     sub = HandlerOSM()
+
     # first_creation is the name of instance
-    sub.post_create_new_subscription('first_creation')
+    id_subscription = sub.post_create_new_subscription('first_creation')
+
+    print(id_subscription)
