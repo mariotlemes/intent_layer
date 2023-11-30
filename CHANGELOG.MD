@@ -42,9 +42,7 @@ class IntentEngine:
 
 --- 
 #### `intent_translator.py`: mapping NILE intents to VNFd and NSD.
-class IntentTranslate:
-- [X] `trigger_creation_slice()` - trigger the creation of slice interacting 
-with OSM NBI REST API.
+TO DO
 
 
 --- 
