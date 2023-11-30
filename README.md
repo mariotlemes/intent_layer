@@ -47,17 +47,17 @@ All features are described [here](CHANGELOG.MD).
 
 ## Installing
 
-**1)** Clone the repository:
-
-```
-cd ~ && git clone https://github.com/mariotlemes/intent_layer.git
-```
-
-**2)** Install python3-venv, git and qttools:
+**1)** Install python3-venv, git and qttools:
 ```
 sudo apt install python3-venv -y
 sudo apt install git -y
 sudo apt install qttools5-dev-tools -y
+```
+
+**2)** Clone the repository:
+
+```
+cd ~ && git clone https://github.com/mariotlemes/intent_layer.git
 ```
 
 **3)** Export the os environment IP_ADDRESS_OSM, where **A.B.C.D** represents the IPv4 address for OSM (Open
