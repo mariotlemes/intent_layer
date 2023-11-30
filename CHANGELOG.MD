@@ -48,7 +48,7 @@ with OSM NBI REST API.
 
 
 --- 
-#### `tests.py`: test and analyze other components.
+#### `tests.py`: tests.
 
 class Tests:
 - [X] `onboarding()` - Onboarding  (VNFd and NSd)
