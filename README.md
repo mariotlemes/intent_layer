@@ -20,7 +20,7 @@ an NFV environment.
 
 Obs 1: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.com/lumichatbot/webhook)
 
-Obs 2: This project is inspirated in [B. Martini, M. Gharbaoui and P. Castoldi](https://dl.acm.org/doi/abs/10.1016/j.future.2022.12.033)
+Obs 2: This project is inspirated in this [work](https://dl.acm.org/doi/abs/10.1016/j.future.2022.12.033)
 
 
 ## Documentation
