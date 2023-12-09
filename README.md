@@ -9,6 +9,7 @@
 This project contains the code
 for intent layer software and instructions to run in top of
 an NFV environment.
+
 <mark>**`Intent Layer`**</mark> has 3 (three) main modules:
 
 **1)** **`intentgui.py`**- GUI-based for intent expressing;
