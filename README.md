@@ -24,4 +24,4 @@ Obs 2: This project is inspirated in [B. Martini, M. Gharbaoui and P. Castoldi](
 
 
 ## Documentation
-You can find details [here](https://github.com/mariotlemes/intent_layer/wiki).
+You can find details about the documentation [here](https://github.com/mariotlemes/intent_layer/wiki).
