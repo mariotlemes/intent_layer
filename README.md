@@ -4,14 +4,6 @@
 ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=plastic&logo=sqlite&logoColor=white)
 ![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=plastic&logo=Qt&logoColor=white)
 
-- [Description](#getting-started)
-- [Architecture](#architecture)
-- [Intent layer components workflow](#intent-layer-components-workflow)
-- [Prerequisites](#prerequisites)
-- [Features](#)
-- [How to install](#installing)
-- [How to run](#running)
-
 ## Getting started
 
 This project contains the code
@@ -30,3 +22,5 @@ Obs 1: `nile` and `utils` folders are provided by [Jacobs et al.](https://github
 Obs 2: This project is inspirated in [B. Martini, M. Gharbaoui and P. Castoldi](https://dl.acm.org/doi/abs/10.1016/j.future.2022.12.033)
 
 
+## Documentation
+You can found details [here](https://github.com/mariotlemes/intent_layer/wiki).
