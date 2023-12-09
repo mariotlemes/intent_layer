@@ -18,10 +18,10 @@ an NFV environment.
 
 **3)** **`intent_translator.py`**- Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor) and NSd (Network Service Descriptor), and trigger network slice creation;
 
-Obs 1: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.com/lumichatbot/webhook)
+> Obs 1: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.com/lumichatbot/webhook)
 
-Obs 2: This project is inspirated in this [work](https://dl.acm.org/doi/abs/10.1016/j.future.2022.12.033).
+> Obs 2: This project is inspirated in this [work](https://dl.acm.org/doi/abs/10.1016/j.future.2022.12.033).
 
 
 ## Documentation
-You can find details about the documentation [here](https://github.com/mariotlemes/intent_layer/wiki).
+You can find details about the documentation in [Wiki](https://github.com/mariotlemes/intent_layer/wiki).
