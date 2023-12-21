@@ -17,13 +17,7 @@ class HandlerOSM:
 - [x] `post_ns_package (nsd_data):` post a new NSd in JSON format to OSM.
 - [x] `post_create_ns_instances (nsd_id, ns_name, ns_description, vim_account_id): `post a new NS instance. 
 ---
-####  `descriptors_constructor:` creates the suitable templates for VNFd and NSd.
-class DescriptorConstructor:
-- [X] `create_template_vnfd(name_of_intent, number_vfs)` - receive an intent name and number of VFs and generate a JSON file
-        of VNF and creates a VNFd template (JSON format).
-- [ ] `create_template_nsd()` 
 
----
 #### `intentgui.py:` basic GUI for intent expressing.
 class IntentGUI:
 - [X] `insert_intent()` - add intent into a database from GUI-template.
@@ -44,9 +38,8 @@ class IntentEngine:
 #### `intent_translator.py`: mapping NILE intents to VNFd and NSD.
 TO DO
 
-
 --- 
-#### `tests.py`: tests.
+#### `tests.py`: to verify perfomance evaluation.
 
 class Tests:
 - [X] `onboarding()` - Onboarding  (VNFd and NSd)
