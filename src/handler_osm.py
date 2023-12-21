@@ -1,6 +1,6 @@
 from variables import GlobalVariables
 import requests
-import json
+import json, yaml
 
 # IPv4 address for OSM NBI
 PUBLIC_IP_OSM = GlobalVariables.get_public_ip_osm()
@@ -98,40 +98,6 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-
-    def post_ns_package(self, nsd_data):
-        # campos importantes
-        # vnfd-id: referencia a VNFD antes implantada
-        # virtual-link-profile-id: nome da rede existente no OpenStack
-
-        """Post a new VNFd content in JSON to OSM"""
-        endpoint = PUBLIC_IP_OSM + endpoint_ns_packages_content
-
-        headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-
-        bearer = HandlerOSM()
-        headers.update(bearer.generate_nbi_token())
-
-        try:
-            response = requests.request("POST", endpoint, headers=headers, data=nsd_data)
-
-            if response.status_code != 201:
-                print("The operation cannot be executed!")
-                return False
-            else:
-                print("Successfuly NSd onboarding on Open Source Mano")
-                key_search = 'id'
-                if key_search in response.json():
-                    id_value = response.json()[key_search]
-                    return id_value
-        except requests.Timeout as timeout:
-            print("Timeout:", timeout)
-        except requests.RequestException as error:
-            print("Error:", error)
-
     def generate_nbi_token(self):
         """Generate token for NBI authentication"""
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
@@ -174,8 +140,8 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def post_create_ns_instances(self, nsd_id, ns_name, ns_description, vim_account_id):
-        '''Post a new VNFd content (JSON object) to OSM'''
+    def post_ns_instance(self, nsd_id, ns_name, ns_description):
+        '''Post a new descriptors content (JSON object) to OSM'''
 
         # vnfd-id: references a VNFD
         endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instances
@@ -188,7 +154,7 @@ class HandlerOSM:
         vim_account_id = HandlerOSM()
 
         payload = json.dumps({
-            "nsdId": nsd_id.get_ns_packages('hackfest_basic-ns'),
+            "nsdId": nsd_id.get_ns_packages('nsd'),
             "nsName": ns_name,
             "nsDescription": ns_description,
             "vimAccountId": vim_account_id.get_vim_accounts()
@@ -200,10 +166,14 @@ class HandlerOSM:
         try:
             response = requests.request("POST", endpoint, headers=headers, data=payload)
             if response.status_code != 201:
-                print("The operation cannot be executed!")
+                response = response.json()
+                print(f"Code: {response['status']} ({response['code']})")
+                print(f"Detail: {response['detail']}")
+                return False
             else:
-                print("Successfuly Instantiation!")
-                return response
+                response = response.json()
+                print(f"Code: 201 (SUCCESS)")
+                print(f"ID: {response['id']}")
 
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
@@ -211,35 +181,77 @@ class HandlerOSM:
             print("Error:", error)
 
     def post_vnf_packages(self, vnfd_data):
-        """Post a new VNFd content in JSON to OSM"""
+        """Post a new descriptors content in YAML to OSM"""
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages_content
-        # print(endpoint)
 
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
+        # transform vnfd_data to JSON
+        data = json.dumps(vnfd_data)
 
         bearer = HandlerOSM()
         headers.update(bearer.generate_nbi_token())
 
         response = requests.request("POST", endpoint, headers=headers,
-                                    data=vnfd_data)
+                                    data=data)
         try:
             if response.status_code != 201:
-                print("The operation cannot be executed!")
+                response = response.json()
+                print(f"Code: {response['status']} ({response['code']})")
+                print(f"Detail: {response['detail']}")
                 return False
             else:
-                print("Successfuly VNFd onboarding on Open Source Mano")
+                response = response.json()
+                print(f"Code: 201 (SUCCESS)")
+                print(f"ID: {response['id']}")
                 key_search = 'id'
-                if key_search in response.json():
-                    id_value = response.json()[key_search]
+                if key_search in response:
+                    id_value = response[key_search]
                     return id_value
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
 
+    def post_ns_package(self, nsd_data):
+        """Post a new descriptors content in JSON to OSM"""
+        endpoint = PUBLIC_IP_OSM + endpoint_ns_packages_content
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        data = json.dumps(nsd_data)
+
+        bearer = HandlerOSM()
+        headers.update(bearer.generate_nbi_token())
+
+        print(endpoint)
+
+        try:
+            response = requests.request("POST", endpoint, headers=headers, data=data)
+            print(response.status_code)
+
+            if response.status_code != 201:
+                response = response.json()
+                print(f"Code: {response['status']} ({response['code']})")
+                print(f"Detail: {response['detail']}")
+                return False
+            else:
+                response = response.json()
+                print(f"Code: 201 (SUCCESS)")
+                print(f"ID: {response['id']}")
+                key_search = 'id'
+                if key_search in response:
+                    id_value = response[key_search]
+                    return id_value
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
     def post_create_new_subscription(self, name):
         '''Create a new subscription to receive notifications about a NSd.
         The input is the name of resource and the output is the subscription ID'''
@@ -294,5 +306,3 @@ class HandlerOSM:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
-
-

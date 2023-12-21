@@ -1,0 +1,68 @@
+vnfd:
+  id: SDN-based-VNF
+  product-name: SDN-based-VNF
+  description: SDN-based-VNF descriptor
+  provider: Mario
+  version: 1.0
+
+  df:
+  - id: default-df
+    instantiation-level:
+    - id: default-instantiation-level
+      vdu-level:
+      - number-of-instances: 1
+        vdu-id: SDN-based-VNF-VM
+    vdu-profile:
+    - id: SDN-based-VNF-VM
+      min-number-of-instances: 1
+
+  ext-cpd:
+  - id: vnf-cp0-ext
+    int-cpd:
+      cpd: eth0
+      vdu-id: SDN-based-VNF-VM
+  - id: vnf-cp1-int
+    int-cpd:
+      cpd: eth1
+      vdu-id: SDN-based-VNF-VM
+  mgmt-cp: vnf-cp0-ext
+
+  sw-image-desc:
+  - id: ubuntu18.04
+    image: ubuntu18.04
+    name: ubuntu18.04
+
+  vdu:
+  - id: SDN-based-VNF-VM
+    cloud-init: |
+      #cloud-config
+      package-update: true
+      hostname: sdn-based-vm
+      password: osm4u
+      chpasswd: { expire: False }
+    name: SDN-based-VNF-VM
+    sw-image-desc: ubuntu18.04
+    virtual-compute-desc: SDN-based-VNF-VM-compute
+    virtual-storage-desc:
+    - SDN-based-VNF-VM-storage
+    int-cpd:
+    - id: eth0
+      virtual-network-interface-requirement:
+      - name: eth0
+        virtual-interface:
+          type: PARAVIRT
+    - id: eth1
+      virtual-network-interface-requirement:
+      - name: eth1
+        virtual-interface:
+          type: PARAVIRT
+
+  virtual-compute-desc:
+  - id: SDN-based-VNF-VM-compute
+    virtual-cpu:
+      num-virtual-cpu: 2
+    virtual-memory:
+      size: 2.572
+  virtual-storage-desc:
+  - id: SDN-based-VNF-VM-storage
+    size-of-storage: 20

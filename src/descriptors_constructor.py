@@ -37,13 +37,13 @@ class DescriptorConstrutor:
                     "virtual-link-profile-id": "mgmtnet"
                   }
                 ],
-                "vnfd-id": "slice_basic_vnf"
+                "vnfd-id": "simple_3vm-vnf"
               }
             ]
           }
         ],
-        "id": "hackfest_basic-ns",
-        "name": "hackfest_basic-ns",
+        "id": "simple_3vm-ns",
+        "name": "simple_3vm-ns",
         "version": 1,
         "virtual-link-desc": [
           {
@@ -52,7 +52,7 @@ class DescriptorConstrutor:
           }
         ],
         "vnfd-id": [
-          "slice_basic_vnf"
+          "simple_3vm-vnf"
         ]
       }
     ]
@@ -64,124 +64,240 @@ class DescriptorConstrutor:
         '''Receive intent name and number of VFs and generate a JSON file
         of VNFD'''
 
-        vnfd_data = """
-                {
-              "vnfd": {
-                "description": "A basic VNF descriptor w/ one VDU",
-                "df": [
-                  {
-                    "id": "default-df",
-                    "instantiation-level": [
-                      {
-                        "id": "default-instantiation-level",
-                        "vdu-level": [
-                          {
-                            "number-of-instances": 1,
-                            "vdu-id": "hackfest_basic-VM"
-                          }
-                        ]
-                      }
-                    ],
-                    "vdu-profile": [
-                      {
-                        "id": "hackfest_basic-VM",
-                        "min-number-of-instances": 1
-                      }
-                    ]
-                  }
-                ],
-                "ext-cpd": [
-                  {
-                    "id": "vnf-cp0-ext",
-                    "int-cpd": {
-                      "cpd": "vdu-eth0-int",
-                      "vdu-id": "hackfest_basic-VM"
-                    }
-                  }
-                ],
-                "id": "teste2",
-                "mgmt-cp": "vnf-cp0-ext",
-                "product-name": "MARIO-TESTE-S",
-                "sw-image-desc": [
-                  {
-                    "id": "ubuntu20.04",
-                    "image": "ubuntu20.04",
-                    "name": "ubuntu20.04"
-                  },
-                  {
-                    "id": "ubuntu20.04-aws",
-                    "name": "ubuntu20.04-aws",
-                    "image": "ubuntu/images/hvm-ssd/ubuntu-artful-17.10-amd64-server-20180509",
-                    "vim-type": "aws"
-                  },
-                  {
-                    "id": "ubuntu20.04-azure",
-                    "name": "ubuntu20.04-azure",
-                    "image": "Canonical:0001-com-ubuntu-server-focal:20_04-lts:latest",
-                    "vim-type": "azure"
-                  },
-                  {
-                    "id": "ubuntu20.04-gcp",
-                    "name": "ubuntu20.04-gcp",
-                    "image": "ubuntu-os-cloud:image-family:ubuntu-2004-lts",
-                    "vim-type": "gcp"
-                  }
-                ],
-                "vdu": [
-                  {
-                    "id": "hackfest_basic-VM",
-                    "name": "hackfest_basic-VM",
-                    "sw-image-desc": "ubuntu20.04",
-                    "alternative-sw-image-desc": [
-                      "ubuntu20.04-aws",
-                      "ubuntu20.04-azure",
-                      "ubuntu20.04-gcp"
-                    ],
-                    "virtual-compute-desc": "hackfest_basic-VM-compute",
-                    "virtual-storage-desc": [
-                      "hackfest_basic-VM-storage"
-                    ],
-                    "int-cpd": [
-                      {
-                        "id": "vdu-eth0-int",
-                        "virtual-network-interface-requirement": [
-                          {
-                            "name": "vdu-eth0",
-                            "virtual-interface": {
-                              "type": "PARAVIRT"
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ],
-                "version": 1,
-                "virtual-compute-desc": [
-                  {
-                    "id": "hackfest_basic-VM-compute",
-                    "virtual-cpu": {
-                      "num-virtual-cpu": 1
-                    },
-                    "virtual-memory": {
-                      "size": 1
-                    }
-                  }
-                ],
-                "virtual-storage-desc": [
-                  {
-                    "id": "hackfest_basic-VM-storage",
-                    "size-of-storage": 10
-                  }
-                ]
+        vnfd_data = """{
+  "vnfd": {
+    "description": "A VNFD consisting of 3 VDUs (VMs) connected to an internal VL (with bitrate-requirement - 10MB) and a cloud-init configuration",
+    "id": "simple_3vm-vnf",
+    "product-name": "simple_3vm-vnf",
+    "vdu": [
+      {
+        "id": "VM1",
+        "name": "VM1",
+        "int-cpd": [
+          {
+            "id": "VM1-eth0-int",
+            "virtual-network-interface-requirement": [
+              {
+                "name": "VM1-eth0",
+                "position": 1,
+                "virtual-interface": {
+                  "type": "PARAVIRT"
+                }
               }
-            }"""
+            ]
+          },
+          {
+            "id": "VM1-eth1-int",
+            "int-virtual-link-desc": "internal",
+            "virtual-network-interface-requirement": [
+              {
+                "name": "VM1-eth1",
+                "position": 2,
+                "virtual-interface": {
+                  "type": "PARAVIRT"
+                }
+              }
+            ],
+            "bitrate-requirement": 5000
+          }
+        ],
+        "sw-image-desc": "ubuntu20.04",
+        "alternative-sw-image-desc": [
+          "ubuntu20.04-azure",
+          "ubuntu20.04-gcp"
+        ],
+        "virtual-compute-desc": "VM1-compute",
+        "virtual-storage-desc": [
+          "VM1-storage"
+        ]
+      },
+      {
+        "id": "VM2",
+        "name": "VM2",
+        "int-cpd": [
+          {
+            "id": "VM2-eth0-int",
+            "int-virtual-link-desc": "internal",
+            "virtual-network-interface-requirement": [
+              {
+                "name": "VM2-eth0",
+                "position": 1,
+                "virtual-interface": {
+                  "type": "PARAVIRT"
+                }
+              }
+            ],
+            "bitrate-requirement": 5000
+          }
+        ],
+        "sw-image-desc": "ubuntu20.04",
+        "alternative-sw-image-desc": [
+          "ubuntu20.04-azure",
+          "ubuntu20.04-gcp"
+        ],
+        "virtual-compute-desc": "VM2-compute",
+        "virtual-storage-desc": [
+          "VM2-storage"
+        ]
+      },
+      {
+        "id": "VM3",
+        "name": "VM3",
+        "int-cpd": [
+          {
+            "id": "VM3-eth0-int",
+            "int-virtual-link-desc": "internal",
+            "virtual-network-interface-requirement": [
+              {
+                "name": "VM3-eth0",
+                "position": 1,
+                "virtual-interface": {
+                  "type": "PARAVIRT"
+                }
+              }
+            ],
+            "bitrate-requirement": 5000
+          }
+        ],
+        "sw-image-desc": "ubuntu20.04",
+        "alternative-sw-image-desc": [
+          "ubuntu20.04-azure",
+          "ubuntu20.04-gcp"
+        ],
+        "virtual-compute-desc": "VM3-compute",
+        "virtual-storage-desc": [
+          "VM3-storage"
+        ]
+      }
+    ],
+    "version": 1,
+    "virtual-compute-desc": [
+      {
+        "id": "VM1-compute",
+        "virtual-memory": {
+          "size": 2572
+        },
+        "virtual-cpu": {
+          "num-virtual-cpu": 2
+        }
+      },
+      {
+        "id": "VM2-compute",
+        "virtual-memory": {
+          "size": 512
+        },
+        "virtual-cpu": {
+          "num-virtual-cpu": 1
+        }
+      },
+      {
+        "id": "VM3-compute",
+        "virtual-memory": {
+          "size": 512
+        },
+        "virtual-cpu": {
+          "num-virtual-cpu": 1
+        }
+      }
+    ],
+    "virtual-storage-desc": [
+      {
+        "id": "VM1-storage",
+        "size-of-storage": 20
+      },
+      {
+        "id": "VM2-storage",
+        "size-of-storage": 10
+      },
+      {
+        "id": "VM3-storage",
+        "size-of-storage": 10
+      }
+    ],
+    "df": [
+      {
+        "id": "default-df",
+        "instantiation-level": [
+          {
+            "id": "default-instantiation-level",
+            "vdu-level": [
+              {
+                "number-of-instances": 1,
+                "vdu-id": "VM1"
+              },
+              {
+                "number-of-instances": 1,
+                "vdu-id": "VM2"
+              },
+              {
+                "number-of-instances": 1,
+                "vdu-id": "VM3"
+              }
+            ]
+          }
+        ],
+        "vdu-profile": [
+          {
+            "id": "VM1",
+            "min-number-of-instances": 1
+          },
+          {
+            "id": "VM2",
+            "min-number-of-instances": 1
+          },
+          {
+            "id": "VM3",
+            "min-number-of-instances": 1
+          }
+        ]
+      }
+    ],
+    "ext-cpd": [
+      {
+        "id": "vnf-mgmt-ext",
+        "int-cpd": {
+          "cpd": "VM1-eth0-int",
+          "vdu-id": "VM1"
+        }
+      }
+    ],
+    "int-virtual-link-desc": [
+      {
+        "id": "internal"
+      }
+    ],
+    "mgmt-cp": "vnf-mgmt-ext",
+    "sw-image-desc": [
+      {
+        "id": "ubuntu20.04",
+        "image": "ubuntu20.04",
+        "name": "ubuntu20.04"
+      },
+      {
+        "id": "ubuntu20.04-azure",
+        "name": "ubuntu20.04-azure",
+        "image": "Canonical:0001-com-ubuntu-server-focal:20_04-lts:latest",
+        "vim-type": "azure"
+      },
+      {
+        "id": "ubuntu20.04-gcp",
+        "name": "ubuntu20.04-gcp",
+        "image": "ubuntu-os-cloud:image-family:ubuntu-2004-lts",
+        "vim-type": "gcp"
+      }
+    ]
+  }
+}"""
 
         # 2o - carregar o conteúdo em YAML para um dicionário PYTHON
         vnfd_dict = json.loads(vnfd_data)
 
+        # vnf = yaml.safe_load(vnfd_data)
+
+        print(vnfd_dict)
+
         value_id = vnfd_dict['vnfd']['id']
-        # print(value_id)
+        print(value_id)
 
         try:
             if 'vnfd' in vnfd_dict and 'df' in vnfd_dict['vnfd']:
@@ -196,12 +312,9 @@ class DescriptorConstrutor:
         #return to json
         json_pos_operation = json.dumps(vnfd_dict, indent=2)
 
-        # print(json_pos_operation)
+        print(json_pos_operation)
 
         return json_pos_operation
-
-
-
 
 
 # vnfd (caracteristicas das funções)
@@ -212,4 +325,7 @@ class DescriptorConstrutor:
 
 # 1o - conteúdo padrão da VNFD em YAML
 
+if __name__ == '__main__':
+    vnfd = DescriptorConstrutor()
+    vnfd.create_template_vnfd("teste", 2)
 

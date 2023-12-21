@@ -1,0 +1,48 @@
+vnfd:
+  description: A basic VNF descriptor for VNF1
+  provider: Mario
+  df:
+  - id: default-df
+    instantiation-level:
+    - id: default-instantiation-level
+      vdu-level:
+      - number-of-instances: 1
+        vdu-id: VNF1-VM
+    vdu-profile:
+    - id: VNF1-VM
+      min-number-of-instances: 1
+  ext-cpd:
+  - id: vnf-cp0-ext
+    int-cpd:
+      cpd: vdu-eth0-int
+      vdu-id: VNF1-VM
+  id: VNF1
+  mgmt-cp: vnf-cp0-ext
+  product-name: VNF1
+  sw-image-desc:
+  - id: ubuntu18.04
+    image: ubuntu18.04
+    name: ubuntu18.04
+  vdu:
+  - id: VNF1-VM
+    name: VNF1-VM
+    sw-image-desc: ubuntu18.04
+    virtual-compute-desc: VNF1-VM-compute
+    virtual-storage-desc:
+    - VNF1-VM-storage
+    int-cpd:
+    - id: vdu-eth0-int
+      virtual-network-interface-requirement:
+      - name: vdu-eth0
+        virtual-interface:
+          type: PARAVIRT
+  version: 1.0
+  virtual-compute-desc:
+  - id: VNF1-VM-compute
+    virtual-cpu:
+      num-virtual-cpu: 1
+    virtual-memory:
+      size: 0.512
+  virtual-storage-desc:
+  - id: VNF1-VM-storage
+    size-of-storage: 10

@@ -1,39 +1,35 @@
 from descriptors_constructor import DescriptorConstrutor
-import time
+import time, yaml
 from handler_osm import HandlerOSM
 
 class Tests:
-    def onboarding (self):
-        """Calculate the onboarding time"""
-
-        print('Onboarding time - start!')
+    def onboarding_test1 (self):
+        print("#Test1 (Onboarding): 3 VNFd and 1 NSd")
         start = time.time()
 
-        # create a VNFd
-        new_vnfd = DescriptorConstrutor()
+        test1 = HandlerOSM()
 
-        new_vnfd = new_vnfd.create_template_vnfd('slice_basic_vnf',3)
+        with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
+            data = yaml.safe_load(file)
+            test1.post_vnf_packages(data)
 
-        # post a VNFd package in OSM
-        post = HandlerOSM()
-        result = post.post_vnf_packages(new_vnfd)
+        with open('src/descriptors/test1/basic_VNF2d.yaml', 'r') as file:
+            data = yaml.safe_load(file)
+            test1.post_vnf_packages(data)
 
-        if not result:
-            print(f"VNF not deployed!")
+        with open('src/descriptors/test1/basic_VNF-SDNd.yaml', 'r') as file:
+            data = yaml.safe_load(file)
+            test1.post_vnf_packages(data)
 
-        nsd = DescriptorConstrutor()
-        post2 = HandlerOSM()
+        with open('src/descriptors/test1/basic_NSD.yaml', 'r') as file:
+            data = yaml.safe_load(file)
+            test1.post_ns_package(data)
 
-        if not post2.post_ns_package(nsd.create_template_ns()):
-            print(f" NS not deployed!")
+        test1.post_ns_instance('nsd', 'nsd', 'nsd')
 
         end = time.time()
-
         elapsed_time = end - start
-
         elapsed_time = round(elapsed_time, 2)
-
-        print('Onboarding time - end!')
 
         print(f'Time elapsed: {elapsed_time}s')
 
@@ -47,6 +43,8 @@ class Tests:
         nsd_id = HandlerOSM()
 
         vim_account_id = HandlerOSM()
+
+        print(vim_account_id.get_vim_accounts())
 
         teste.post_create_ns_instances(nsd_id.get_ns_packages('hackfest_basic-ns'),
                                        'first_creation',
@@ -63,15 +61,16 @@ class Tests:
         print(f'Time elapsed: {elapsed_time}s')
 
 if __name__ == '__main__':
-    teste1 = Tests()
-    teste1.onboarding()
+    test1 = Tests()
+    test1.onboarding_test1()
 
-    teste2 = Tests()
-    teste2.instantiaton()
-
-    sub = HandlerOSM()
-
-    # first_creation is the name of instance
-    id_subscription = sub.post_create_new_subscription('first_creation')
-
-    print(id_subscription)
+    #
+    # teste2 = Tests()
+    # teste2.instantiaton()
+    #
+    # sub = HandlerOSM()
+    #
+    # # first_creation is the name of instance
+    # id_subscription = sub.post_create_new_subscription('first_creation')
+    #
+    # print(id_subscription)
