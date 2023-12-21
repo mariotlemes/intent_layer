@@ -42,7 +42,7 @@ TO DO
 #### `tests.py`: to verify perfomance evaluation.
 
 class Tests:
-- [X] `onboarding()` - Onboarding  (VNFd and NSd)
+- [X] `onboarding_test1()` - This test calculate the time for onboarding 3 VNFs and 1 NSd (slice considered in the article)
 - [X] `instantiaton()` - NSd instantiation.
 
 
