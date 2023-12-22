@@ -1,37 +1,39 @@
-from descriptors_constructor import DescriptorConstrutor
-import time, yaml
+import time
+import yaml
 from handler_osm import HandlerOSM
 
 class Tests:
     def onboarding_test1 (self):
-        print("#Test1 (Onboarding): 3 VNFd and 1 NSd")
-        start = time.time()
+        status = HandlerOSM()
+        if status.verify_osm_status():
+            print("#Test1 (Onboarding): 3 VNFd and 1 NSd")
+            start = time.time()
 
-        test1 = HandlerOSM()
+            test1 = HandlerOSM()
 
-        with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
-            data = yaml.safe_load(file)
-            test1.post_vnf_packages(data)
+            with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
+                data = yaml.safe_load(file)
+                test1.post_vnf_packages(data)
 
-        with open('src/descriptors/test1/basic_VNF2d.yaml', 'r') as file:
-            data = yaml.safe_load(file)
-            test1.post_vnf_packages(data)
+            with open('src/descriptors/test1/basic_VNF2d.yaml', 'r') as file:
+                data = yaml.safe_load(file)
+                test1.post_vnf_packages(data)
 
-        with open('src/descriptors/test1/basic_VNF-SDNd.yaml', 'r') as file:
-            data = yaml.safe_load(file)
-            test1.post_vnf_packages(data)
+            with open('src/descriptors/test1/basic_VNF-SDNd.yaml', 'r') as file:
+                data = yaml.safe_load(file)
+                test1.post_vnf_packages(data)
 
-        with open('src/descriptors/test1/basic_NSD.yaml', 'r') as file:
-            data = yaml.safe_load(file)
-            test1.post_ns_package(data)
+            with open('src/descriptors/test1/basic_NSD.yaml', 'r') as file:
+                data = yaml.safe_load(file)
+                test1.post_ns_package(data)
 
-        test1.post_ns_instance('nsd', 'nsd', 'nsd')
+            test1.post_ns_instance('nsd', 'nsd', 'nsd')
 
-        end = time.time()
-        elapsed_time = end - start
-        elapsed_time = round(elapsed_time, 2)
+            end = time.time()
+            elapsed_time = end - start
+            elapsed_time = round(elapsed_time, 2)
 
-        print(f'Time elapsed: {elapsed_time}s')
+            print(f'Time elapsed: {elapsed_time}s')
 
     def instantiaton (self):
         '''Calculate the instantiation time'''

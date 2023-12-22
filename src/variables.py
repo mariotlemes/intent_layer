@@ -2,7 +2,6 @@ import os
 
 class GlobalVariables:
     PUBLIC_IP_OSM = 'http://' + os.environ.get('IP_ADDRESS_OSM') + '/osm'
-    print(PUBLIC_IP_OSM)
 
     @classmethod
     def get_public_ip_osm(cls):

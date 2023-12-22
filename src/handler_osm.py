@@ -18,7 +18,7 @@ endpoint_ns_create_instances = '/nslcm/v1/ns_instances_content'
 endpoint_create_new_subscription = '/nslcm/v1/subscriptions'
 
 class HandlerOSM:
-    """This class provides methods for interacting with the OSM rest interface"""
+    """This class provides methods to interact with the OSM REST interface"""
     def get_vim_accounts(self):
         endpoint = PUBLIC_IP_OSM + endpoint_vim_accounts
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
@@ -41,7 +41,7 @@ class HandlerOSM:
 
     def verify_osm_status(self):
         """Verify  OSM (Open Source Mano) status. """
-        print("Trying to connect OSM NorthBound Interface ... \n")
+        print(f"Trying to connect OSM NBI - {PUBLIC_IP_OSM} -")
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         endpoint = PUBLIC_IP_OSM + endpoint_generate_token
 
@@ -228,8 +228,6 @@ class HandlerOSM:
 
         bearer = HandlerOSM()
         headers.update(bearer.generate_nbi_token())
-
-        print(endpoint)
 
         try:
             response = requests.request("POST", endpoint, headers=headers, data=data)
