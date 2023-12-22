@@ -13,9 +13,9 @@ class HandlerOSM:
 - [x] `get_ns_instances(name)` - get ID information about a specific NS instance.
 - [x] `get_public_ip_osm()` - get value from IP_ADDRESS_OSM (OS environment variable) 
 - [x] `get_vim_accounts()` - get information about VIM created in OSM.
-- [x] `post_vnf_packages(vnfd_data):` post a new VNFd in JSON format to OSM.
-- [x] `post_ns_package (nsd_data):` post a new NSd in JSON format to OSM.
-- [x] `post_create_ns_instances (nsd_id, ns_name, ns_description, vim_account_id): `post a new NS instance. 
+- [x] `post_vnf_packages(vnfd_data):` post a new VNFd to OSM.
+- [x] `post_ns_package (nsd_data):` post a new NSd to OSM.
+- [x] `post_ns_instance (nsd_id, ns_name, ns_description): `post a new NS instance. 
 ---
 
 #### `intentgui.py:` basic GUI for intent expressing.
