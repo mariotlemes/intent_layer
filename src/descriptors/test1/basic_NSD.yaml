@@ -1,7 +1,7 @@
 nsd:
   nsd:
     - description: nsd descriptor
-      designer: NGUI Composer
+      designer: Mario
       df:
         - id: default-df
           vnf-profile:

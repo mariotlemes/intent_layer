@@ -4,83 +4,63 @@ from handler_osm import HandlerOSM
 
 class Tests:
     def onboarding_test1 (self):
-        status = HandlerOSM()
-        if status.verify_osm_status():
+        test1 = HandlerOSM()
+        if test1.verify_osm_status():
             print("------------------------------------------------------------------------------")
             print("              #Test1 (Onboarding): 3 VNFd and 1 NSd")
             print("------------------------------------------------------------------------------")
 
             start = time.time()
 
-            test1 = HandlerOSM()
             with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_vnf_packages(data)
-
             with open('src/descriptors/test1/basic_VNF2d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_vnf_packages(data)
-
             with open('src/descriptors/test1/basic_VNF-SDNd.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_vnf_packages(data)
-
             with open('src/descriptors/test1/basic_NSD.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_ns_package(data)
 
-            print("------------------------------------------------------------------------------")
-            print("                    Trigger NS instance creation                              ")
-            print("------------------------------------------------------------------------------")
-            test1.post_ns_instance('nsd', 'nsd', 'nsd')
-
-            print("------------------------------------------------------------------------------")
-            print("                          Onboarding Results                                  ")
-            print("------------------------------------------------------------------------------")
             end = time.time()
             elapsed_time = end - start
             elapsed_time = round(elapsed_time, 2)
 
-            print(f'Time elapsed: {elapsed_time}s')
+            print("------------------------------------------------------------------------------")
+            print("                          Onboarding Results                                  ")
+            print("------------------------------------------------------------------------------")
+            print(f"Time elapsed: {elapsed_time}s\n")
 
-    def instantiaton (self):
-        '''Calculate the instantiation time'''
-        print('Instantiation time - start!')
+    def instantiaton_test1 (self):
+        '''Calculate the instantiation time of a Network Service'''
+        test1 = HandlerOSM()
+        if test1.verify_osm_status():
+            print("------------------------------------------------------------------------------")
+            print("                  #Test1 (Instantiation): Trigger NS instance                 ")
+            print("------------------------------------------------------------------------------")
 
-        start = time.time()
-        teste = HandlerOSM()
+            start = time.time()
 
-        nsd_id = HandlerOSM()
+            test1.post_ns_instance('nsd', 'nsd_instance', 'nsd_instance')
 
-        vim_account_id = HandlerOSM()
+            #perfom subscrition
+            test1.post_ns_subscription('nsd')
 
-        print(vim_account_id.get_vim_accounts())
+            end = time.time()
+            elapsed_time = end - start
+            elapsed_time = round(elapsed_time, 2)
 
-        teste.post_create_ns_instances(nsd_id.get_ns_packages('hackfest_basic-ns'),
-                                       'first_creation',
-                                       'default',
-                                       vim_account_id.get_vim_accounts())
-        end = time.time()
-
-        elapsed_time = end - start
-
-        elapsed_time = round(elapsed_time, 2)
-
-        print('Onboarding time - end!')
-
-        print(f'Time elapsed: {elapsed_time}s')
+            print("------------------------------------------------------------------------------")
+            print("                        Instantiation Results                                 ")
+            print("------------------------------------------------------------------------------")
+            print(f"Time elapsed: {elapsed_time}s\n")
 
 if __name__ == '__main__':
+    # VNFd/NSd onboarding and NS instantiation for slice-based VNF.
     test1 = Tests()
     test1.onboarding_test1()
+    test1.instantiaton_test1()
 
-    #
-    # teste2 = Tests()
-    # teste2.instantiaton()
-    #
-    # sub = HandlerOSM()
-    #
-    # # first_creation is the name of instance
-    # id_subscription = sub.post_create_new_subscription('first_creation')
-    #
-    # print(id_subscription)
