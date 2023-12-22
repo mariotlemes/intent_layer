@@ -6,11 +6,13 @@ class Tests:
     def onboarding_test1 (self):
         status = HandlerOSM()
         if status.verify_osm_status():
-            print("#Test1 (Onboarding): 3 VNFd and 1 NSd")
+            print("------------------------------------------------------------------------------")
+            print("              #Test1 (Onboarding): 3 VNFd and 1 NSd")
+            print("------------------------------------------------------------------------------")
+
             start = time.time()
 
             test1 = HandlerOSM()
-
             with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_vnf_packages(data)
@@ -27,8 +29,14 @@ class Tests:
                 data = yaml.safe_load(file)
                 test1.post_ns_package(data)
 
+            print("------------------------------------------------------------------------------")
+            print("                    Trigger NS instance creation                              ")
+            print("------------------------------------------------------------------------------")
             test1.post_ns_instance('nsd', 'nsd', 'nsd')
 
+            print("------------------------------------------------------------------------------")
+            print("                          Onboarding Results                                  ")
+            print("------------------------------------------------------------------------------")
             end = time.time()
             elapsed_time = end - start
             elapsed_time = round(elapsed_time, 2)

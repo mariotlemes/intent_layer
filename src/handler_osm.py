@@ -41,7 +41,7 @@ class HandlerOSM:
 
     def verify_osm_status(self):
         """Verify  OSM (Open Source Mano) status. """
-        print(f"Trying to connect OSM NBI - {PUBLIC_IP_OSM} -")
+        print(f"Trying to connect OSM NBI ({PUBLIC_IP_OSM})... \n")
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         endpoint = PUBLIC_IP_OSM + endpoint_generate_token
 
@@ -50,7 +50,6 @@ class HandlerOSM:
             requests.post(endpoint, headers=headers,
                           json={"username": "admin",
                                 "password": "admin"})
-            print("Connected!")
             return True
         except requests.Timeout:
             print("Timeout! OSM is probably down...")
@@ -143,7 +142,6 @@ class HandlerOSM:
     def post_ns_instance(self, nsd_id, ns_name, ns_description):
         '''Post a new descriptors content (JSON object) to OSM'''
 
-        # vnfd-id: references a VNFD
         endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instances
         headers = {
             'Content-Type': 'application/json',
@@ -167,13 +165,15 @@ class HandlerOSM:
             response = requests.request("POST", endpoint, headers=headers, data=payload)
             if response.status_code != 201:
                 response = response.json()
+                print(f"NS ID: {ns_name}")
                 print(f"Code: {response['status']} ({response['code']})")
-                print(f"Detail: {response['detail']}")
+                print(f"Detail: {response['detail']}\n")
                 return False
             else:
                 response = response.json()
+                print(f"NS ID: {ns_name}")
                 print(f"Code: 201 (SUCCESS)")
-                print(f"ID: {response['id']}")
+                print(f"ID: {response['id']}\n")
 
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
@@ -190,6 +190,9 @@ class HandlerOSM:
         }
         # transform vnfd_data to JSON
         data = json.dumps(vnfd_data)
+        # print(data)
+
+        vnfd_name = vnfd_data['vnfd']['id']
 
         bearer = HandlerOSM()
         headers.update(bearer.generate_nbi_token())
@@ -199,13 +202,15 @@ class HandlerOSM:
         try:
             if response.status_code != 201:
                 response = response.json()
+                print(f"VNFd ID: {vnfd_name}")
                 print(f"Code: {response['status']} ({response['code']})")
-                print(f"Detail: {response['detail']}")
+                print(f"Detail: {response['detail']}\n")
                 return False
             else:
                 response = response.json()
+                print(f"VNFd ID: {vnfd_name}")
                 print(f"Code: 201 (SUCCESS)")
-                print(f"ID: {response['id']}")
+                print(f"ID: {response['id']}\n")
                 key_search = 'id'
                 if key_search in response:
                     id_value = response[key_search]
@@ -226,22 +231,25 @@ class HandlerOSM:
 
         data = json.dumps(nsd_data)
 
+        nsd_name = nsd_data['nsd']['nsd'][0]['id']
+
         bearer = HandlerOSM()
         headers.update(bearer.generate_nbi_token())
 
         try:
             response = requests.request("POST", endpoint, headers=headers, data=data)
-            print(response.status_code)
 
             if response.status_code != 201:
                 response = response.json()
+                print(f"NSd ID): {nsd_name}")
                 print(f"Code: {response['status']} ({response['code']})")
-                print(f"Detail: {response['detail']}")
+                print(f"Detail: {response['detail']}\n")
                 return False
             else:
                 response = response.json()
+                print(f"NSd ID): {nsd_name}")
                 print(f"Code: 201 (SUCCESS)")
-                print(f"ID: {response['id']}")
+                print(f"ID: {response['id']}\n")
                 key_search = 'id'
                 if key_search in response:
                     id_value = response[key_search]
