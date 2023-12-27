@@ -14,13 +14,13 @@ class Tests:
 
             with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
-                test1.post_vnf_packages(data)
+                test1.post_vnf_package(data)
             with open('src/descriptors/test1/basic_VNF2d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
-                test1.post_vnf_packages(data)
+                test1.post_vnf_package(data)
             with open('src/descriptors/test1/basic_VNF-SDNd.yaml', 'r') as file:
                 data = yaml.safe_load(file)
-                test1.post_vnf_packages(data)
+                test1.post_vnf_package(data)
             with open('src/descriptors/test1/basic_NSD.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_ns_package(data)
@@ -39,15 +39,19 @@ class Tests:
         test1 = HandlerOSM()
         if test1.verify_osm_status():
             print("------------------------------------------------------------------------------")
-            print("                  #Test1 (Instantiation): Trigger NS instance                 ")
+            print("        #Test1 (Instantiation):   NS instance creation and instantiation                 ")
             print("------------------------------------------------------------------------------")
 
             start = time.time()
+            # create the instance
+            test1.post_ns_instance_create('nsd', 'nsd_instance',
+                                          'nsd_instance')
+            # instantiate
+            test1.post_ns_instance_instantiate(test1.get_ns_instance('nsd_instance'))
 
-            test1.post_ns_instance('nsd', 'nsd_instance', 'nsd_instance')
-
-            #perfom subscrition
-            test1.post_ns_subscription('nsd')
+            #perfom subscrition to ns instance
+            # test1.post_ns_subscription('nsd_instance')
+            test1.post_ns_subscription('nsd_instance')
 
             end = time.time()
             elapsed_time = end - start

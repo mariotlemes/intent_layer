@@ -11,13 +11,14 @@ endpoint_vnf_packages = '/vnfpkgm/v1/vnf_packages'
 endpoint_vim_accounts = '/admin/v1/vim_accounts'
 endpoint_ns_packages = '/nsd/v1/ns_descriptors'
 endpoint_ns_instances = '/nslcm/v1/ns_instances'
-endpoint_del_ns_instances = '/nslcm/v1/ns_instances'
 endpoint_vnf_packages_content = '/vnfpkgm/v1/vnf_packages_content'
 endpoint_ns_packages_content = '/nsd/v1/ns_descriptors_content'
-endpoint_ns_create_instances = '/nslcm/v1/ns_instances_content'
+endpoint_ns_create_instances = '/nslcm/v1/ns_instances'
 endpoint_create_new_subscription = '/nslcm/v1/subscriptions'
 
 class HandlerOSM:
+    """This class provides methods to interact with the OSM REST interface"""
+
     def verify_osm_status(self):
         """Verify  OSM (Open Source Mano) status. """
         print("------------------------------------------------------------------------------")
@@ -64,8 +65,7 @@ class HandlerOSM:
             print("Error:", error)
         return headers
 
-    """This class provides methods to interact with the OSM REST interface"""
-    def get_vim_accounts(self):
+    def get_vim_account(self):
         endpoint = PUBLIC_IP_OSM + endpoint_vim_accounts
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         bearer = HandlerOSM()
@@ -85,7 +85,7 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def get_vnf_packages(self):
+    def get_vnf_package(self):
         """Query information about multiple VNF package resources"""
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
@@ -148,7 +148,7 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def post_ns_instance(self, nsd_id, ns_name, ns_description):
+    def post_ns_instance_create(self, nsd_id, ns_name, ns_description):
         '''Post a new descriptors content (JSON object) to OSM'''
 
         endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instances
@@ -166,7 +166,7 @@ class HandlerOSM:
             "nsdId": nsd_id,
             "nsName": ns_name,
             "nsDescription": ns_description,
-            "vimAccountId": vim_account_id.get_vim_accounts(),
+            "vimAccountId": vim_account_id.get_vim_account(),
             "lcmOperationType": "NsLcmOperationOccurrenceNotification"
         })
 
@@ -186,13 +186,13 @@ class HandlerOSM:
                 print(f"NS ID: {ns_name}")
                 print(f"Code: 201 (SUCCESS)")
                 print(f"ID: {response['id']}\n")
-
+                return response['id']
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
 
-    def post_vnf_packages(self, vnfd_data):
+    def post_vnf_package(self, vnfd_data):
         """Post a new descriptors content in YAML to OSM"""
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages_content
 
@@ -282,27 +282,33 @@ class HandlerOSM:
 
         bearer = HandlerOSM()
 
-        nsd_id = bearer.get_ns_package(name)
+        # # subscription to nsd package
+        # nsd_id = bearer.get_ns_package(name)
+        # headers.update(bearer.generate_nbi_token())
+
+        # subscription to ns instance
+        nsd_id = bearer.get_ns_instance(name)
         headers.update(bearer.generate_nbi_token())
 
-        if not nsd_id:
-            return False
+        # if not nsd_id:
+        #     return False
 
         payload = json.dumps({
                 "filter": {
                     "nsInstanceSubscriptionFilter": {
-                        "nsdIds": [
+                        "nsInstanceIds": [
                             nsd_id
                         ]
                     },
                     "notificationTypes": [
                         "NsLcmOperationOccurrenceNotification"
                     ],
-                    # "operationTypes": [
-                    #     "INSTANTIATE"
-                    # ],
+                    "operationTypes": [
+                        "INSTANTIATE"
+                    ],
                     "operationStates": [
-                        "COMPLETED"
+                        "COMPLETED",
+                        "PROCESSING"
                     ]
                 },
                 "CallbackUri": "http://35.199.94.95:5400/notifications"
@@ -330,3 +336,36 @@ class HandlerOSM:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
+
+    def post_ns_instance_instantiate(self, ns_instance_id):
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        id = HandlerOSM()
+        headers = HandlerOSM()
+
+
+        endpoint = (PUBLIC_IP_OSM + endpoint_create_new_subscription +
+                    "/" + id.get_ns_instance('nsd_instance') + "/instantiate")
+
+        print(endpoint)
+
+        # headers.update(bearer.generate_nbi_token())
+
+
+
+if __name__ == '__main__':
+    test1 = HandlerOSM()
+    test1.post_ns_instance_create('nsd', 'nsd_instance',
+                                  'nsd_instance')
+
+    test1.post_ns_instance_instantiate(test1.get_ns_instance('nsd_instance'))
+
+
+
+
+
+
