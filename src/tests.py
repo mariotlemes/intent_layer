@@ -46,6 +46,7 @@ class Tests:
             print("                          Onboarding Results                                  ")
             print("------------------------------------------------------------------------------")
             print(f"Time elapsed: {elapsed_time}s")
+
             return elapsed_time
 
     def instantiaton_test1 (self):
@@ -72,30 +73,32 @@ class Tests:
                 print("                        Instantiation Results                                 ")
                 print("------------------------------------------------------------------------------")
                 print(f"Time elapsed: {elapsed_time}s")
+
                 return elapsed_time
 
 if __name__ == '__main__':
+    time_onboarding = []
+    time_instantiate = []
+    start = time.time()
 
     # VNFd/NSd onboarding and NS instantiation for slice-based VNF.
     for i in range (0,2):
-        start= time.time()
         test1 = Tests()
         test1.clean_environment()
 
-        time_onboarding = []
         time_onboarding.append(test1.onboarding_test1())
-
-        time_instantiate = []
         time_instantiate.append(test1.instantiaton_test1())
 
     end = time.time()
     elapsed_time = end - start
     print("------------------------------------------------------------------------------")
-    print(f"Test duration: {elapsed_time}s.")
+    print(f"Test duration: {round(elapsed_time, 2)}s.")
     print("------------------------------------------------------------------------------")
+
     average_onboarding = sum(time_onboarding) / len(time_onboarding)
-    print(f" Time onboarding (average): {average_onboarding}s.")
+    print(f"Time onboarding (AVG - {len(time_onboarding)} tests): {round (average_onboarding, 2)}s.")
     print("------------------------------------------------------------------------------")
+
     average_instantiate = sum(time_instantiate)/len(time_instantiate)
-    print(f" Time instantiate (average): {average_instantiate}s.")
+    print(f"Time instantiate (AVG - {len(time_onboarding)} tests): {round(average_instantiate, 2)}s.")
 
