@@ -148,7 +148,7 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def post_ns_instance_create(self, nsd_id, ns_name, ns_description):
+    def post_ns_instance_create_and_instantiate(self, nsd_id, ns_name, ns_description):
         '''Post a new descriptors content (JSON object) to OSM'''
 
         endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instances
@@ -180,13 +180,31 @@ class HandlerOSM:
                 print(f"NS ID: {ns_name}")
                 print(f"Code: {response['status']} ({response['code']})")
                 print(f"Detail: {response['detail']}\n")
-                return False
+                # return False
             else:
                 response = response.json()
                 print(f"NS ID: {ns_name}")
                 print(f"Code: 201 (SUCCESS)")
                 print(f"ID: {response['id']}\n")
+                # return response['id']
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
+        id = HandlerOSM()
+        endpoint_instantiate = (PUBLIC_IP_OSM + endpoint_ns_instances +
+                    "/" + id.get_ns_instance('nsd_instance') + "/instantiate")
+
+        try:
+            response = requests.request("POST", endpoint_instantiate, headers=headers, data=payload)
+            if response.status_code != 202:
+                response = response.json()
                 return response['id']
+
+            else:
+                response = response.json()
+                print(response)
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -338,34 +356,34 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def post_ns_instance_instantiate(self, ns_instance_id):
-
-        headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-
-        id = HandlerOSM()
-        bearer = HandlerOSM()
-
-        headers.update(bearer.generate_nbi_token())
-
-        endpoint = (PUBLIC_IP_OSM + endpoint_ns_instances +
-                    "/" + id.get_ns_instance('nsd_instance') + "/instantiate")
-
-        try:
-            response = requests.request("POST", endpoint, headers=headers)
-            if response.status_code != 202:
-                response = response.json()
-                print(response)
-
-            else:
-                response = response.json()
-                print(response)
-        except requests.Timeout as timeout:
-            print("Timeout:", timeout)
-        except requests.RequestException as error:
-            print("Error:", error)
+    # def post_ns_instance_instantiate(self, ns_instance_id):
+    #
+    #     headers = {
+    #         'Content-Type': 'application/json',
+    #         'Accept': 'application/json'
+    #     }
+    #
+    #     id = HandlerOSM()
+    #     bearer = HandlerOSM()
+    #
+    #     headers.update(bearer.generate_nbi_token())
+    #
+    #     endpoint = (PUBLIC_IP_OSM + endpoint_ns_instances +
+    #                 "/" + id.get_ns_instance('nsd_instance') + "/instantiate")
+    #
+    #     try:
+    #         response = requests.request("POST", endpoint, headers=headers)
+    #         if response.status_code != 202:
+    #             response = response.json()
+    #             print(response)
+    #
+    #         else:
+    #             response = response.json()
+    #             print(response)
+    #     except requests.Timeout as timeout:
+    #         print("Timeout:", timeout)
+    #     except requests.RequestException as error:
+    #         print("Error:", error)
 
 
 

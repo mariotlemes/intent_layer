@@ -43,17 +43,13 @@ class Tests:
             print("------------------------------------------------------------------------------")
 
             start = time.time()
-            # create the instance
-            test1.post_ns_instance_create('nsd', 'nsd_instance',
-                                          'nsd_instance')
-            # instantiate
-            test1.post_ns_instance_instantiate(test1.get_ns_instance('nsd_instance'))
+
+            # instance create and instantiate
+            test1.post_ns_instance_create_and_instantiate('nsd', 'nsd_instance', 'teste')
 
             #perfom subscrition to ns instance
             # test1.post_ns_subscription('nsd_instance')
-            test1.post_ns_subscription('nsd_instance')
-
-            test1.post_ns_instance_instantiate(test1.get_ns_instance('nsd_instance'))
+            # test1.post_ns_subscription('nsd_instance')
 
             end = time.time()
             elapsed_time = end - start
