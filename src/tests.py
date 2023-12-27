@@ -32,34 +32,36 @@ class Tests:
             print("------------------------------------------------------------------------------")
             print("                          Onboarding Results                                  ")
             print("------------------------------------------------------------------------------")
-            print(f"Time elapsed: {elapsed_time}s\n")
+            print(f"Time elapsed: {elapsed_time}s")
 
     def instantiaton_test1 (self):
         '''Calculate the instantiation time of a Network Service'''
         test1 = HandlerOSM()
         if test1.verify_osm_status():
             print("------------------------------------------------------------------------------")
-            print("        #Test1 (Instantiate): NS instance creation and instantiate            ")
+            print("        #Test1 (Instantiate): NS instance - create and instantiate            ")
             print("------------------------------------------------------------------------------")
 
             start = time.time()
 
             # create and instantiate instance
             id_occurrence = test1.post_ns_instance_create_and_instantiate('nsd', 'nsd_instance',
-                                                                            'teste')
-
-            if test1.get_ns_lcmp_op_occs(test1.get_ns_instance('nsd_instance')):
+                                                                            'a brief description')
+            #
+            if test1.get_ns_lcmp_op_occs(id_occurrence):
                 end = time.time()
+
                 elapsed_time = end - start
                 elapsed_time = round(elapsed_time, 2)
+
                 print("------------------------------------------------------------------------------")
                 print("                        Instantiation Results                                 ")
                 print("------------------------------------------------------------------------------")
-                print(f"Time elapsed: {elapsed_time}s\n")
+                print(f"Time elapsed: {elapsed_time}s")
 
 if __name__ == '__main__':
+
     # VNFd/NSd onboarding and NS instantiation for slice-based VNF.
     test1 = Tests()
     test1.onboarding_test1()
     test1.instantiaton_test1()
-

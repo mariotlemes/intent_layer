@@ -30,10 +30,10 @@ class HandlerOSM:
             status = False
             while (status == False):
                 response = requests.get(endpoint, headers=headers)
-                print(response.json())
+                # print(response.json())
                 for item in response.json():
                     if (item['operationState'] == "COMPLETED"
-                            and item['InstanceId'] == ns_instance_id):
+                            and item['_id'] == ns_instance_id):
                         status = True
                         return status
                     else:
@@ -56,14 +56,9 @@ class HandlerOSM:
                           json={"username": "admin",
                                 "password": "admin"})
             print("\nRESULT: Connected to OSM NBI.")
-            print("------------------------------------------------------------------------------")
-
-
             return True
         except requests.Timeout:
             print("\nRESULT: Timeout! OSM is probably down...")
-            print("------------------------------------------------------------------------------")
-
             return False
         except requests.RequestException as error:
             print("Error:", error)
@@ -296,13 +291,13 @@ class HandlerOSM:
                 response = response.json()
                 print(f"NSd ID: {nsd_name}")
                 print(f"Code: {response['status']} ({response['code']})")
-                print(f"Detail: {response['detail']}\n")
+                print(f"Detail: {response['detail']}")
                 return False
             else:
                 response = response.json()
                 print(f"NSd ID: {nsd_name}")
                 print(f"Code: 201 (SUCCESS)")
-                print(f"ID: {response['id']}\n")
+                print(f"ID: {response['id']}")
                 key_search = 'id'
                 if key_search in response:
                     id_value = response[key_search]
