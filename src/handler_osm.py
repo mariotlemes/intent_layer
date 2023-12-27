@@ -14,10 +14,34 @@ endpoint_ns_instances = '/nslcm/v1/ns_instances'
 endpoint_vnf_packages_content = '/vnfpkgm/v1/vnf_packages_content'
 endpoint_ns_packages_content = '/nsd/v1/ns_descriptors_content'
 endpoint_ns_create_instances = '/nslcm/v1/ns_instances'
-endpoint_create_new_subscription = '/nslcm/v1/subscriptions'
+endpoint_create_subscription = '/nslcm/v1/subscriptions'
+endpoint_occurrences= '/nslcm/v1/ns_lcm_op_occs/'
 
 class HandlerOSM:
     """This class provides methods to interact with the OSM REST interface"""
+    def get_ns_lcmp_op_occs(self, ns_instance_id):
+        endpoint = PUBLIC_IP_OSM + endpoint_occurrences
+        headers = {"Accept": "application/json",
+                   "Content_Type": "application/json"}
+        bearer = HandlerOSM()
+        headers.update(bearer.generate_nbi_token())
+
+        try:
+            status = False
+            while (status == False):
+                response = requests.get(endpoint, headers=headers)
+                print(response.json())
+                for item in response.json():
+                    if (item['operationState'] == "COMPLETED"
+                            and item['InstanceId'] == ns_instance_id):
+                        status = True
+                        return status
+                    else:
+                        status = False
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
 
     def verify_osm_status(self):
         """Verify  OSM (Open Source Mano) status. """
@@ -180,13 +204,11 @@ class HandlerOSM:
                 print(f"NS ID: {ns_name}")
                 print(f"Code: {response['status']} ({response['code']})")
                 print(f"Detail: {response['detail']}\n")
-                # return False
             else:
                 response = response.json()
                 print(f"NS ID: {ns_name}")
                 print(f"Code: 201 (SUCCESS)")
                 print(f"ID: {response['id']}\n")
-                # return response['id']
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -200,11 +222,12 @@ class HandlerOSM:
             response = requests.request("POST", endpoint_instantiate, headers=headers, data=payload)
             if response.status_code != 202:
                 response = response.json()
-                return response['id']
-
+                # return response['id']
             else:
                 response = response.json()
-                print(response)
+                # print(response)
+                return response['id']
+                # print(response)
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -289,10 +312,10 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def post_ns_subscription(self, name):
+    def post_ns_subscription(self, id):
         '''Create a new subscription to receive notifications about a network service.
         The input is the name of resource and the output is the subscription ID'''
-        endpoint = PUBLIC_IP_OSM + endpoint_create_new_subscription
+        endpoint = PUBLIC_IP_OSM + endpoint_create_subscription
 
         headers = {
             'Content-Type': 'application/json',
@@ -300,35 +323,23 @@ class HandlerOSM:
         }
 
         bearer = HandlerOSM()
-
-        # # subscription to nsd package
-        # nsd_id = bearer.get_ns_package(name)
-        # headers.update(bearer.generate_nbi_token())
-
-        # subscription to ns instance
-        nsd_id = bearer.get_ns_instance(name)
         headers.update(bearer.generate_nbi_token())
 
-        # if not nsd_id:
-        #     return False
 
         payload = json.dumps({
                 "filter": {
-                    "nsInstanceSubscriptionFilter": {
+                    "NsInstanceSubscriptionFilter": {
                         "nsInstanceIds": [
-                            nsd_id
+                            id
                         ]
                     },
                     "notificationTypes": [
-                        "NsLcmOperationOccurrenceNotification"
+                        "NsChangeNotification"
                     ],
-                    "operationTypes": [
-                        "INSTANTIATE"
+
+                    "nsComponentTypes" : [
+
                     ],
-                    "operationStates": [
-                        "COMPLETED",
-                        "PROCESSING"
-                    ]
                 },
                 "CallbackUri": "http://35.199.94.95:5400/notifications"
             })
@@ -337,57 +348,17 @@ class HandlerOSM:
             response = requests.request("POST", endpoint, headers=headers, data=payload)
             if response.status_code != 201:
                 response = response.json()
-                print("Task: Subscription")
-                print(f"NSd ID: {nsd_id}")
                 print(f"Code: {response['status']} ({response['code']})")
                 print(f"Detail: {response['detail']}")
             else:
                 response = response.json()
-                print("Task: Subscription")
-                print(f"NSd ID: {nsd_id}")
                 print(f"Code: 201 (SUCCESS)")
                 print(f"ID of subscription: {response['id']}")
-                key_search = 'id'
-                if key_search in response:
-                    id_value = response[key_search]
-                    return id_value
+                # key_search = 'id'
+                # if key_search in response:
+                #     id_value = response[key_search]
+                #     return id_value
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
-
-    # def post_ns_instance_instantiate(self, ns_instance_id):
-    #
-    #     headers = {
-    #         'Content-Type': 'application/json',
-    #         'Accept': 'application/json'
-    #     }
-    #
-    #     id = HandlerOSM()
-    #     bearer = HandlerOSM()
-    #
-    #     headers.update(bearer.generate_nbi_token())
-    #
-    #     endpoint = (PUBLIC_IP_OSM + endpoint_ns_instances +
-    #                 "/" + id.get_ns_instance('nsd_instance') + "/instantiate")
-    #
-    #     try:
-    #         response = requests.request("POST", endpoint, headers=headers)
-    #         if response.status_code != 202:
-    #             response = response.json()
-    #             print(response)
-    #
-    #         else:
-    #             response = response.json()
-    #             print(response)
-    #     except requests.Timeout as timeout:
-    #         print("Timeout:", timeout)
-    #     except requests.RequestException as error:
-    #         print("Error:", error)
-
-
-
-
-
-
-
