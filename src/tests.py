@@ -3,6 +3,19 @@ import yaml
 from handler_osm import HandlerOSM
 
 class Tests:
+    def clean_environment(self):
+        clean = HandlerOSM()
+        if not clean.get_ns_instance():
+            pass
+            print("Nothing to clean!!")
+        else:
+            id = clean.get_ns_instance()
+            # print(id)
+            print("Cleanning...")
+            clean.post_ns_instance_terminate_and_delete(id)
+
+
+
     def onboarding_test1 (self):
         test1 = HandlerOSM()
         if test1.verify_osm_status():
@@ -33,6 +46,7 @@ class Tests:
             print("                          Onboarding Results                                  ")
             print("------------------------------------------------------------------------------")
             print(f"Time elapsed: {elapsed_time}s")
+            return elapsed_time
 
     def instantiaton_test1 (self):
         '''Calculate the instantiation time of a Network Service'''
@@ -58,10 +72,30 @@ class Tests:
                 print("                        Instantiation Results                                 ")
                 print("------------------------------------------------------------------------------")
                 print(f"Time elapsed: {elapsed_time}s")
+                return elapsed_time
 
 if __name__ == '__main__':
 
     # VNFd/NSd onboarding and NS instantiation for slice-based VNF.
-    test1 = Tests()
-    test1.onboarding_test1()
-    test1.instantiaton_test1()
+    for i in range (0,2):
+        start= time.time()
+        test1 = Tests()
+        test1.clean_environment()
+
+        time_onboarding = []
+        time_onboarding.append(test1.onboarding_test1())
+
+        time_instantiate = []
+        time_instantiate.append(test1.instantiaton_test1())
+
+    end = time.time()
+    elapsed_time = end - start
+    print("------------------------------------------------------------------------------")
+    print(f"Test duration: {elapsed_time}s.")
+    print("------------------------------------------------------------------------------")
+    average_onboarding = sum(time_onboarding) / len(time_onboarding)
+    print(f" Time onboarding (average): {average_onboarding}s.")
+    print("------------------------------------------------------------------------------")
+    average_instantiate = sum(time_instantiate)/len(time_instantiate)
+    print(f" Time instantiate (average): {average_instantiate}s.")
+

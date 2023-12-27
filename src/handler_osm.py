@@ -1,6 +1,8 @@
 from variables import GlobalVariables
 import requests
 import json, yaml
+import time
+
 
 # IPv4 address for OSM NBI
 PUBLIC_IP_OSM = GlobalVariables.get_public_ip_osm()
@@ -16,6 +18,7 @@ endpoint_ns_packages_content = '/nsd/v1/ns_descriptors_content'
 endpoint_ns_create_instances = '/nslcm/v1/ns_instances'
 endpoint_create_subscription = '/nslcm/v1/subscriptions'
 endpoint_occurrences= '/nslcm/v1/ns_lcm_op_occs/'
+
 
 class HandlerOSM:
     """This class provides methods to interact with the OSM REST interface"""
@@ -123,7 +126,27 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def get_ns_instance(self, name):
+    def get_ns_instance(self):
+        endpoint = PUBLIC_IP_OSM + endpoint_ns_instances
+        headers = {"Accept": "application/json", "Content_Type": "application/json"}
+
+        bearer = HandlerOSM()
+        headers.update(bearer.generate_nbi_token())
+
+        try:
+            response = requests.get(endpoint, headers=headers)
+            # print(response.json())
+            for item in response.json():
+                value_id = item['_id']
+                return value_id
+            else:
+                return False
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
+    def get_ns_instance_by_name(self, name):
         endpoint = PUBLIC_IP_OSM + endpoint_ns_instances
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
 
@@ -211,7 +234,7 @@ class HandlerOSM:
 
         id = HandlerOSM()
         endpoint_instantiate = (PUBLIC_IP_OSM + endpoint_ns_instances +
-                    "/" + id.get_ns_instance('nsd_instance') + "/instantiate")
+                    "/" + id.get_ns_instance_by_name('nsd_instance') + "/instantiate")
 
         try:
             response = requests.request("POST", endpoint_instantiate, headers=headers, data=payload)
@@ -349,11 +372,50 @@ class HandlerOSM:
                 response = response.json()
                 print(f"Code: 201 (SUCCESS)")
                 print(f"ID of subscription: {response['id']}")
-                # key_search = 'id'
-                # if key_search in response:
-                #     id_value = response[key_search]
-                #     return id_value
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
+
+    def post_ns_instance_terminate_and_delete(self, id):
+        print(endpoint_ns_create_instances)
+
+        endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instances + '/' + id + '/' + 'terminate'
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        bearer = HandlerOSM()
+        headers.update(bearer.generate_nbi_token())
+
+        try:
+            response = requests.request("POST", endpoint, headers=headers)
+            if response.status_code != 202:
+                print("Not terminated!")
+            else:
+                response = response.json()
+                print("Terminating proccess.. Wait...")
+
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
+        time.sleep(40)
+
+        endpoint_delete = PUBLIC_IP_OSM + endpoint_ns_create_instances + '/' + id + '/'
+
+        try:
+            response = requests.request("DELETE", endpoint_delete, headers=headers)
+            if response.status_code != 204:
+                print("Not deleting..")
+            else:
+                print("Delete successfull!")
+                response = response.json()
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
