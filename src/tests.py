@@ -53,6 +53,8 @@ class Tests:
             # test1.post_ns_subscription('nsd_instance')
             test1.post_ns_subscription('nsd_instance')
 
+            test1.post_ns_instance_instantiate(test1.get_ns_instance('nsd_instance'))
+
             end = time.time()
             elapsed_time = end - start
             elapsed_time = round(elapsed_time, 2)

@@ -270,6 +270,7 @@ class HandlerOSM:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
+
     def post_ns_subscription(self, name):
         '''Create a new subscription to receive notifications about a network service.
         The input is the name of resource and the output is the subscription ID'''
@@ -345,24 +346,27 @@ class HandlerOSM:
         }
 
         id = HandlerOSM()
-        headers = HandlerOSM()
+        bearer = HandlerOSM()
 
+        headers.update(bearer.generate_nbi_token())
 
-        endpoint = (PUBLIC_IP_OSM + endpoint_create_new_subscription +
+        endpoint = (PUBLIC_IP_OSM + endpoint_ns_instances +
                     "/" + id.get_ns_instance('nsd_instance') + "/instantiate")
 
-        print(endpoint)
+        try:
+            response = requests.request("POST", endpoint, headers=headers)
+            if response.status_code != 202:
+                response = response.json()
+                print(response)
 
-        # headers.update(bearer.generate_nbi_token())
+            else:
+                response = response.json()
+                print(response)
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
 
-
-
-if __name__ == '__main__':
-    test1 = HandlerOSM()
-    test1.post_ns_instance_create('nsd', 'nsd_instance',
-                                  'nsd_instance')
-
-    test1.post_ns_instance_instantiate(test1.get_ns_instance('nsd_instance'))
 
 
 
