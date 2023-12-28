@@ -1,21 +1,9 @@
 import time
 import yaml
 from handler_osm import HandlerOSM
+from timer import Timer
 
 class Tests:
-
-    def clean_environment(self):
-        clean = HandlerOSM()
-        if not clean.get_ns_instance():
-            print("Nothing to clean!!")
-        else:
-            ns_instance_id = clean.get_ns_instance()
-            print("Cleanning...")
-            if clean.get_ns_lcmp_op_occs(ns_instance_id):
-                id_terminate = clean.post_ns_instance_terminate(ns_instance_id)
-                if id_terminate:
-                    clean.del_ns_instace(ns_instance_id)
-
     def onboarding_test1 (self):
         '''Calculate the onboarding time of VNF descriptors for test1'''
         test1 = HandlerOSM()
@@ -82,17 +70,24 @@ class Tests:
        number of tests and the output is the average time for onboarding and instantiation'''
         time_onboarding = []
         time_instantiate = []
-        start = time.time()
+        # start = time.time()
+        timer = Timer()
+        timer.start()
 
         for i in range(0, number_of_tests):
+            clean = HandlerOSM()
             test1 = Tests()
-            test1.clean_environment()
+
+            timer.pause()
+            clean.clean_environment()
+            timer.resume()
 
             time_onboarding.append(test1.onboarding_test1())
             time_instantiate.append(test1.instantiaton_test1())
 
-        end = time.time()
-        elapsed_time = end - start
+        # end = time.time()
+        # elapsed_time = end - start
+        elapsed_time = timer.elapsed_time()
         print("------------------------------------------------------------------------------")
         print(f"                        End test1 - Results                                  ")
         print("------------------------------------------------------------------------------")
@@ -108,5 +103,5 @@ class Tests:
 if __name__ == '__main__':
     obj = Tests()
     obj.test1(2)
-    # obj.clean_environment()
+
 
