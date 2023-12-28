@@ -3,20 +3,21 @@ import yaml
 from handler_osm import HandlerOSM
 
 class Tests:
+
     def clean_environment(self):
         clean = HandlerOSM()
         if not clean.get_ns_instance():
-            pass
             print("Nothing to clean!!")
         else:
-            id = clean.get_ns_instance()
-            # print(id)
+            ns_instance_id = clean.get_ns_instance()
             print("Cleanning...")
-            clean.post_ns_instance_terminate_and_delete(id)
-
-
+            if clean.get_ns_lcmp_op_occs(ns_instance_id):
+                id_terminate = clean.post_ns_instance_terminate(ns_instance_id)
+                if id_terminate:
+                    clean.del_ns_instace(ns_instance_id)
 
     def onboarding_test1 (self):
+        '''Calculate the onboarding time of VNF descriptors for test1'''
         test1 = HandlerOSM()
         if test1.verify_osm_status():
             print("------------------------------------------------------------------------------")
@@ -50,7 +51,7 @@ class Tests:
             return elapsed_time
 
     def instantiaton_test1 (self):
-        '''Calculate the instantiation time of a Network Service'''
+        '''Calculate the instantiation time of a Network Service for test1'''
         test1 = HandlerOSM()
         if test1.verify_osm_status():
             print("------------------------------------------------------------------------------")
@@ -75,30 +76,37 @@ class Tests:
                 print(f"Time elapsed: {elapsed_time}s")
 
                 return elapsed_time
+    def test1(self, number_of_tests):
+        '''This test show the average time for onboarding 3 VNFs and 1 NSd to OSM. After,
+       show the average time for instantiate the Network Service Instance. The input is the
+       number of tests and the output is the average time for onboarding and instantiation'''
+        time_onboarding = []
+        time_instantiate = []
+        start = time.time()
+
+        for i in range(0, number_of_tests):
+            test1 = Tests()
+            test1.clean_environment()
+
+            time_onboarding.append(test1.onboarding_test1())
+            time_instantiate.append(test1.instantiaton_test1())
+
+        end = time.time()
+        elapsed_time = end - start
+        print("------------------------------------------------------------------------------")
+        print(f"                        End test1 - Results                                  ")
+        print("------------------------------------------------------------------------------")
+        print(f"Test duration: {round(elapsed_time, 2)}s.")
+        print("------------------------------------------------------------------------------")
+        average_onboarding = sum(time_onboarding) / len(time_onboarding)
+        print(f"Time onboarding (AVG - {len(time_onboarding)} tests): {round(average_onboarding, 2)}s.")
+        print("------------------------------------------------------------------------------")
+        average_instantiate = sum(time_instantiate) / len(time_instantiate)
+        print(f"Time instantiate (AVG - {len(time_onboarding)} tests): {round(average_instantiate, 2)}s.")
+        print("------------------------------------------------------------------------------")
 
 if __name__ == '__main__':
-    time_onboarding = []
-    time_instantiate = []
-    start = time.time()
-
-    # VNFd/NSd onboarding and NS instantiation for slice-based VNF.
-    for i in range (0,2):
-        test1 = Tests()
-        test1.clean_environment()
-
-        time_onboarding.append(test1.onboarding_test1())
-        time_instantiate.append(test1.instantiaton_test1())
-
-    end = time.time()
-    elapsed_time = end - start
-    print("------------------------------------------------------------------------------")
-    print(f"Test duration: {round(elapsed_time, 2)}s.")
-    print("------------------------------------------------------------------------------")
-
-    average_onboarding = sum(time_onboarding) / len(time_onboarding)
-    print(f"Time onboarding (AVG - {len(time_onboarding)} tests): {round (average_onboarding, 2)}s.")
-    print("------------------------------------------------------------------------------")
-
-    average_instantiate = sum(time_instantiate)/len(time_instantiate)
-    print(f"Time instantiate (AVG - {len(time_onboarding)} tests): {round(average_instantiate, 2)}s.")
+    obj = Tests()
+    obj.test1(2)
+    # obj.clean_environment()
 

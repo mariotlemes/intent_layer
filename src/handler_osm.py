@@ -3,7 +3,6 @@ import requests
 import json, yaml
 import time
 
-
 # IPv4 address for OSM NBI
 PUBLIC_IP_OSM = GlobalVariables.get_public_ip_osm()
 
@@ -17,7 +16,7 @@ endpoint_vnf_packages_content = '/vnfpkgm/v1/vnf_packages_content'
 endpoint_ns_packages_content = '/nsd/v1/ns_descriptors_content'
 endpoint_ns_create_instances = '/nslcm/v1/ns_instances'
 endpoint_create_subscription = '/nslcm/v1/subscriptions'
-endpoint_occurrences= '/nslcm/v1/ns_lcm_op_occs/'
+endpoint_occurrences = '/nslcm/v1/ns_lcm_op_occs/'
 
 
 class HandlerOSM:
@@ -35,8 +34,10 @@ class HandlerOSM:
                 response = requests.get(endpoint, headers=headers)
                 # print(response.json())
                 for item in response.json():
-                    if (item['operationState'] == "COMPLETED"
-                            and item['_id'] == ns_instance_id):
+                    if ((item['operationState'] == "COMPLETED"
+                            and item['_id'] == ns_instance_id) or
+                            # (item['operationState'] == "COMPLETED"
+                            (item['nsInstanceId'] == ns_instance_id)):
                         status = True
                         return status
                     else:
@@ -377,10 +378,8 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def post_ns_instance_terminate_and_delete(self, id):
-        print(endpoint_ns_create_instances)
-
-        endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instances + '/' + id + '/' + 'terminate'
+    def post_ns_instance_terminate(self, ns_instance_id):
+        endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instances + '/' + ns_instance_id + '/' + 'terminate'
 
         headers = {
             'Content-Type': 'application/json',
@@ -391,24 +390,65 @@ class HandlerOSM:
         headers.update(bearer.generate_nbi_token())
 
         try:
-            response = requests.request("POST", endpoint, headers=headers)
-            if response.status_code != 202:
-                print("Not terminated!")
-            else:
-                response = response.json()
-                print("Terminating proccess.. Wait...")
+            status = False
+            print("Terminating proccess.. Wait...")
+            while (status == False):
+                response = requests.request("POST", endpoint, headers=headers)
+                # print(response.status_code)
+                if(response.status_code) != 409:
+                    response = response.json()
+                    id = response['id']
+                    if (bearer.get_ns_lcmp_op_occs(id)):
+                        status = True
+                        return status
+                    else:
+                        return status
+                else:
+                    status = True
+                    return status
 
+
+                        # return False
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
 
-        time.sleep(40)
+    def del_ns_instace(self, ns_instance_id):
+        endpoint_delete = PUBLIC_IP_OSM + endpoint_ns_create_instances + "/" + ns_instance_id + "/"
 
-        endpoint_delete = PUBLIC_IP_OSM + endpoint_ns_create_instances + '/' + id + '/'
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        bearer = HandlerOSM()
+        headers.update(bearer.generate_nbi_token())
+
+        response = requests.request("DELETE", endpoint_delete, headers=headers)
+        try:
+            if response.status_code != 204:
+                print("Not deleting..")
+            else:
+                print("Delete successfull!")
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
+    def del_vnf_packages(self, vnfPkgId):
+        endpoint = PUBLIC_IP_OSM + endpoint_vnf_packages + '/' + vnfPkgId
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        bearer = HandlerOSM()
+        headers.update(bearer.generate_nbi_token())
 
         try:
-            response = requests.request("DELETE", endpoint_delete, headers=headers)
+            response = requests.request("DELETE", endpoint, headers=headers)
             if response.status_code != 204:
                 print("Not deleting..")
             else:
@@ -419,3 +459,6 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
+if __name__ == '__main__':
+    test = HandlerOSM()
+    # test.del_vnf_packages('1212121')
