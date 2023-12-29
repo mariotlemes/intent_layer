@@ -23,7 +23,6 @@ class HandlerOSM:
     """This class provides methods to interact with the OSM REST interface"""
     def get_ns_lcmp_op_occs(self, ns_instance_id):
         endpoint = PUBLIC_IP_OSM + endpoint_occurrences + ns_instance_id
-        print(endpoint)
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
 
@@ -31,7 +30,6 @@ class HandlerOSM:
             status = False
             while (status == False):
                 response = requests.get(endpoint, headers=headers)
-
                 # ns - blank
                 if (response.status_code == 404):
                     status = True
@@ -247,7 +245,7 @@ class HandlerOSM:
         endpoint_instantiate = (PUBLIC_IP_OSM + endpoint_ns_instance +
                     "/" + self.get_ns_instance_by_name('nsd_instance') + "/instantiate")
 
-        print(endpoint_instantiate)
+        print(f"Instantiating: {self.get_ns_instance_by_name('nsd_instance')}")
 
         try:
             response = requests.request("POST", endpoint_instantiate, headers=headers, data=payload)
@@ -268,7 +266,7 @@ class HandlerOSM:
         '''Post a new VNFd content in JSON to OSM'''
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_package_content
         # print(endpoint)
-        print(endpoint)
+        # print(endpoint)
 
         headers = {
             'Content-Type': 'application/json',
@@ -354,79 +352,6 @@ class HandlerOSM:
 
         print(response.status_code)
 
-
-
-    # def post_vnf_package(self, vnfd_data):
-    #     """Post a new descriptors content in YAML to OSM"""
-    #     endpoint = PUBLIC_IP_OSM + endpoint_vnf_package_content
-    #     headers = {"Accept": "application/json", "Content_Type": "application/json"}
-    #
-    #     headers.update(self.generate_nbi_token())
-    #
-    #     # transform vnfd_data to JSON
-    #     data = json.dumps(vnfd_data)
-    #
-    #     # vnfd_name = vnfd_data['vnfd']['id']
-    #
-    #     print(data)
-    #
-    #     response = requests.request("POST", endpoint, headers=headers, data=data)
-    #
-    #     print(response.json())
-
-        # try:
-        #     if response.status_code != 201:
-        #         response = response.json()
-        #         print(f"VNFd ID: {vnfd_name}")
-        #         print(f"Code: {response['status']} ({response['code']})")
-        #         print(f"Detail: {response['detail']}\n")
-        #         return False
-        #     else:
-        #         response = response.json()
-        #         print(f"VNFd ID: {vnfd_name}")
-        #         print(f"Code: 201 (SUCCESS)")
-        #         print(f"ID: {response['id']}\n")
-        #         key_search = 'id'
-        #         if key_search in response:
-        #             id_value = response[key_search]
-        #             return id_value
-        # except requests.Timeout as timeout:
-        #     print("Timeout:", timeout)
-        # except requests.RequestException as error:
-        #     print("Error:", error)
-
-    # def post_ns_package(self, nsd_data):
-    #     """Post a new descriptors content in JSON to OSM"""
-    #     endpoint = PUBLIC_IP_OSM + endpoint_ns_package_content
-    #     headers = {"Accept": "application/json", "Content_Type": "application/json"}
-    #     headers.update(self.generate_nbi_token())
-    #
-    #     data = json.dumps(nsd_data)
-    #     nsd_name = nsd_data['nsd']['nsd'][0]['id']
-    #
-    #     try:
-    #         response = requests.request("POST", endpoint, headers=headers, data=data)
-    #
-    #         if response.status_code != 201:
-    #             response = response.json()
-    #             print(f"NSd ID: {nsd_name}")
-    #             print(f"Code: {response['status']} ({response['code']})")
-    #             print(f"Detail: {response['detail']}")
-    #             return False
-    #         else:
-    #             response = response.json()
-    #             print(f"NSd ID: {nsd_name}")
-    #             print(f"Code: 201 (SUCCESS)")
-    #             print(f"ID: {response['id']}")
-    #             key_search = 'id'
-    #             if key_search in response:
-    #                 id_value = response[key_search]
-    #                 return id_value
-    #     except requests.Timeout as timeout:
-    #         print("Timeout:", timeout)
-    #     except requests.RequestException as error:
-    #         print("Error:", error)
-
     def post_ns_package(self, data):
         # campos importantes
         # vnfd-id: referencia a VNFD antes implantada
@@ -435,7 +360,7 @@ class HandlerOSM:
         '''Post a new VNFd content in JSON to OSM'''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_package_content
 
-        print(endpoint)
+        # print(endpoint)
 
         headers = {
             'Content-Type': 'application/json',
@@ -605,6 +530,9 @@ class HandlerOSM:
 
     def clean_environment(self):
         '''This function perfom a clean environment in OSM, i.e., deletes all VNFd, NSD, and network instances'''
+        qtnsi = len(self.get_ns_instance())
+        qtnsd = len(self.get_ns_package())
+        qtvnfd = len(self.get_vnf_package())
 
         if (not self.get_ns_instance() and
                 not self.get_vnf_package()
@@ -612,20 +540,22 @@ class HandlerOSM:
             print("Nothing to clean!!")
 
         # to clean all network service instances
-        for ns_instance_id in self.get_ns_instance():
-            print(f"Cleanning network instances...")
-            if self.get_ns_lcmp_op_occs(ns_instance_id):
-                id_terminate = self.post_ns_instance_terminate(ns_instance_id)
-                if id_terminate:
-                    self.del_ns_instace(ns_instance_id)
+        if (len(self.get_ns_instance()) > 0):
+            for pos, ns_instance_id in enumerate(self.get_ns_instance(), start=1):
+                    print(f"Cleanning network instances ({pos}/{qtnsi})")
+                    if self.get_ns_lcmp_op_occs(ns_instance_id):
+                        id_terminate = self.post_ns_instance_terminate(ns_instance_id)
+                        if id_terminate:
+                            self.del_ns_instace(ns_instance_id)
 
         # to clean all nsd - descriptors
-        # i = 0
-        for nsd_descriptor in self.get_ns_package():
-            # print(f"Cleanning network service descriptors [{i/leng(self.get_ns_package())}]...")
-            self.del_ns_package(nsd_descriptor)
-            # i = i + 1
+        if (len(self.get_ns_package()) > 0):
+            for pos, nsd_descriptor in enumerate(self.get_ns_package(), start=1):
+                    print(f"Cleanning NS descriptors ({pos}/{qtnsd})")
+                    self.del_ns_package(nsd_descriptor)
 
         # to clean all vnfd - descriptors
-        for vnfd_descritor in self.get_vnf_package():
-            self.del_vnf_package(vnfd_descritor)
+        if (len(self.get_vnf_package()) > 0):
+            for pos, vnfd_descritor in enumerate(self.get_vnf_package(), start=1):
+                    print(f"Cleanning VNF descriptors ({pos}/{qtvnfd})")
+                    self.del_vnf_package(vnfd_descritor)
