@@ -22,6 +22,11 @@ endpoint_occurrences = '/nslcm/v1/ns_lcm_op_occs/'
 class HandlerOSM:
     """This class provides methods to interact with the OSM REST interface"""
     def get_ns_lcmp_op_occs(self, ns_instance_id):
+        '''
+        This method verify the status of network instance. It is used to safed delete.
+        :param ns_instance_id: network instance id
+        :return: true or false
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_occurrences + ns_instance_id
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -49,8 +54,12 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
+    """Verify OSM (Open Source Mano) status. """
     def verify_osm_status(self):
-        """Verify  OSM (Open Source Mano) status. """
+        '''
+        This method checks OMS status (online/offline)
+        :return: true (ON) or false (OFF)
+        '''
         print("------------------------------------------------------------------------------")
         print(f"              Connecting to OSM NBI ({PUBLIC_IP_OSM})                        ")
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
@@ -71,7 +80,10 @@ class HandlerOSM:
             return False
 
     def generate_nbi_token(self):
-        """Generate token for NBI authentication"""
+        '''
+        This method generates a NBI bearer token for API Rest authorization
+        :return: bearer token ID
+        '''
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         endpoint = PUBLIC_IP_OSM + endpoint_generate_token
 
@@ -91,6 +103,10 @@ class HandlerOSM:
         return headers
 
     def get_vim_account(self):
+        '''
+        This method gets a ID list of virtual infrastructure managers
+        :return: list (ID)
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_vim_account
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -110,7 +126,10 @@ class HandlerOSM:
             print("Error:", error)
 
     def get_vnf_package(self):
-        """Query information about multiple VNF package resources"""
+        '''
+        This method gets a list (ID) of Virtual Network Function Descriptors
+        :return: list (ID)
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_package
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -128,6 +147,10 @@ class HandlerOSM:
             print("Error:", error)
 
     def get_ns_instance(self):
+        '''
+        This method gets a list (ID) of Network Service Instances
+        :return: list (ID)
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_instance
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -146,6 +169,11 @@ class HandlerOSM:
             print("Error:", error)
 
     def get_ns_instance_by_name(self, name):
+        '''
+        This method gets ID of Network Service Instance using the name
+        :param name: name of instance
+        :return: ID of instance
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_instance
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -165,7 +193,10 @@ class HandlerOSM:
             print("Error:", error)
 
     def get_ns_package(self):
-        """Query information about multiple NS packages"""
+        '''
+        This method gets a list (ID) of Network Service Descriptors
+        :return: list (ID) of nsd
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_package
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -186,7 +217,11 @@ class HandlerOSM:
             print("Error:", error)
 
     def get_ns_package_by_name(self, name):
-        """Query information about multiple NS packages"""
+        '''
+        This method gets ID of Network Service Descriptor using the name
+        :param name: name of nsd
+        :return: ID of nsd
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_package
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -207,7 +242,12 @@ class HandlerOSM:
             print("Error:", error)
 
     def post_ns_instance_create_and_instantiate(self, nsd_id, ns_name, ns_description):
-        '''Post a new descriptors content (JSON object) to OSM'''
+        '''
+        This method creates and instantiates a network service
+        :param nsd_id: id of network service descriptor
+        :param ns_name: network service nane
+        :param ns_description: network service description
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instance
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -263,6 +303,11 @@ class HandlerOSM:
             print("Error:", error)
 
     def post_vnf_package(self, data):
+        '''
+        This method creates a VNF descriptor package in OSM
+        :param data: YAML descriptor
+        :return: ID of created VNF or False if not created
+        '''
         '''Post a new VNFd content in JSON to OSM'''
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_package_content
         # print(endpoint)
@@ -302,11 +347,6 @@ class HandlerOSM:
             print("Timeout:", timeout)
         except requests.RequestException as error:
             print("Error:", error)
-
-
-
-
-
 
     def post_create_vnf_package(self):
         """Post a new descriptors content in YAML to OSM"""
@@ -353,11 +393,11 @@ class HandlerOSM:
         print(response.status_code)
 
     def post_ns_package(self, data):
-        # campos importantes
-        # vnfd-id: referencia a VNFD antes implantada
-        # virtual-link-profile-id: nome da rede existente no OpenStack
-
-        '''Post a new VNFd content in JSON to OSM'''
+        '''
+        This method creates a network service descriptor package in OSM
+        :param data: nsd in YAML
+        :return: the ID of NS package or False if not created
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_package_content
 
         # print(endpoint)
@@ -397,8 +437,11 @@ class HandlerOSM:
             print("Error:", error)
 
     def post_ns_subscription(self, id):
-        '''Create a new subscription to receive notifications about a network service.
-        The input is the name of resource and the output is the subscription ID'''
+        '''
+        This method creates a new subscription to receive notifications about a network service
+        :param id: resource ID
+        :return: subscription ID
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_create_subscription
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -437,13 +480,18 @@ class HandlerOSM:
             print("Error:", error)
 
     def post_ns_instance_terminate(self, ns_instance_id):
+        '''
+        This method terminates a network service instance
+        :param ns_instance_id: network instance ID
+        :return: True if success
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instance + '/' + ns_instance_id + '/' + 'terminate'
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
 
         try:
             status = False
-            print("Terminating proccess.. Wait...")
+            print("Terminating proccess (wait): ", end="")
             while (status == False):
                 response = requests.request("POST", endpoint, headers=headers)
                 # print(response.status_code)
@@ -464,6 +512,10 @@ class HandlerOSM:
             print("Error:", error)
 
     def del_ns_instace(self, ns_instance_id):
+        '''
+        This method deletes a network service instance
+        :param ns_instance_id: network service instance ID
+        '''
         endpoint_delete = PUBLIC_IP_OSM + endpoint_ns_create_instance + "/" + ns_instance_id + "/"
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -480,6 +532,10 @@ class HandlerOSM:
             print("Error:", error)
 
     def del_vnf_package(self, vnf_package_id):
+        '''
+        This method deletes a virtual network function descriptor
+        :param vnf_package_id: virtual network function ID
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_package + "/" + vnf_package_id + "/"
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -496,6 +552,10 @@ class HandlerOSM:
             print("Error:", error)
 
     def del_ns_package(self, ns_package_id):
+        '''
+        This method deletes a network service descriptor
+        :param ns_package_id: network service descriptor ID
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_package + "/" + ns_package_id + "/"
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -512,6 +572,10 @@ class HandlerOSM:
             print("Error:", error)
 
     def del_vnf_packages(self, vnfPkgId):
+        '''
+        This method deletes a virtual network function descriptor
+        :param vnfPkgId: virtual network function descriptor ID
+        '''
         endpoint = PUBLIC_IP_OSM + endpoint_vnf_package + '/' + vnfPkgId
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -529,7 +593,9 @@ class HandlerOSM:
             print("Error:", error)
 
     def clean_environment(self):
-        '''This function perfom a clean environment in OSM, i.e., deletes all VNFd, NSD, and network instances'''
+        '''
+        This function perfom a clean environment in OSM, i.e., deletes all VNFd, NSD, and network instances
+        '''
         qtnsi = len(self.get_ns_instance())
         qtnsd = len(self.get_ns_package())
         qtvnfd = len(self.get_vnf_package())
@@ -542,7 +608,7 @@ class HandlerOSM:
         # to clean all network service instances
         if (len(self.get_ns_instance()) > 0):
             for pos, ns_instance_id in enumerate(self.get_ns_instance(), start=1):
-                    print(f"Cleanning network instances ({pos}/{qtnsi})")
+                    print(f"Cleanning network instances ({pos}/{qtnsi}): ", end="")
                     if self.get_ns_lcmp_op_occs(ns_instance_id):
                         id_terminate = self.post_ns_instance_terminate(ns_instance_id)
                         if id_terminate:
@@ -551,11 +617,11 @@ class HandlerOSM:
         # to clean all nsd - descriptors
         if (len(self.get_ns_package()) > 0):
             for pos, nsd_descriptor in enumerate(self.get_ns_package(), start=1):
-                    print(f"Cleanning NS descriptors ({pos}/{qtnsd})")
+                    print(f"Cleanning NS descriptors ({pos}/{qtnsd}): ", end="")
                     self.del_ns_package(nsd_descriptor)
 
         # to clean all vnfd - descriptors
         if (len(self.get_vnf_package()) > 0):
             for pos, vnfd_descritor in enumerate(self.get_vnf_package(), start=1):
-                    print(f"Cleanning VNF descriptors ({pos}/{qtvnfd})")
+                    print(f"Cleanning VNF descriptors ({pos}/{qtvnfd}): ", end="")
                     self.del_vnf_package(vnfd_descritor)

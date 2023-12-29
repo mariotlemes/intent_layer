@@ -34,7 +34,7 @@ class Tests:
             print("------------------------------------------------------------------------------")
             print("                          Onboarding Results                                  ")
             print("------------------------------------------------------------------------------")
-            print(f"Time elapsed: {elapsed_time}s")
+            print(f"Time elapsed: {elapsed_time}s\n")
 
             return elapsed_time
 
@@ -65,9 +65,12 @@ class Tests:
 
                 return elapsed_time
     def test1(self, number_of_tests):
-        '''This test show the average time for onboarding 3 VNFs and 1 NSd to OSM. After,
-       show the average time for instantiate the Network Service Instance. The input is the
-       number of tests and the output is the average time for onboarding and instantiation'''
+        '''
+        This test calculates the average time for onboarding 3 VNFs and 1 NSd to OSM. After,
+        show the average time for instantiate the Network Service Instance.
+        :param number_of_tests: number of rounds
+        :return: average onboardig and instantiation time
+        '''
         time_onboarding = []
         time_instantiate = []
 
