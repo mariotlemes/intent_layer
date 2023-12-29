@@ -13,9 +13,9 @@ class Tests:
             print("------------------------------------------------------------------------------")
 
             start = time.time()
-
             with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
+                # print(data)
                 test1.post_vnf_package(data)
             with open('src/descriptors/test1/basic_VNF2d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
@@ -70,7 +70,7 @@ class Tests:
        number of tests and the output is the average time for onboarding and instantiation'''
         time_onboarding = []
         time_instantiate = []
-        # start = time.time()
+
         timer = Timer()
         timer.start()
 
@@ -102,6 +102,4 @@ class Tests:
 
 if __name__ == '__main__':
     obj = Tests()
-    obj.test1(2)
-
-
+    obj.test1(3)
