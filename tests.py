@@ -31,45 +31,45 @@ class Tests:
             elapsed_time = end - start
             elapsed_time = round(elapsed_time, 2)
 
-            print("------------------------------------------------------------------------------")
-            print("                          Onboarding Results                                  ")
-            print("------------------------------------------------------------------------------")
-            print(f"Time elapsed: {elapsed_time}s\n")
+            # print("------------------------------------------------------------------------------")
+            # print("                          Onboarding Results                                  ")
+            # print("------------------------------------------------------------------------------")
+            # print(f"Time elapsed: {elapsed_time}s\n")
 
             return elapsed_time
 
-    def instantiaton_test1 (self):
+    def instantiaton_test1 (self, ns_name_instance):
         '''Calculate the instantiation time of a Network Service for test1'''
         test1 = HandlerOSM()
-        if test1.verify_osm_status():
-            print("------------------------------------------------------------------------------")
-            print("        #Test1 (Instantiate): NS instance - create and instantiate            ")
-            print("------------------------------------------------------------------------------")
+        # if test1.verify_osm_status():
+        print("------------------------------------------------------------------------------")
+        print("        #Test1 (Instantiate): NS instance - create and instantiate            ")
+        print("------------------------------------------------------------------------------")
 
-            start = time.time()
+        start = time.time()
 
-            # create and instantiate instance
-            id_occurrence = test1.post_ns_instance_create_and_instantiate('nsd', 'nsd_instance',
-                                                                            'a brief description')
-            #
-            if test1.get_ns_lcmp_op_occs(id_occurrence):
-                end = time.time()
+        # create and instantiate instance
+        id_occurrence = test1.post_ns_instance_create_and_instantiate('nsd', ns_name_instance,
+                                                                        'a brief description')
+        #
+        if test1.get_ns_lcmp_op_occs(id_occurrence):
+            end = time.time()
 
-                elapsed_time = end - start
-                elapsed_time = round(elapsed_time, 2)
+            elapsed_time = end - start
+            elapsed_time = round(elapsed_time, 2)
 
-                print("------------------------------------------------------------------------------")
-                print("                        Instantiation Results                                 ")
-                print("------------------------------------------------------------------------------")
-                print(f"Time elapsed: {elapsed_time}s")
+            # print("------------------------------------------------------------------------------")
+            # print("                        Instantiation Results                                 ")
+            # print("------------------------------------------------------------------------------")
+            # print(f"Time elapsed: {elapsed_time}s")
 
-                return elapsed_time
-    def test1(self, number_of_tests):
+            return elapsed_time
+    def test1(self, number_of_tests, name_ns_instance):
         '''
         This test calculates the average time for onboarding 3 VNFs and 1 NSd to OSM. After,
         show the average time for instantiate the Network Service Instance.
         :param number_of_tests: number of rounds
-        :return: average onboardig and instantiation time
+        :return: average onboarding and instantiation time
         '''
         time_onboarding = []
         time_instantiate = []
@@ -86,7 +86,7 @@ class Tests:
             timer.resume()
 
             time_onboarding.append(test1.onboarding_test1())
-            time_instantiate.append(test1.instantiaton_test1())
+            time_instantiate.append(test1.instantiaton_test1(name_ns_instance))
 
         # end = time.time()
         # elapsed_time = end - start
@@ -103,6 +103,6 @@ class Tests:
         print(f"Time instantiate (AVG - {len(time_onboarding)} tests): {round(average_instantiate, 2)}s.")
         print("------------------------------------------------------------------------------")
 
-if __name__ == '__main__':
-    obj = Tests()
-    obj.test1(3)
+# if __name__ == '__main__':
+#     obj = Tests()
+#     obj.test1(3)

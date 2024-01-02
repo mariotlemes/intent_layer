@@ -96,28 +96,3 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
 
         # remove lines in tw_intents QTableView
         header = self.tw_intents.verticalHeader().setVisible(False)
-
-    def create_subscription_osm(self):
-        '''TODO: create a new subscription related to NS lifecycle changes'''
-        pass
-
-    def receive_subscrition_changes(self):
-        '''TODO: receive NS lifecycle changes'''
-        pass
-
-
-if __name__ == '__main__':
-    # create database 'intents' if not exists
-    db = DataBase()
-    db.create_connect()
-    db.create_table_intents()
-
-    app = QApplication(sys.argv)
-    window = IntentGUI()
-
-    # status = HandlerOSM()
-    # if status.verify_osm_status():
-    window.show()
-    app.exec()
-
-    window.verify_netslice_instances()

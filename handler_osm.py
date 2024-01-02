@@ -245,7 +245,7 @@ class HandlerOSM:
         '''
         This method creates and instantiates a network service
         :param nsd_id: id of network service descriptor
-        :param ns_name: network service nane
+        :param ns_name: network service name
         :param ns_description: network service description
         '''
         endpoint = PUBLIC_IP_OSM + endpoint_ns_create_instance
@@ -268,12 +268,12 @@ class HandlerOSM:
             response = requests.request("POST", endpoint, headers=headers, data=payload)
             if response.status_code != 201:
                 response = response.json()
-                print(f"NS ID: {ns_name}")
+                print(f"NS name: {ns_name}")
                 print(f"Code: {response['status']} ({response['code']})")
                 print(f"Detail: {response['detail']}\n")
             else:
                 response = response.json()
-                print(f"NS ID: {ns_name}")
+                print(f"NS name: {ns_name}")
                 print(f"Code: 201 (SUCCESS)")
                 print(f"ID: {response['id']}\n")
         except requests.Timeout as timeout:
@@ -283,9 +283,9 @@ class HandlerOSM:
 
         # id = HandlerOSM()
         endpoint_instantiate = (PUBLIC_IP_OSM + endpoint_ns_instance +
-                    "/" + self.get_ns_instance_by_name('nsd_instance') + "/instantiate")
+                    "/" + self.get_ns_instance_by_name(ns_name) + "/instantiate")
 
-        print(f"Instantiating: {self.get_ns_instance_by_name('nsd_instance')}")
+        print(f"Instantiating: {self.get_ns_instance_by_name(ns_name)}")
 
         try:
             response = requests.request("POST", endpoint_instantiate, headers=headers, data=payload)

@@ -3,7 +3,7 @@ import re
 import time
 
 import sys
-sys.path.append('/Users/mariotl/PycharmProjects/intent_layer')
+# sys.path.append('/Users/mariotl/PycharmProjects/intent_layer')
 
 from utils import topology
 
@@ -285,9 +285,9 @@ def compile(nile, target="Merlin"):
     return compiled, elapsed_time
 
 
-if __name__ == "__main__":
-    test_intent = "define intent uniIntent: from endpoint('19.16.1.1') to service('netflix') add middlebox('loadbalancer'), middlebox('firewall') start hour('10:00') end hour('10:00')"
-    merlin, compile_time = compile(test_intent)
-    # deploy_time = merlin_deployer.deploy(merlin)
-
-    # print("Deploy time: ", deploy_time)
+# if __name__ == "__main__":
+#     test_intent = "define intent uniIntent: from endpoint('19.16.1.1') to service('netflix') add middlebox('loadbalancer'), middlebox('firewall') start hour('10:00') end hour('10:00')"
+#     merlin, compile_time = compile(test_intent)
+#     deploy_time = merlin_deployer.deploy(merlin)
+#
+#     print("Deploy time: ", deploy_time)
