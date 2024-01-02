@@ -156,7 +156,7 @@ QPushButton:hover {
     <item>
      <widget class="QStackedWidget" name="Pages">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pg_table">
        <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -280,22 +280,6 @@ QPushButton:hover {
          </widget>
         </item>
         <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>30</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QLabel" name="label_6">
@@ -305,7 +289,7 @@ QPushButton:hover {
              </font>
             </property>
             <property name="text">
-             <string>Name of Intent:</string>
+             <string>Intent ID</string>
             </property>
            </widget>
           </item>
@@ -322,22 +306,6 @@ QPushButton:hover {
            </widget>
           </item>
          </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -369,22 +337,6 @@ QPushButton:hover {
            </widget>
           </item>
          </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">

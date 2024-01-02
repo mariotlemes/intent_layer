@@ -13,17 +13,17 @@ class Tests:
             print("------------------------------------------------------------------------------")
 
             start = time.time()
-            with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
+            with open('descriptors/test1/basic_VNF1d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 # print(data)
                 test1.post_vnf_package(data)
-            with open('src/descriptors/test1/basic_VNF2d.yaml', 'r') as file:
+            with open('descriptors/test1/basic_VNF2d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_vnf_package(data)
-            with open('src/descriptors/test1/basic_VNF-SDNd.yaml', 'r') as file:
+            with open('descriptors/test1/basic_VNF-SDNd.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_vnf_package(data)
-            with open('src/descriptors/test1/basic_NSD.yaml', 'r') as file:
+            with open('descriptors/test1/basic_NSD.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_ns_package(data)
 

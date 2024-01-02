@@ -4,4 +4,5 @@ from handler_osm import HandlerOSM
 from variables import GlobalVariables
 
 
-# TO DO
+class IntentTranslator:
+    pass

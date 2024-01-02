@@ -6,7 +6,7 @@ from nile.exceptions import MissingTargetError, MissingOperationError
 
 
 def slot_filling(entities):
-    """ Given extracted entities, fills missing slots with some assumptions"""
+    """ Given extracted entities, fills missing slots with some assumptions  """
 
     if "targets" not in entities:
         entities["targets"] = []

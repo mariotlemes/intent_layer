@@ -368,7 +368,7 @@ class HandlerOSM:
 
     # def put_vnf_package(self, vnfpkg_id, vnfpkg_data):
     def put_vnf_package(self, vnfd_id):
-        with open('src/descriptors/test1/basic_VNF1d.yaml', 'r') as file:
+        with open('descriptors/test1/basic_VNF1d.yaml', 'r') as file:
             data = yaml.safe_load(file)
             # print(data)
 

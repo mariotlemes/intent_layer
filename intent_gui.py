@@ -42,6 +42,8 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
         # capture action in button submit
         self.btn_submit.clicked.connect(lambda: self.insert_intent())
 
+        # sleep(3)
+
         # show table intents (list of intents)
         self.show_table_intent()
 
@@ -64,6 +66,9 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
 
         # show tw_intents
         self.show_table_intent()
+
+        # close window
+        self.close()
 
         # db.close_connection()
 
@@ -110,9 +115,9 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = IntentGUI()
 
-    status = HandlerOSM()
-    if status.verify_osm_status():
-        window.show()
-        app.exec()
+    # status = HandlerOSM()
+    # if status.verify_osm_status():
+    window.show()
+    app.exec()
 
-        # window.verify_netslice_instances()
+    window.verify_netslice_instances()
