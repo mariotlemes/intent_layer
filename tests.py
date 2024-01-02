@@ -4,7 +4,7 @@ from handler_osm import HandlerOSM
 from timer import Timer
 
 class Tests:
-    def onboarding_test1 (self):
+    def onboarding (self):
         '''Calculate the onboarding time of VNF descriptors for test1'''
         test1 = HandlerOSM()
         if test1.verify_osm_status():
@@ -13,17 +13,17 @@ class Tests:
             print("------------------------------------------------------------------------------")
 
             start = time.time()
-            with open('descriptors/test1/basic_VNF1d.yaml', 'r') as file:
+            with open('descriptors/VNF1d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 # print(data)
                 test1.post_vnf_package(data)
-            with open('descriptors/test1/basic_VNF2d.yaml', 'r') as file:
+            with open('descriptors/VNF2d.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_vnf_package(data)
-            with open('descriptors/test1/basic_VNF-SDNd.yaml', 'r') as file:
+            with open('descriptors/VNF-SDNd.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_vnf_package(data)
-            with open('descriptors/test1/basic_NSD.yaml', 'r') as file:
+            with open('descriptors/NSd-2VNFs.yaml', 'r') as file:
                 data = yaml.safe_load(file)
                 test1.post_ns_package(data)
 
@@ -38,7 +38,7 @@ class Tests:
 
             return elapsed_time
 
-    def instantiaton_test1 (self, ns_name_instance):
+    def instantiaton (self, ns_name_instance):
         '''Calculate the instantiation time of a Network Service for test1'''
         test1 = HandlerOSM()
         # if test1.verify_osm_status():
@@ -64,7 +64,7 @@ class Tests:
             # print(f"Time elapsed: {elapsed_time}s")
 
             return elapsed_time
-    def test1(self, number_of_tests, name_ns_instance):
+    def onboarding_and_instantiation(self, number_of_tests, name_ns_instance):
         '''
         This test calculates the average time for onboarding 3 VNFs and 1 NSd to OSM. After,
         show the average time for instantiate the Network Service Instance.
@@ -85,24 +85,20 @@ class Tests:
             clean.clean_environment()
             timer.resume()
 
-            time_onboarding.append(test1.onboarding_test1())
-            time_instantiate.append(test1.instantiaton_test1(name_ns_instance))
+            time_onboarding.append(test1.onboarding())
+            time_instantiate.append(test1.instantiaton(name_ns_instance))
 
         # end = time.time()
         # elapsed_time = end - start
         elapsed_time = timer.elapsed_time()
-        print("------------------------------------------------------------------------------")
-        print(f"                        End test1 - Results                                  ")
+        # print("------------------------------------------------------------------------------")
+        # print(f"                        End test1 - Results                                  ")
         print("------------------------------------------------------------------------------")
         print(f"Test duration: {round(elapsed_time, 2)}s.")
         print("------------------------------------------------------------------------------")
         average_onboarding = sum(time_onboarding) / len(time_onboarding)
-        print(f"Time onboarding (AVG - {len(time_onboarding)} tests): {round(average_onboarding, 2)}s.")
+        print(f"Onboarding time (AVG - {len(time_onboarding)} tests): {round(average_onboarding, 2)}s.")
         print("------------------------------------------------------------------------------")
         average_instantiate = sum(time_instantiate) / len(time_instantiate)
-        print(f"Time instantiate (AVG - {len(time_onboarding)} tests): {round(average_instantiate, 2)}s.")
+        print(f"Instantiating time (AVG - {len(time_onboarding)} tests): {round(average_instantiate, 2)}s.")
         print("------------------------------------------------------------------------------")
-
-# if __name__ == '__main__':
-#     obj = Tests()
-#     obj.test1(3)

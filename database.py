@@ -1,6 +1,6 @@
 import sqlite3
 from PySide6.QtSql import QSqlDatabase, QSqlQuery
-from PySide6.QtWidgets import QHeaderView
+
 
 class DataBase():
     def __init__(self, name="system.db") -> None:

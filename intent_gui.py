@@ -1,5 +1,3 @@
-import sys
-from handler_osm import HandlerOSM
 from ui_main import Ui_MainWindow
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox,
                                QHeaderView)
@@ -73,13 +71,12 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
         # db.close_connection()
 
     def show_table_intent(self):
-        """Show data from databse in tw_intents QTableView"""
+        """Show data from database in tw_intents QTableView"""
 
         db = QSqlDatabase.addDatabase("QSQLITE")
         db.setDatabaseName("system.db")
         db.open()
 
-        # herdar da classe CenterAlignedQueryModel para centralizar o resultado da consulta
         project_model = CenterAlignedQueryModel()
         project_model.setQuery("SELECT  id AS 'ID', name AS 'Name', "
                                "number_vfs AS 'Number of VFs', "
@@ -87,7 +84,7 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
         project_view = self.tw_intents
         project_view.setModel(project_model)
 
-        # alter spacing of colummns in tw_intents QTableView
+        # alter spacing of column in tw_intents QTableView
         header = self.tw_intents.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QHeaderView.Stretch)

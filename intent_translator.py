@@ -1,10 +1,4 @@
-import requests
-import json
-import yaml
 import re
-from handler_osm import HandlerOSM
-from variables import GlobalVariables
-from tests import Tests
 
 def extract_values_from_intent(nile_intent):
     # name_intent = 0

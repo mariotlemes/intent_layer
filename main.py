@@ -33,11 +33,6 @@ def start_intent_engine():
 
     nile_intent = objIntEngine.transform_to_nile(data_transformed)
 
-    # elapsed_time = timer.elapsed_time()
-    # elapsed_time = round(elapsed_time, 2)
-    #
-    # print(f" Parsing time: {elapsed_time}")
-
     return nile_intent
 
 def start_intent_translation(nile_intent):
@@ -49,8 +44,8 @@ def match_nsd_descriptor (name_intent, number_vfs):
     # print(number_vfs)
     if number_vfs == '2':
         print("Starting - Onboarding and Instantiating Process")
-        onboarding_instantiating = Tests()
-        onboarding_instantiating.test1(1, name_intent)
+        obj = Tests()
+        obj.onboarding_and_instantiation(1, name_intent)
 
 if __name__ == '__main__':
     start_intent_gui()

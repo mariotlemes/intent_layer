@@ -2,7 +2,6 @@ from variables import GlobalVariables
 import requests
 import json
 import yaml
-import time
 
 # IPv4 address for OSM NBI
 PUBLIC_IP_OSM = GlobalVariables.get_public_ip_osm()
@@ -19,14 +18,15 @@ endpoint_ns_create_instance = '/nslcm/v1/ns_instances'
 endpoint_create_subscription = '/nslcm/v1/subscriptions'
 endpoint_occurrences = '/nslcm/v1/ns_lcm_op_occs/'
 
+
 class HandlerOSM:
     """This class provides methods to interact with the OSM REST interface"""
+    '''
+    This method verify the status of network instance. It is used to safe delete.
+    :param ns_instance_id: network instance id
+    :return: true or false
+    '''
     def get_ns_lcmp_op_occs(self, ns_instance_id):
-        '''
-        This method verify the status of network instance. It is used to safed delete.
-        :param ns_instance_id: network instance id
-        :return: true or false
-        '''
         endpoint = PUBLIC_IP_OSM + endpoint_occurrences + ns_instance_id
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         headers.update(self.generate_nbi_token())
@@ -59,9 +59,9 @@ class HandlerOSM:
         '''
         This method checks OMS status (online/offline)
         :return: true (ON) or false (OFF)
-        '''
-        print("------------------------------------------------------------------------------")
-        print(f"              Connecting to OSM NBI ({PUBLIC_IP_OSM})                        ")
+        # '''
+        # print("------------------------------------------------------------------------------")
+        # print(f"              Connecting to OSM NBI ({PUBLIC_IP_OSM})                        ")
         headers = {"Accept": "application/json", "Content_Type": "application/json"}
         endpoint = PUBLIC_IP_OSM + endpoint_generate_token
 
@@ -70,10 +70,10 @@ class HandlerOSM:
             requests.post(endpoint, headers=headers,
                           json={"username": "admin",
                                 "password": "admin"})
-            print("\nRESULT: Connected to OSM NBI.")
+            print("\nConnected to OSM NBI.")
             return True
         except requests.Timeout:
-            print("\nRESULT: Timeout! OSM is probably down...")
+            print("\nTimeout! OSM is probably down...")
             return False
         except requests.RequestException as error:
             print("Error:", error)
@@ -368,7 +368,7 @@ class HandlerOSM:
 
     # def put_vnf_package(self, vnfpkg_id, vnfpkg_data):
     def put_vnf_package(self, vnfd_id):
-        with open('descriptors/test1/basic_VNF1d.yaml', 'r') as file:
+        with open('descriptors/VNF1d.yaml', 'r') as file:
             data = yaml.safe_load(file)
             # print(data)
 
@@ -491,7 +491,7 @@ class HandlerOSM:
 
         try:
             status = False
-            print("Terminating proccess (wait): ", end="")
+            # print("Finishing the process - ", end="")
             while (status == False):
                 response = requests.request("POST", endpoint, headers=headers)
                 # print(response.status_code)
@@ -523,9 +523,9 @@ class HandlerOSM:
         response = requests.request("DELETE", endpoint_delete, headers=headers)
         try:
             if response.status_code != 204:
-                print("Not deleting..")
+                print("Not deleted.")
             else:
-                print("Delete successfull!")
+                print("Successfully deleted network service instance.!")
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -543,9 +543,9 @@ class HandlerOSM:
         response = requests.request("DELETE", endpoint, headers=headers)
         try:
             if response.status_code != 204:
-                print("Not deleting..")
+                print("Not deleted.")
             else:
-                print("Delete successfull!")
+                print("Successfully deleted virtual network function descriptor.")
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -565,28 +565,7 @@ class HandlerOSM:
             if response.status_code != 204:
                 print("Not deleting..")
             else:
-                print("Delete successfull!")
-        except requests.Timeout as timeout:
-            print("Timeout:", timeout)
-        except requests.RequestException as error:
-            print("Error:", error)
-
-    def del_vnf_packages(self, vnfPkgId):
-        '''
-        This method deletes a virtual network function descriptor
-        :param vnfPkgId: virtual network function descriptor ID
-        '''
-        endpoint = PUBLIC_IP_OSM + endpoint_vnf_package + '/' + vnfPkgId
-        headers = {"Accept": "application/json", "Content_Type": "application/json"}
-        headers.update(self.generate_nbi_token())
-
-        try:
-            response = requests.request("DELETE", endpoint, headers=headers)
-            if response.status_code != 204:
-                print("Not deleting..")
-            else:
-                print("Delete successfull!")
-                response = response.json()
+                print("Successfully deleted network service descriptor.")
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -603,7 +582,7 @@ class HandlerOSM:
         if (not self.get_ns_instance() and
                 not self.get_vnf_package()
                 and not self.get_ns_package()):
-            print("Nothing to clean!!")
+            print("Nothing to clean.")
 
         # to clean all network service instances
         if (len(self.get_ns_instance()) > 0):
