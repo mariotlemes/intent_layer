@@ -21,38 +21,6 @@ endpoint_occurrences = '/nslcm/v1/ns_lcm_op_occs/'
 
 class HandlerOSM:
     """This class provides methods to interact with the OSM REST interface"""
-    '''
-    This method verify the status of network instance. It is used to safe delete.
-    :param ns_instance_id: network instance id
-    :return: true or false
-    '''
-    def get_ns_lcmp_op_occs(self, ns_instance_id):
-        endpoint = PUBLIC_IP_OSM + endpoint_occurrences + ns_instance_id
-        headers = {"Accept": "application/json", "Content_Type": "application/json"}
-        headers.update(self.generate_nbi_token())
-
-        try:
-            status = False
-            while (status == False):
-                response = requests.get(endpoint, headers=headers)
-                # ns - blank
-                if (response.status_code == 404):
-                    status = True
-                    return status
-
-                response = response.json()
-
-                if ((response['operationState'] == "COMPLETED"
-                        and response['_id'] == ns_instance_id) or
-                        (response['nsInstanceId'] == ns_instance_id)):
-                    status = True
-                    return status
-                else:
-                    status = False
-        except requests.Timeout as timeout:
-            print("Timeout:", timeout)
-        except requests.RequestException as error:
-            print("Error:", error)
 
     """Verify OSM (Open Source Mano) status. """
     def verify_osm_status(self):
@@ -104,7 +72,7 @@ class HandlerOSM:
 
     def get_vim_account(self):
         '''
-        This method gets a ID list of virtual infrastructure managers
+        This method gets an ID list of virtual infrastructure managers
         :return: list (ID)
         '''
         endpoint = PUBLIC_IP_OSM + endpoint_vim_account
@@ -170,7 +138,7 @@ class HandlerOSM:
 
     def get_ns_instance_by_name(self, name):
         '''
-        This method gets ID of Network Service Instance using the name
+        This method gets an ID of Network Service Instance using the name
         :param name: name of instance
         :return: ID of instance
         '''
@@ -241,6 +209,173 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
+    def get_ns_lcmp_op_occs(self, ns_instance_id):
+        '''
+        This method verify the status of network instance. It is used to safe delete.
+        :param ns_instance_id: network instance id
+        :return: true or false
+        '''
+        endpoint = PUBLIC_IP_OSM + endpoint_occurrences + ns_instance_id
+        headers = {"Accept": "application/json", "Content_Type": "application/json"}
+        headers.update(self.generate_nbi_token())
+
+        try:
+            status = False
+            while (status == False):
+                response = requests.get(endpoint, headers=headers)
+                # ns - blank
+                if (response.status_code == 404):
+                    status = True
+                    return status
+
+                response = response.json()
+
+                if ((response['operationState'] == "COMPLETED"
+                     and response['_id'] == ns_instance_id) or
+                        (response['nsInstanceId'] == ns_instance_id)):
+                    status = True
+                    return status
+                else:
+                    status = False
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
+    def post_vnf_package(self, data):
+        '''
+        This method creates a VNF descriptor package in OSM
+        :param data: YAML descriptor
+        :return: ID of created VNF or False if not created
+        '''
+        '''Post a new VNFd content in JSON to OSM'''
+        endpoint = PUBLIC_IP_OSM + endpoint_vnf_package_content
+        # print(endpoint)
+        # print(endpoint)
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        headers.update(self.generate_nbi_token())
+
+        vnfd_data = json.dumps(data)
+
+        vnfd_name = data['vnfd']['id']
+
+
+        try:
+            response = requests.request("POST", endpoint, headers=headers,
+                                        data=vnfd_data)
+            if response.status_code != 201:
+                response = response.json()
+                print(f"VNFd ID: {vnfd_name}")
+                print(f"Code: {response['status']} ({response['code']})")
+                print(f"Detail: {response['detail']}\n")
+                return False
+            else:
+                response = response.json()
+                # print(f"VNFd ID: {vnfd_name}")
+                print(f"Code: 201 (SUCCESS)")
+                print(f"ID: {response['id']}\n")
+                key_search = 'id'
+                if key_search in response:
+                    id_value = response[key_search]
+                    return id_value
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
+    # def post_create_vnf_package(self):
+    #     """Post a new descriptors content in YAML to OSM"""
+    #     endpoint = PUBLIC_IP_OSM + endpoint_vnf_package
+    #     print(endpoint)
+    #     headers = {"Accept": "application/json", "Content_Type": "application/json"}
+    #
+    #     headers.update(self.generate_nbi_token())
+    #
+    #     response = requests.request("POST", endpoint, headers=headers)
+    #
+    #     response = response.json()
+    #
+    #     vnfd_id = response['id']
+    #
+    #     # print(teste)
+    #
+    #     return vnfd_id
+
+    # def put_vnf_package(self, vnfpkg_id, vnfpkg_data):
+    # def put_vnf_package(self, vnfd_id):
+    #     with open('descriptors/VNF1d.yaml', 'r') as file:
+    #         data = yaml.safe_load(file)
+    #         # print(data)
+    #
+    #     payload = json.dumps(
+    #         data, indent=2
+    #     )
+    #
+    #     print(payload)
+    #     #
+    #     # print(dados_json)
+    #
+    #     endpoint = PUBLIC_IP_OSM + endpoint_vnf_package + '/' + vnfd_id + '/package_content/'
+    #     print(endpoint)
+    #
+    #     headers = {"Accept": "application/json", "Content_Type": "application/json"}
+    #     headers.update(self.generate_nbi_token())
+    #
+    #     response = requests.request("PUT", endpoint, headers=headers, data=payload)
+    #
+    #     print(response.text)
+    #
+    #     print(response.status_code)
+
+    def post_ns_package(self, data):
+        '''
+        This method creates a network service descriptor package in OSM
+        :param data: nsd in YAML
+        :return: the ID of NS package or False if not created
+        '''
+        endpoint = PUBLIC_IP_OSM + endpoint_ns_package_content
+
+        # print(endpoint)
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        headers.update(self.generate_nbi_token())
+
+        nsd_data = json.dumps(data)
+
+        nsd_name = data['nsd']['nsd'][0]['id']
+
+        try:
+            response = requests.request("POST", endpoint, headers=headers, data=nsd_data)
+
+            if response.status_code != 201:
+                response = response.json()
+                print(f"NSd ID: {nsd_name}")
+                print(f"Code: {response['status']} ({response['code']})")
+                print(f"Detail: {response['detail']}")
+                return False
+            else:
+                response = response.json()
+                print(f"NSd ID: {nsd_name}")
+                print(f"Code: 201 (SUCCESS)")
+                print(f"ID: {response['id']}")
+                key_search = 'id'
+                if key_search in response:
+                    id_value = response[key_search]
+                    return id_value
+        except requests.Timeout as timeout:
+            print("Timeout:", timeout)
+        except requests.RequestException as error:
+            print("Error:", error)
+
     def post_ns_instance_create_and_instantiate(self, nsd_id, ns_name, ns_description):
         '''
         This method creates and instantiates a network service
@@ -302,182 +437,49 @@ class HandlerOSM:
         except requests.RequestException as error:
             print("Error:", error)
 
-    def post_vnf_package(self, data):
-        '''
-        This method creates a VNF descriptor package in OSM
-        :param data: YAML descriptor
-        :return: ID of created VNF or False if not created
-        '''
-        '''Post a new VNFd content in JSON to OSM'''
-        endpoint = PUBLIC_IP_OSM + endpoint_vnf_package_content
-        # print(endpoint)
-        # print(endpoint)
 
-        headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-
-        headers.update(self.generate_nbi_token())
-
-        vnfd_data = json.dumps(data)
-
-        vnfd_name = data['vnfd']['id']
-
-
-        try:
-            response = requests.request("POST", endpoint, headers=headers,
-                                        data=vnfd_data)
-            if response.status_code != 201:
-                response = response.json()
-                print(f"VNFd ID: {vnfd_name}")
-                print(f"Code: {response['status']} ({response['code']})")
-                print(f"Detail: {response['detail']}\n")
-                return False
-            else:
-                response = response.json()
-                # print(f"VNFd ID: {vnfd_name}")
-                print(f"Code: 201 (SUCCESS)")
-                print(f"ID: {response['id']}\n")
-                key_search = 'id'
-                if key_search in response:
-                    id_value = response[key_search]
-                    return id_value
-        except requests.Timeout as timeout:
-            print("Timeout:", timeout)
-        except requests.RequestException as error:
-            print("Error:", error)
-
-    def post_create_vnf_package(self):
-        """Post a new descriptors content in YAML to OSM"""
-        endpoint = PUBLIC_IP_OSM + endpoint_vnf_package
-        print(endpoint)
-        headers = {"Accept": "application/json", "Content_Type": "application/json"}
-
-        headers.update(self.generate_nbi_token())
-
-        response = requests.request("POST", endpoint, headers=headers)
-
-        response = response.json()
-
-        vnfd_id = response['id']
-
-        # print(teste)
-
-        return vnfd_id
-
-    # def put_vnf_package(self, vnfpkg_id, vnfpkg_data):
-    def put_vnf_package(self, vnfd_id):
-        with open('descriptors/VNF1d.yaml', 'r') as file:
-            data = yaml.safe_load(file)
-            # print(data)
-
-        payload = json.dumps(
-            data, indent=2
-        )
-
-        print(payload)
-        #
-        # print(dados_json)
-
-        endpoint = PUBLIC_IP_OSM + endpoint_vnf_package + '/' + vnfd_id + '/package_content/'
-        print(endpoint)
-
-        headers = {"Accept": "application/json", "Content_Type": "application/json"}
-        headers.update(self.generate_nbi_token())
-
-        response = requests.request("PUT", endpoint, headers=headers, data=payload)
-
-        print(response.text)
-
-        print(response.status_code)
-
-    def post_ns_package(self, data):
-        '''
-        This method creates a network service descriptor package in OSM
-        :param data: nsd in YAML
-        :return: the ID of NS package or False if not created
-        '''
-        endpoint = PUBLIC_IP_OSM + endpoint_ns_package_content
-
-        # print(endpoint)
-
-        headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-
-        headers.update(self.generate_nbi_token())
-
-        nsd_data = json.dumps(data)
-
-        nsd_name = data['nsd']['nsd'][0]['id']
-
-        try:
-            response = requests.request("POST", endpoint, headers=headers, data=nsd_data)
-
-            if response.status_code != 201:
-                response = response.json()
-                print(f"NSd ID: {nsd_name}")
-                print(f"Code: {response['status']} ({response['code']})")
-                print(f"Detail: {response['detail']}")
-                return False
-            else:
-                response = response.json()
-                print(f"NSd ID: {nsd_name}")
-                print(f"Code: 201 (SUCCESS)")
-                print(f"ID: {response['id']}")
-                key_search = 'id'
-                if key_search in response:
-                    id_value = response[key_search]
-                    return id_value
-        except requests.Timeout as timeout:
-            print("Timeout:", timeout)
-        except requests.RequestException as error:
-            print("Error:", error)
-
-    def post_ns_subscription(self, id):
-        '''
-        This method creates a new subscription to receive notifications about a network service
-        :param id: resource ID
-        :return: subscription ID
-        '''
-        endpoint = PUBLIC_IP_OSM + endpoint_create_subscription
-        headers = {"Accept": "application/json", "Content_Type": "application/json"}
-        headers.update(self.generate_nbi_token())
-
-        payload = json.dumps({
-                "filter": {
-                    "NsInstanceSubscriptionFilter": {
-                        "nsInstanceIds": [
-                            id
-                        ]
-                    },
-                    "notificationTypes": [
-                        "NsChangeNotification"
-                    ],
-
-                    "nsComponentTypes" : [
-
-                    ],
-                },
-                "CallbackUri": "http://35.199.94.95:5400/notifications"
-            })
-
-        try:
-            response = requests.request("POST", endpoint, headers=headers, data=payload)
-            if response.status_code != 201:
-                response = response.json()
-                print(f"Code: {response['status']} ({response['code']})")
-                print(f"Detail: {response['detail']}")
-            else:
-                response = response.json()
-                print(f"Code: 201 (SUCCESS)")
-                print(f"ID of subscription: {response['id']}")
-        except requests.Timeout as timeout:
-            print("Timeout:", timeout)
-        except requests.RequestException as error:
-            print("Error:", error)
+    # def post_ns_subscription(self, id):
+    #     '''
+    #     This method creates a new subscription to receive notifications about a network service
+    #     :param id: resource ID
+    #     :return: subscription ID
+    #     '''
+    #     endpoint = PUBLIC_IP_OSM + endpoint_create_subscription
+    #     headers = {"Accept": "application/json", "Content_Type": "application/json"}
+    #     headers.update(self.generate_nbi_token())
+    #
+    #     payload = json.dumps({
+    #             "filter": {
+    #                 "NsInstanceSubscriptionFilter": {
+    #                     "nsInstanceIds": [
+    #                         id
+    #                     ]
+    #                 },
+    #                 "notificationTypes": [
+    #                     "NsChangeNotification"
+    #                 ],
+    #
+    #                 "nsComponentTypes" : [
+    #
+    #                 ],
+    #             },
+    #             "CallbackUri": "http://35.199.94.95:5400/notifications"
+    #         })
+    #
+    #     try:
+    #         response = requests.request("POST", endpoint, headers=headers, data=payload)
+    #         if response.status_code != 201:
+    #             response = response.json()
+    #             print(f"Code: {response['status']} ({response['code']})")
+    #             print(f"Detail: {response['detail']}")
+    #         else:
+    #             response = response.json()
+    #             print(f"Code: 201 (SUCCESS)")
+    #             print(f"ID of subscription: {response['id']}")
+    #     except requests.Timeout as timeout:
+    #         print("Timeout:", timeout)
+    #     except requests.RequestException as error:
+    #         print("Error:", error)
 
     def post_ns_instance_terminate(self, ns_instance_id):
         '''
@@ -573,7 +575,7 @@ class HandlerOSM:
 
     def clean_environment(self):
         '''
-        This function perfom a clean environment in OSM, i.e., deletes all VNFd, NSD, and network instances
+        This method performs a clean environment in OSM, i.e., deletes all VNFd, NSD, and network instances
         '''
         qtnsi = len(self.get_ns_instance())
         qtnsd = len(self.get_ns_package())

@@ -5,7 +5,6 @@ import intent_gui
 import intent_translator
 from handler_osm import HandlerOSM
 from timer import Timer
-# from tests import Tests
 import tests
 
 def start_intent_gui():
@@ -44,29 +43,6 @@ def start_intent_translation(nile_intent):
     return name, number_vfs
     # intent_translator.match_nsd_descriptor(name, number_vfs)
 
-def match_nsd_descriptor (name_intent, number_vfs):
-    # print(number_vfs)
-    if number_vfs == str(2):
-        print("------------------------------------------------------------------------------")
-        print("Getting starting - Onboarding and Instantiating Process")
-        tests.onboarding_and_instantiation(1, name_intent, 4)
-    if number_vfs == str(3):
-        print("------------------------------------------------------------------------------")
-        print("Getting starting - Onboarding and Instantiating Process")
-        tests.onboarding_and_instantiation(1, name_intent, 5)
-    if number_vfs == str(4):
-        print("------------------------------------------------------------------------------")
-        print("Getting starting - Onboarding and Instantiating Process")
-        tests.onboarding_and_instantiation(1, name_intent, 6)
-    if number_vfs == str(5):
-        print("------------------------------------------------------------------------------")
-        print("Getting starting - Onboarding and Instantiating Process")
-        tests.onboarding_and_instantiation(1, name_intent, 7)
-    if number_vfs == str(6):
-        print("------------------------------------------------------------------------------")
-        print("Getting starting - Onboarding and Instantiating Process")
-        tests.onboarding_and_instantiation(1, name_intent, 8)
-
 if __name__ == '__main__':
     start_intent_gui()
 
@@ -89,8 +65,6 @@ if __name__ == '__main__':
 
     print(f"Translation time: {elapsed_time}")
 
-    match_nsd_descriptor(name_ns_instance, number_vfs)
-
-
+    intent_translator.match_nsd_descriptor(name_ns_instance, number_vfs)
 
 
