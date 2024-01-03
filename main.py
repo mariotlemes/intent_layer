@@ -54,6 +54,18 @@ def match_nsd_descriptor (name_intent, number_vfs):
         print("------------------------------------------------------------------------------")
         print("Getting starting - Onboarding and Instantiating Process")
         tests.onboarding_and_instantiation(1, name_intent, 5)
+    if number_vfs == str(4):
+        print("------------------------------------------------------------------------------")
+        print("Getting starting - Onboarding and Instantiating Process")
+        tests.onboarding_and_instantiation(1, name_intent, 6)
+    if number_vfs == str(5):
+        print("------------------------------------------------------------------------------")
+        print("Getting starting - Onboarding and Instantiating Process")
+        tests.onboarding_and_instantiation(1, name_intent, 7)
+    if number_vfs == str(6):
+        print("------------------------------------------------------------------------------")
+        print("Getting starting - Onboarding and Instantiating Process")
+        tests.onboarding_and_instantiation(1, name_intent, 8)
 
 if __name__ == '__main__':
     start_intent_gui()
@@ -64,7 +76,7 @@ if __name__ == '__main__':
 
     nile_intent = start_intent_engine()
 
-    # print(nile_intent)
+    print(nile_intent)
 
     name_ns_instance, number_vfs = start_intent_translation(nile_intent)
 
@@ -72,6 +84,8 @@ if __name__ == '__main__':
     end = time.time()
 
     elapsed_time = end - start
+
+    elapsed_time = round(elapsed_time, 5)
 
     print(f"Translation time: {elapsed_time}")
 
