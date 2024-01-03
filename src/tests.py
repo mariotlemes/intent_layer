@@ -1,7 +1,12 @@
 import time
 import yaml
+import os
+import sys
 from handler_osm import HandlerOSM
 from timer import Timer
+
+path_project = os.path.abspath(os.path.join(os.getcwd()))
+sys.path.append(path_project)
 
 def load_vnf_descriptors():
     osm = HandlerOSM()

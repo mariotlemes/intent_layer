@@ -1,6 +1,12 @@
-import sqlite3
+import sqlite3, sys, os
+
+
+path_project = os.path.abspath(os.path.join(os.getcwd()))
+sys.path.append(path_project)
+
 from nile.builder import build
 
+# from nile.builder import build
 class IntentEngine():
     def get_intent_from_database(self):
         """1) Get intents from database"""

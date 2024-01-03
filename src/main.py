@@ -3,9 +3,7 @@ import time
 import intent_engine
 import intent_gui
 import intent_translator
-from handler_osm import HandlerOSM
-from timer import Timer
-import tests
+
 
 def start_intent_gui():
     # 1 - intent_gui.py

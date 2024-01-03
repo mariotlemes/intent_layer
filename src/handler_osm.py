@@ -1,7 +1,6 @@
 from variables import GlobalVariables
 import requests
 import json
-import yaml
 
 # IPv4 address for OSM NBI
 PUBLIC_IP_OSM = GlobalVariables.get_public_ip_osm()
