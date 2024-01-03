@@ -1,6 +1,5 @@
 from ui_main import Ui_MainWindow
-from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox,
-                               QHeaderView)
+from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox, QHeaderView)
 from PySide6.QtCore import Qt
 from PySide6.QtSql import QSqlDatabase, QSqlQueryModel
 from database import DataBase

@@ -1,10 +1,12 @@
 import sys
+import time
 import intent_engine
 import intent_gui
 import intent_translator
 from handler_osm import HandlerOSM
 from timer import Timer
-from tests import Tests
+# from tests import Tests
+import tests
 
 def start_intent_gui():
     # 1 - intent_gui.py
@@ -23,7 +25,9 @@ def start_intent_gui():
     app.exec()
 
 def start_intent_engine():
-    # 2 - Transform intents to a NILE
+    # 2 - Transform intents to NILE
+    print("------------------------------------------------------------------------------")
+    print("Getting starting - Translating Intent")
 
     objIntEngine = intent_engine.IntentEngine()
 
@@ -42,17 +46,21 @@ def start_intent_translation(nile_intent):
 
 def match_nsd_descriptor (name_intent, number_vfs):
     # print(number_vfs)
-    if number_vfs == '2':
-        print("Starting - Onboarding and Instantiating Process")
-        obj = Tests()
-        obj.onboarding_and_instantiation(1, name_intent)
+    if number_vfs == str(2):
+        print("------------------------------------------------------------------------------")
+        print("Getting starting - Onboarding and Instantiating Process")
+        tests.onboarding_and_instantiation(1, name_intent, 4)
+    if number_vfs == str(3):
+        print("------------------------------------------------------------------------------")
+        print("Getting starting - Onboarding and Instantiating Process")
+        tests.onboarding_and_instantiation(1, name_intent, 5)
 
 if __name__ == '__main__':
     start_intent_gui()
 
     # start intent_engine
-    timer = Timer()
-    timer.start()
+    start = time.time()
+    # timer.start()
 
     nile_intent = start_intent_engine()
 
@@ -61,10 +69,11 @@ if __name__ == '__main__':
     name_ns_instance, number_vfs = start_intent_translation(nile_intent)
 
     # print(name_ns_instance, number_vfs)
+    end = time.time()
 
-    elapsed_time = timer.elapsed_time()
+    elapsed_time = end - start
 
-    print(f"Parsing time: {elapsed_time}")
+    print(f"Translation time: {elapsed_time}")
 
     match_nsd_descriptor(name_ns_instance, number_vfs)
 

@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 class GlobalVariables:
     if not os.environ.get('IP_ADDRESS_OSM'):
         print("TIP: export an IP_ADDRESS_OSM environment variable "

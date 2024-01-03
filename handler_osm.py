@@ -70,10 +70,10 @@ class HandlerOSM:
             requests.post(endpoint, headers=headers,
                           json={"username": "admin",
                                 "password": "admin"})
-            print("\nConnected to OSM NBI.")
+            # print("Connected to OSM NBI.")
             return True
         except requests.Timeout:
-            print("\nTimeout! OSM is probably down...")
+            print("Timeout! OSM is probably down...")
             return False
         except requests.RequestException as error:
             print("Error:", error)
@@ -523,9 +523,9 @@ class HandlerOSM:
         response = requests.request("DELETE", endpoint_delete, headers=headers)
         try:
             if response.status_code != 204:
-                print("Not deleted.")
+                print("Not deleted")
             else:
-                print("Successfully deleted network service instance.!")
+                print("Successfully deleted")
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -543,9 +543,9 @@ class HandlerOSM:
         response = requests.request("DELETE", endpoint, headers=headers)
         try:
             if response.status_code != 204:
-                print("Not deleted.")
+                print("Not deleted")
             else:
-                print("Successfully deleted virtual network function descriptor.")
+                print("Successfully deleted")
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -563,9 +563,9 @@ class HandlerOSM:
         response = requests.request("DELETE", endpoint, headers=headers)
         try:
             if response.status_code != 204:
-                print("Not deleting..")
+                print("Not deleted")
             else:
-                print("Successfully deleted network service descriptor.")
+                print("Successfully deleted")
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
         except requests.RequestException as error:
@@ -587,7 +587,7 @@ class HandlerOSM:
         # to clean all network service instances
         if (len(self.get_ns_instance()) > 0):
             for pos, ns_instance_id in enumerate(self.get_ns_instance(), start=1):
-                    print(f"Cleanning network instances ({pos}/{qtnsi}): ", end="")
+                    print(f"Cleanning network instance(s) ({pos}/{qtnsi}): ", end="")
                     if self.get_ns_lcmp_op_occs(ns_instance_id):
                         id_terminate = self.post_ns_instance_terminate(ns_instance_id)
                         if id_terminate:
@@ -596,11 +596,11 @@ class HandlerOSM:
         # to clean all nsd - descriptors
         if (len(self.get_ns_package()) > 0):
             for pos, nsd_descriptor in enumerate(self.get_ns_package(), start=1):
-                    print(f"Cleanning NS descriptors ({pos}/{qtnsd}): ", end="")
+                    print(f"Cleanning NS descriptor(s) ({pos}/{qtnsd}): ", end="")
                     self.del_ns_package(nsd_descriptor)
 
         # to clean all vnfd - descriptors
         if (len(self.get_vnf_package()) > 0):
             for pos, vnfd_descritor in enumerate(self.get_vnf_package(), start=1):
-                    print(f"Cleanning VNF descriptors ({pos}/{qtvnfd}): ", end="")
+                    print(f"Cleanning VNF descriptor(s) ({pos}/{qtvnfd}): ", end="")
                     self.del_vnf_package(vnfd_descritor)

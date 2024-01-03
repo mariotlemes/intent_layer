@@ -1,6 +1,6 @@
 nsd:
   nsd:
-    - description: nsd descriptor for SDN-based VNF and 2 VNFs
+    - description: nsd descriptor for SDN-based VNF and 4 VNFs
       designer: Mario
       df:
         - id: default-df
@@ -26,9 +26,23 @@ nsd:
                       constituent-cpd-id: vnf-cp0-ext
                   virtual-link-profile-id: private
               vnfd-id: VNF2
+            - id: ns_vnfd_uPTO
+              virtual-link-connectivity:
+                - constituent-cpd-id:
+                    - constituent-base-element-id: ns_vnfd_uPTO
+                      constituent-cpd-id: vnf-cp0-ext
+                  virtual-link-profile-id: private
+              vnfd-id: VNF1
+            - id: ns_vnfd_gX8f
+              virtual-link-connectivity:
+                - constituent-cpd-id:
+                    - constituent-base-element-id: ns_vnfd_gX8f
+                      constituent-cpd-id: vnf-cp0-ext
+                  virtual-link-profile-id: private
+              vnfd-id: VNF2
       id: nsd
       name: nsd
-      version: 1.0
+      version: '1.0'
       virtual-link-desc:
         - id: private
           mgmt-network: true
