@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     elapsed_time = round(elapsed_time, 5)
 
-    print(f"Translation time: {elapsed_time}")
+    print(f"\nTranslation time: {elapsed_time}")
 
     intent_translator.match_nsd_descriptor(name_ns_instance, number_vfs)
 
