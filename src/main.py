@@ -24,7 +24,7 @@ def start_intent_gui():
 def start_intent_engine():
     # 2 - Transform intents to NILE
     print("------------------------------------------------------------------------------")
-    print("Getting starting - Translating Intent")
+    print("Getting starting - Translating Intent\n")
 
     objIntEngine = intent_engine.IntentEngine()
 
