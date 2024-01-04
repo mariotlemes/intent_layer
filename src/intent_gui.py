@@ -56,7 +56,7 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
 
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Icon.Warning)
-        msg.setText("This intent was submitted with success! Click in OK and go to List of intents")
+        msg.setText("This intent was submitted with success!")
         msg.setWindowTitle("Warning")
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         msg.exec()

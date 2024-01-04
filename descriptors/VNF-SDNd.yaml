@@ -36,10 +36,38 @@ vnfd:
   - id: SDN-based-VNF-VM
     cloud-init: |
       #cloud-config
-      package-update: true
-      hostname: sdn-based-vm
+      package_update: true
       password: osm4u
       chpasswd: { expire: False }
+      ssh_pwauth: true
+#      packages:
+#        - docker.io
+#        - sshpass
+#        - mininet
+#      write_files:
+#        - path: /tmp/install_onos.sh
+#          content: |
+#            #!/bin/bash
+#            echo "Initializing..."
+#
+#            # getting docker image
+#            docker pull onosproject/onos
+#
+#            # running a single instane
+#            docker run -t -d -p 8181:8181 -p 8101:8101 -p 5005:5005 -p 830:830 --restart unless-stopped --name onos onosproject/onos
+#
+#            #  create password file
+#            echo "karaf" >> password.txt
+#
+#            # sshpass
+#            sshpass -f password.txt ssh -o StrictHostKeyChecking=no -p 8101 karaf@172.17.0.2 app activate org.onosproject.drivers.polatis.openflow org.onosproject.pipelines.basic org.onosproject.fwd org.onosproject.openflow org.onosproject.openflow-message org.onosproject.ofagent
+#
+#            sleep 20
+#            # mininet topology
+#            mn --controller remote,ip=172.17.0.2 --switch ovs,protocols=OpenFlow13 --test pingall
+#      runcmd:
+#      - sudo chmod +x /tmp/install_onos.sh
+#      - sudo ./tmp/install_onos.sh
     name: SDN-based-VNF-VM
     sw-image-desc: ubuntu18.04
     virtual-compute-desc: SDN-based-VNF-VM-compute
