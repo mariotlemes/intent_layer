@@ -36,11 +36,6 @@ All `notable features` (is not an exhaustive list) are documented in this file.
 - [x] `del_ns_package(ns_package_id)` - This method deletes a network service descriptor.
 - [x] `clean_environment(self)` - This method performs a clean environment in OSM, i.e., deletes all VNFd, NSDd, and network instances.
 ---
-#### `tests.py`: performance evaluation.
-- [x] `load_vnf_descriptors()` - This method calculates the time for onboarding the VNF descriptors in OSM.
-- [X] `onboarding(number_descriptors)` - This method calculates the time for onboarding the specific NS descriptor accordingly to required number of descriptors.
-- [X] `onboarding_and_instantiation (number_of_tests, name_ns_intance, number_descriptors)` - This method calculates the average time (based on number of tests) for onboarding VNFs and NSd to OSM. After,
-    shows the average time for creation and instantiation the Network Service Instance.
 
 
 
