@@ -590,10 +590,10 @@ class HandlerOSM:
             for pos, ns_instance_id in enumerate(self.get_ns_instance(), start=1):
                     print(f"Terminating network instance(s) ({pos}/{qtnsi}): ", end="")
                     if self.get_ns_lcmp_op_occs(ns_instance_id):
-                        # id_terminate = self.post_ns_instance_terminate(ns_instance_id)
-                        self.post_ns_instance_terminate(ns_instance_id)
-                        # if id_terminate:
-                        #     self.del_ns_instace(ns_instance_id)
+                        id_terminate = self.post_ns_instance_terminate(ns_instance_id)
+                        # self.post_ns_instance_terminate(ns_instance_id)
+                        if id_terminate:
+                            self.del_ns_instace(ns_instance_id)
 
         # to clean all nsd - descriptors
         if (len(self.get_ns_package()) > 0):

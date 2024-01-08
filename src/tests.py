@@ -115,10 +115,7 @@ def instantiaton(ns_name_instance):
     id_occurrence = osm.post_ns_instance_create_and_instantiate('nsd', ns_name_instance,
                                                                     'a brief description')
 
-    teste = save_occurrences(id_occurrence)
-    for id in teste:
-        print(id)
-
+    save_occurrences(id_occurrence)
 
     if osm.get_ns_lcmp_op_occs(id_occurrence):
         end = time.time()
