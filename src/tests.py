@@ -4,6 +4,7 @@ import os
 import sys
 from handler_osm import HandlerOSM
 from timer import Timer
+from database import DataBase
 
 path_project = os.path.abspath(os.path.join(os.getcwd()))
 sys.path.append(path_project)
@@ -114,6 +115,10 @@ def instantiaton(ns_name_instance):
         # print("                        Instantiation Results                                 ")
         # print("------------------------------------------------------------------------------")
         # print(f"Time elapsed: {elapsed_time}s")
+
+        # update intent status
+        db = DataBase()
+        db.update_table_intent(ns_name_instance)
 
         return elapsed_time
 def onboarding_and_instantiation(number_of_tests, name_ns_instance, number_descriptors):

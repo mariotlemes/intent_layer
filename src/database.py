@@ -15,7 +15,22 @@ class DataBase():
         except:
             pass
 
-    def insert_intent(self, name, number_vfs):
+    def get_intent_from_database(self):
+        """1) Get intents from database"""
+        conn = sqlite3.connect('system.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT name, number_vfs FROM intents')
+        intent = cursor.fetchall()
+        return intent
+
+    def get_status_from_intent(self):
+        conn = sqlite3.connect('system.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT status FROM intents')
+        status = cursor.fetchall()
+        return status
+
+    def insert_intent_into_database(self, name, number_vfs):
         try:
             cursor = self.connection.cursor()
             cursor.execute("""
@@ -23,7 +38,7 @@ class DataBase():
             """, (name, number_vfs))
             self.connection.commit()
         except AttributeError:
-            print("faça a conexão!")
+            print("Make the connection!")
 
     def create_table_intents(self):
         try:
@@ -34,16 +49,24 @@ class DataBase():
                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
                     name TEXT NOT NULL UNIQUE,
                     number_vfs INTEGER NOT NULL,
-                    status VARCHAR(50) DEFAULT "STARTED"
+                    status VARCHAR(50) DEFAULT "NOT INSTANTIATED"
                 );    
             """)
         except AttributeError:
-            print("faça a conexão")
+            print("Make the connection!")
 
-    def update_table_intent(name):
+    def update_table_intent(self, name_of_instance):
+
+        if QSqlDatabase.contains('qt_sql_default_connection'):
+            QSqlDatabase.removeDatabase('qt_sql_default_connection')
+
+        # print(name_of_instance)
         db = QSqlDatabase.addDatabase("QSQLITE")
         db.setDatabaseName("system.db")
-        db.open()
+
+        if not db.open():
+            print("Failed to open database")
+            return
 
         query = QSqlQuery()
 
@@ -53,10 +76,10 @@ class DataBase():
         # prepare the query
         query.prepare(update_query)
 
-        # bind values to placeholders
-        query.bindValue(":new_value", "DEPLOYED")  # Replace with the new value
-        query.bindValue(":condition_value", name)  # Replace with the condition value
+        query.bindValue(":condition_value", name_of_instance)
+        query.bindValue(":new_value", "INSTANTIATED")
 
-        # execute the query
-        query.exec()
-        db.close()
+        if not query.exec_():
+            print("Query execution failed:", query.lastError().text())
+        else:
+            db.close()

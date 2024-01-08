@@ -12,7 +12,7 @@ class IntentEngine():
         """1) Get intents from database"""
         conn = sqlite3.connect('system.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT name, number_vfs FROM intents')
+        cursor.execute('SELECT name, number_vfs, status FROM intents')
         intent = cursor.fetchall()
         return intent
 
@@ -30,10 +30,3 @@ class IntentEngine():
     def transform_to_nile(self, entity):
         nile_intent = build(entity)
         return nile_intent
-
-
-
-
-
-
-
