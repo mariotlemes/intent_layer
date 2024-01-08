@@ -1,12 +1,8 @@
 import sqlite3, sys, os
-
-
 path_project = os.path.abspath(os.path.join(os.getcwd()))
 sys.path.append(path_project)
-
 from nile.builder import build
 
-# from nile.builder import build
 class IntentEngine():
     def get_intent_from_database(self):
         """1) Get intents from database"""
@@ -15,7 +11,6 @@ class IntentEngine():
         cursor.execute('SELECT name, number_vfs, status FROM intents')
         intent = cursor.fetchall()
         return intent
-
 
     def filling_data (self, intent_from_database):
         name_intent = intent_from_database[0][0]

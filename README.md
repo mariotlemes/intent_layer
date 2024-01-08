@@ -10,13 +10,15 @@ This project contains the code
 for intent layer software and instructions to run in top of
 an NFV environment.
 
-<mark>**`Intent Layer`**</mark> has 3 (three) main modules:
+**`Intent Layer`** has four main modules:
 
 **1)** **`intent_gui.py`**- GUI-based for intent expressing;
 
 **2)** **`intent_engine.py`**- Convert intents into NILE (**N**etwork **I**ntent **L**anguag**E**);
 
 **3)** **`intent_translator.py`**- Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor)/NSd (Network Service Descriptor), and trigger network slice creation;
+
+**4)** **`handler_osm.py`**- Interact with OSM via its REST API to onboard the descriptors and to deploy the Network Slice (NS) Instance.
 
 > Obs 1: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.com/lumichatbot/webhook)
 

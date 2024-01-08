@@ -9,6 +9,15 @@ from database import DataBase
 path_project = os.path.abspath(os.path.join(os.getcwd()))
 sys.path.append(path_project)
 
+history = []
+
+def save_occurrences(id_occurrence):
+    history.append(id_occurrence)
+    return history
+
+def del_occurrences():
+    history.clear()
+
 def load_vnf_descriptors():
     osm = HandlerOSM()
     with open('descriptors/VNF1d.yaml', 'r') as file:
@@ -101,10 +110,16 @@ def instantiaton(ns_name_instance):
 
     start = time.time()
 
+
     # create and instantiate instance
     id_occurrence = osm.post_ns_instance_create_and_instantiate('nsd', ns_name_instance,
                                                                     'a brief description')
-    #
+
+    teste = save_occurrences(id_occurrence)
+    for id in teste:
+        print(id)
+
+
     if osm.get_ns_lcmp_op_occs(id_occurrence):
         end = time.time()
 

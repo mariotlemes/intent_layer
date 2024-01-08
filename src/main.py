@@ -20,16 +20,15 @@ def start_intent_engine():
     print("Getting starting - Translating Intent\n")
     objIntEngine = intent_engine.IntentEngine()
     data_from_database = objIntEngine.get_intent_from_database()
-    not_deployed = [tupla for tupla in data_from_database if tupla[2] == 'NOT INSTANTIATED']
+    not_instantiated = [tupla for tupla in data_from_database if tupla[2] == 'NOT INSTANTIATED']
 
-    if not_deployed:
-        data_transformed = objIntEngine.filling_data(not_deployed)
+    if not_instantiated:
+        data_transformed = objIntEngine.filling_data(not_instantiated)
         nile_intent = objIntEngine.transform_to_nile(data_transformed)
         return nile_intent
     else:
         print("All intents deployed! Create a new intent..")
         sys.exit()
-
 
 def start_intent_translation(nile_intent):
     name, number_vfs = intent_translator.extract_values_from_intent(nile_intent)

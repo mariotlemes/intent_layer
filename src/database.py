@@ -1,6 +1,6 @@
 import sqlite3
 from PySide6.QtSql import QSqlDatabase, QSqlQuery
-
+import tests
 
 class DataBase():
     def __init__(self, name="system.db") -> None:
@@ -52,6 +52,7 @@ class DataBase():
                     status VARCHAR(50) DEFAULT "NOT INSTANTIATED"
                 );    
             """)
+            tests.del_occurrences()
         except AttributeError:
             print("Make the connection!")
 

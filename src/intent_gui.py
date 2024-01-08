@@ -2,7 +2,6 @@ import sys
 import main
 import time
 import intent_translator
-
 from ui_main import Ui_MainWindow
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMessageBox, QHeaderView)
 from PySide6.QtCore import Qt
@@ -71,6 +70,7 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
 
         # capture action in button submit - insert intent
         self.btn_submit.clicked.connect(lambda: self.insert_intent())
+        self.btn_submit.clicked.connect(lambda: main.start_intent_engine())
 
         # thread to onboarding
         self.btn_submit.clicked.connect(start_thread)
@@ -91,19 +91,13 @@ class IntentGUI(QMainWindow, Ui_MainWindow):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Icon.Warning)
         msg.setText("This intent was submitted with success!")
-        # msg.setWindowTitle("Warning")
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         msg.exec()
-        # sys.exit()
 
         db.close_connection()
 
         # show tw_intents
         self.show_table_intent()
-
-        # close window
-        # self.close()
-
 
     def show_table_intent(self):
         """Show data from database in tw_intents QTableView"""

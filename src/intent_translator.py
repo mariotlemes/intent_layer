@@ -2,9 +2,6 @@ import re
 import tests
 
 def extract_values_from_intent(nile_intent):
-    # name_intent = 0
-    # number_of_vfs = 0
-
     start = 'intent'
     end = 'Intent'
 
@@ -17,8 +14,6 @@ def extract_values_from_intent(nile_intent):
     result = re.search(r"middlebox\('(\d+)'\)", nile_intent)
     if result:
         number_of_vfs = result.group(1)
-        # print(number_of_vfs)
-
         return name_intent, number_of_vfs
 
 def match_nsd_descriptor (name_intent, number_vfs):
