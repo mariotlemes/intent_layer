@@ -18,7 +18,7 @@ an NFV environment.
 
 **3)** **`intent_translator.py`**- Convert NILE to suitable format e.g., VNFd (Virtual Network Function Descriptor)/NSd (Network Service Descriptor), and trigger network slice creation;
 
-**4)** **`handler_osm.py`**- Interact with OSM via its REST API to onboard the descriptors and to deploy the Network Slice (NS) Instance.
+**4)** **`handler_osm.py`**- Interact with OSM (Open Source Mano) via its REST API to onboard the descriptors and to deploy the Network Slice (NS) Instance.
 
 > Obs 1: `nile` and `utils` folders are provided by [Jacobs et al.](https://github.com/lumichatbot/webhook)
 
