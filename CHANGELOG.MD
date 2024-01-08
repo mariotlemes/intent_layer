@@ -17,7 +17,7 @@ All `notable features` (is not an exhaustive list) are documented in this file.
 - [x] `extract_values_from_intent(nile_intent)` - This method extracts name and number of VNFs from a NILE intent.
 - [x] `match_nsd_descriptor (name_intent, number_vfs)` - This method match NS descriptor accordingly with required number of VFs.
 ---
-#### `handler_osm.py:` interacts with OSM (Open Source Mano) via REST API.
+#### `handler_osm.py:` interacts with OSM (Open Source Mano) via its REST API.
 - [x] `verify_osm_status()` - This method checks OSM status (online/offline).
 - [x] `generate_nbi_token()` - This method generates a bearer token for API Rest authorization.
 - [x] `get_vim_accounts()` - This method gets an ID list of virtual infrastructure managers.
