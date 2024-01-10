@@ -21,20 +21,21 @@ def match_nsd_descriptor (name_intent, number_vfs):
     if number_vfs == str(2):
         print("------------------------------------------------------------------------------")
         print("Getting starting - Onboarding and Instantiating Process\n")
-        tests.onboarding_and_instantiation(10, name_intent, 4)
+        # tests.onboarding_and_instantiation_with_pause(1, name_intent, 4)
+        tests.onboarding_and_instantiation_without_pause(10, name_intent, 4)
     if number_vfs == str(3):
         print("------------------------------------------------------------------------------")
         print("Getting starting - Onboarding and Instantiating Process\n")
-        tests.onboarding_and_instantiation(10, name_intent, 5)
+        tests.onboarding_and_instantiation_with_pause(1, name_intent, 5)
     if number_vfs == str(4):
         print("------------------------------------------------------------------------------")
         print("Getting starting - Onboarding and Instantiating Process\n")
-        tests.onboarding_and_instantiation(10, name_intent, 6)
+        tests.onboarding_and_instantiation_with_pause(1, name_intent, 6)
     if number_vfs == str(5):
         print("------------------------------------------------------------------------------")
         print("Getting starting - Onboarding and Instantiating Process\n")
-        tests.onboarding_and_instantiation(10, name_intent, 7)
+        tests.onboarding_and_instantiation_with_pause(1, name_intent, 7)
     if number_vfs == str(6):
         print("------------------------------------------------------------------------------")
         print("Getting starting - Onboarding and Instantiating Process\n")
-        tests.onboarding_and_instantiation(10, name_intent, 8)
+        tests.onboarding_and_instantiation_with_pause(1, name_intent, 8)

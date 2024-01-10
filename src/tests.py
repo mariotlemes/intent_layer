@@ -31,7 +31,7 @@ def load_vnf_descriptors():
         osm.post_vnf_package(data)
 
 def onboarding(number_descriptors):
-    '''Calculate the onboarding time of VNF descriptors for test1'''
+    '''Calculate the onboarding time of VNF/NS descriptors'''
     osm = HandlerOSM()
     if osm.verify_osm_status():
         print("------------------------------------------------------------------------------")
@@ -133,7 +133,7 @@ def instantiaton(ns_name_instance):
         db.update_table_intent(ns_name_instance)
 
         return elapsed_time
-def onboarding_and_instantiation(number_of_tests, name_ns_instance, number_descriptors):
+def onboarding_and_instantiation_with_pause(number_of_tests, name_ns_instance, number_descriptors):
     '''
     This test calculates the average time for onboarding VNFs and NSd to OSM. After,
     show the average time for creation and instantiation the Network Service Instance.
@@ -144,7 +144,7 @@ def onboarding_and_instantiation(number_of_tests, name_ns_instance, number_descr
     time_instantiate = []
 
     timer = Timer()
-    timer.start()
+    # timer.start()
 
     for i in range(0, number_of_tests):
         timer.pause()
@@ -157,15 +157,62 @@ def onboarding_and_instantiation(number_of_tests, name_ns_instance, number_descr
         time_onboarding.append(onboarding(number_descriptors))
         time_instantiate.append(instantiaton(name_ns_instance))
 
-    elapsed_time = timer.elapsed_time()
+    # total_elapsed_time = timer.elapsed_time()
     # print("------------------------------------------------------------------------------")
     # print(f"                        End test1 - Results                                  ")
     # print("------------------------------------------------------------------------------")
-    # print(f"Test duration: {round(elapsed_time, 2)}s.")
+    # print(f"Test duration: {round(total_elapsed_time, 2)}s.")
     print("------------------------------------------------------------------------------")
     average_onboarding = sum(time_onboarding) / len(time_onboarding)
     print(f"Onboarding time (AVG - {len(time_onboarding)} tests): {round(average_onboarding, 2)}s.")
     print("------------------------------------------------------------------------------")
     average_instantiate = sum(time_instantiate) / len(time_instantiate)
-    print(f"Instantiating time (AVG - {len(time_onboarding)} tests): {round(average_instantiate, 2)}s.")
+    print(f"Instantiating time (AVG - {len(time_instantiate)} tests): {round(average_instantiate, 2)}s.")
+    print("------------------------------------------------------------------------------")
+
+def onboarding_and_instantiation_without_pause(number_of_tests, name_ns_instance, number_descriptors):
+    '''
+    This test calculates the average time for onboarding VNFs and NSd to OSM. After,
+    show the average time for creation and instantiation the Network Service Instance.
+    :param number_of_tests: number of rounds
+    :return: average onboarding and instantiation time
+    '''
+
+    timer_deletion = Timer()
+
+    time_onboarding = []
+    time_re_instantiation = []
+    time_deletion = []
+    total_time = []
+
+    for i in range(0, number_of_tests):
+        # deletion time
+        timer_deletion.start()
+        clean = HandlerOSM()
+        clean.clean_environment()
+        elapsed_time_deletion = timer_deletion.elapsed_time()
+
+        time_deletion.append(elapsed_time_deletion)
+
+        # re-setup time
+        time_onboarding.append(onboarding(number_descriptors))
+        time_re_instantiation.append(instantiaton(name_ns_instance))
+
+        total_time.append(time_deletion[i] + time_onboarding[i] + time_re_instantiation[i])
+
+    print("------------------------------------------------------------------------------")
+    average_deleting = sum(time_deletion) / len(time_deletion)
+    print(f"Deletion time (AVG - {len(time_deletion)} tests): {round(average_deleting, 2)}s.")
+    print("------------------------------------------------------------------------------")
+
+    average_onboarding = sum(time_onboarding) / len(time_onboarding)
+    print(f"Onboarding time (AVG - {len(time_onboarding)} tests): {round(average_onboarding, 2)}s.")
+    print("------------------------------------------------------------------------------")
+
+    average_re_instantiate = sum(time_re_instantiation) / len(time_re_instantiation)
+    print(f"Redeployment time (AVG - {len(time_re_instantiation)} tests): {round(average_re_instantiate, 2)}s.")
+    print("------------------------------------------------------------------------------")
+
+    average_total_time = sum(total_time) / len(total_time)
+    print(f"Total time (AVG - {len(total_time)} tests): {round(average_total_time, 2)}s.")
     print("------------------------------------------------------------------------------")
