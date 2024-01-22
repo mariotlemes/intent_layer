@@ -86,6 +86,7 @@ class HandlerOSM:
 
             if response.status_code == 200:
                 value_id = response.json()[0]["_id"]
+                print("ID VIM: ", value_id)
                 return value_id
         except requests.Timeout as timeout:
             print("Timeout:", timeout)
@@ -210,7 +211,7 @@ class HandlerOSM:
 
     def get_ns_lcmp_op_occs(self, ns_instance_id):
         '''
-        This method verify the status of network instance. It is used to safe delete.
+        This method verify the status of network instance.
         :param ns_instance_id: network instance id
         :return: true or false
         '''
@@ -230,7 +231,9 @@ class HandlerOSM:
                 response = response.json()
 
                 if ((response['operationState'] == "COMPLETED"
-                     and response['_id'] == ns_instance_id) or
+                     and response['_id'] == ns_instance_id
+                        and response['lcmOperationType'] =='instantiate')
+                        or
                         (response['nsInstanceId'] == ns_instance_id)):
                     status = True
                     return status
@@ -591,7 +594,6 @@ class HandlerOSM:
                     print(f"Terminating network instance(s) ({pos}/{qtnsi}): ", end="")
                     if self.get_ns_lcmp_op_occs(ns_instance_id):
                         id_terminate = self.post_ns_instance_terminate(ns_instance_id)
-                        # self.post_ns_instance_terminate(ns_instance_id)
                         if id_terminate:
                             self.del_ns_instace(ns_instance_id)
 

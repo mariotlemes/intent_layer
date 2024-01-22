@@ -92,12 +92,6 @@ def onboarding(number_descriptors):
             elapsed_time = end - start
             elapsed_time = round(elapsed_time, 2)
 
-
-        # print("------------------------------------------------------------------------------")
-        # print("                          Onboarding Results                                  ")
-        # print("------------------------------------------------------------------------------")
-        # print(f"Time elapsed: {elapsed_time}s\n")
-
         return elapsed_time
 
 def instantiaton(ns_name_instance):
@@ -110,12 +104,14 @@ def instantiaton(ns_name_instance):
 
     start = time.time()
 
-
     # create and instantiate instance
     id_occurrence = osm.post_ns_instance_create_and_instantiate('nsd', ns_name_instance,
                                                                     'a brief description')
 
-    save_occurrences(id_occurrence)
+    history = save_occurrences(id_occurrence)
+
+    # for id in history:
+    #     print("OCURRENCE: ", id)
 
     if osm.get_ns_lcmp_op_occs(id_occurrence):
         end = time.time()
@@ -123,12 +119,6 @@ def instantiaton(ns_name_instance):
         elapsed_time = end - start
         elapsed_time = round(elapsed_time, 2)
 
-        # print("------------------------------------------------------------------------------")
-        # print("                        Instantiation Results                                 ")
-        # print("------------------------------------------------------------------------------")
-        # print(f"Time elapsed: {elapsed_time}s")
-
-        # update intent status
         db = DataBase()
         db.update_table_intent(ns_name_instance)
 
@@ -144,24 +134,20 @@ def onboarding_and_instantiation_with_pause(number_of_tests, name_ns_instance, n
     time_instantiate = []
 
     timer = Timer()
-    # timer.start()
+    timer.start()
 
     for i in range(0, number_of_tests):
         timer.pause()
-        clean = HandlerOSM()
 
         # cleaning the environment
+        clean = HandlerOSM()
         clean.clean_environment()
+
         timer.resume()
 
         time_onboarding.append(onboarding(number_descriptors))
         time_instantiate.append(instantiaton(name_ns_instance))
 
-    # total_elapsed_time = timer.elapsed_time()
-    # print("------------------------------------------------------------------------------")
-    # print(f"                        End test1 - Results                                  ")
-    # print("------------------------------------------------------------------------------")
-    # print(f"Test duration: {round(total_elapsed_time, 2)}s.")
     print("------------------------------------------------------------------------------")
     average_onboarding = sum(time_onboarding) / len(time_onboarding)
     print(f"Onboarding time (AVG - {len(time_onboarding)} tests): {round(average_onboarding, 2)}s.")

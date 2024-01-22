@@ -1,9 +1,11 @@
 """ Nile compiler """
 import re
 import time
-
+import os
 import sys
-# sys.path.append('/Users/mariotl/PycharmProjects/intent_layer')
+
+path_project = os.path.abspath(os.path.join(os.getcwd()))
+sys.path.append(path_project)
 
 from utils import topology
 

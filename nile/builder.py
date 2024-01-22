@@ -2,8 +2,10 @@
 
 from datetime import datetime
 import sys
-# sys.path.append('/Users/mariotl/PycharmProjects/intent_layer')
-
+import os
+path_project = os.path.abspath(os.path.join(os.getcwd()))
+sys.path.append(path_project)
+from nile import compiler
 from nile.exceptions import MissingTargetError, MissingOperationError
 
 def slot_filling(entities):
@@ -28,8 +30,12 @@ def slot_filling(entities):
     if "operations" not in entities:
         entities["operations"] = []
 
+    if "size" not in entities:
+        entities["size"] = []
+
     if "middleboxes" in entities and "add" not in entities["operations"] and "remove" not in entities["operations"]:
         entities["operations"].append("add")
+
 
     if "qos" in entities and "set" not in entities["operations"] and "unset" not in entities["operations"]:
         entities["operations"].append("set")
@@ -58,11 +64,11 @@ def slot_filling(entities):
 
 def build(entities):
     """ Build extracted entities into a Nile intent """
-    # print("ENTITIES", entities)
+    print("ENTITIES", entities)
 
     entities = slot_filling(entities)
 
-    # print("ENTITIES AFTER SLOT-FILLING", entities)
+    print("ENTITIES AFTER SLOT-FILLING", entities)
 
     intent = "define intent {}Intent:".format(entities["id"])
 
@@ -105,6 +111,12 @@ def build(entities):
                 for middlebox in entities["middleboxes"]:
                     if middlebox not in intent:
                         intent += " middlebox('{}'),".format(middlebox)
+                intent = intent.rstrip(',')
+
+            if "size" in entities:
+                for size in entities["size"]:
+                    if size not in intent:
+                        intent += " size('{}'),".format(size)
                 intent = intent.rstrip(',')
 
             # if no parameters for the action were given, we remove the action
@@ -162,3 +174,13 @@ def build(entities):
 
     return intent
 
+if __name__ == '__main__':
+    entittie = {'id': 'teste', 'size': '2'}
+    print(build(entittie))
+
+    test_intent = "define intent uniIntent: from endpoint('19.16.1.1') to service('netflix') add middlebox('loadbalancer'), middlebox('firewall') start hour('10:00') end hour('10:00')"
+    # print(compiler.parse(test_intent))
+
+
+    # test_intent = "define intent uniIntent: from endpoint('19.16.1.1') to service('netflix') add middlebox('loadbalancer'), middlebox('firewall') start hour('10:00') end hour('10:00')"
+    # merlin, compile_time = compile(test_intent)
